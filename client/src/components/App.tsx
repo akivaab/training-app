@@ -14,18 +14,16 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />}></Route>
-          <Route path="login" element={<Login />}></Route>
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
 
-          <Route path="users" element={<UserList />}>
-            <Route path="register" element={<AddUser />}></Route>
-            <Route path=":id" element={<User />}></Route>
-          </Route>
+          <Route path="users" element={<UserList />} />
+          <Route path="users/register" element={<AddUser />} />
+          <Route path="users/:id" element={<User />} />
 
-          <Route path="items" element={<ItemMainPage />}>
-            <Route path="lend" element={<AddItem />}></Route>
-            <Route path=":id" element={<Item />}></Route>
-          </Route>
+          <Route path="items" element={<ItemMainPage />} />
+          <Route path="items/lend" element={<AddItem />} />
+          <Route path="items/:id" element={<Item />} />
 
           {/* Error Route Here */}
         </Route>
