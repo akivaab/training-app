@@ -1,33 +1,71 @@
-// import { useEffect, useState } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
-// import { ItemType } from "../../api/itemsApi";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteItem, getItem, ItemType } from "../../api/itemsApi";
 
 function Item() {
-  // const navigate = useNavigate();
-  // const { id } = useParams();
-  // const [item, setItem] = useState<ItemType | null>(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [item, setItem] = useState<ItemType | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   handleGetItem();
-  // }, []);
+  useEffect(() => {
+    handleGetItem();
+  }, []);
 
-  // async function handleGetItem() {
-  //   const data = await getItem(id);
-  //   if (data) {
-  //     setItem(data);
-  //   }
-  //   //setIsLoading(false);
-  // }
+  async function handleGetItem() {
+    try {
+      if (!id) {
+        return;
+      }
+      const data = await getItem(id);
+      if (data) {
+        setItem(data);
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function handleEdit() {
+    const data = {
+      category: item?.category,
+      size: item?.size,
+      description: item?.description
+    };
+    navigate("edit", { state: data });
+  }
+
+  async function handleDelete() {
+    try {
+      if (!id) {
+        return;
+      }
+      await deleteItem(id);
+      navigate("/items", { replace: true });
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <div>
-      <div>
-        <h2></h2>
-      </div>
-      <div className="bg-teal-900">
-        <button>Edit</button>
-        <button>Delete</button>
-      </div>
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && !item && <div>Error</div>}
+      {!isLoading && item && (
+        <div>
+          <div>
+            <h2>
+              {item.category},{item.size}
+            </h2>
+            <p>{item.description}</p>
+          </div>
+          <div className="bg-teal-900">
+            <button onClick={handleEdit}>Edit</button>
+            <button onClick={handleDelete}>Delete</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

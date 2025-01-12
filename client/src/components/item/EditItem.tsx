@@ -1,9 +1,17 @@
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { CategoryType, putItem } from "../../api/itemsApi";
 import { useState } from "react";
-import { CategoryType, postItem } from "../../api/itemsApi";
-import { useNavigate } from "react-router-dom";
 
-function AddItem() {
+function EditItem() {
+  const location = useLocation();
+  const { category, size, description } = location.state || {};
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [editCategory, setEditCategory] = useState<CategoryType | null>(
+    category
+  );
+  const [editSize, setEditSize] = useState<number>(size);
+  const [editDescription, setEditDescription] = useState<string>(description);
   const categories: CategoryType[] = [
     "shirt",
     "pants",
@@ -12,15 +20,12 @@ function AddItem() {
     "hat",
     "tie"
   ];
-  const [category, setCategory] = useState<CategoryType | null>(null);
-  const [size, setSize] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
 
-  async function handleSubmit() {
+  async function handleEdit() {
     try {
-      if (category && !isNaN(size)) {
-        await postItem(category, size, description);
-        navigate("/items");
+      if (id && editCategory && !isNaN(editSize)) {
+        await putItem(id, editCategory, editSize, editDescription);
+        navigate(`/items/${id}`);
       }
     } catch (err) {
       console.error(err);
@@ -33,8 +38,10 @@ function AddItem() {
       <label className="text-lg">Choose Category:</label>
       <select
         required
-        value={category || ""}
-        onChange={(e) => setCategory((e.target.value as CategoryType) || null)}
+        value={editCategory || ""}
+        onChange={(e) =>
+          setEditCategory((e.target.value as CategoryType) || null)
+        }
         className="mx-auto w-96 rounded-xl border border-sky-500 px-3 py-2"
       >
         <option value="" disabled>
@@ -54,8 +61,8 @@ function AddItem() {
           type="number"
           placeholder="Size"
           required
-          value={size}
-          onChange={(e) => setSize(parseInt(e.target.value))}
+          value={editSize}
+          onChange={(e) => setEditSize(parseInt(e.target.value))}
           className="m-2 w-20 rounded border border-sky-500 px-3 py-2"
         />
       </div>
@@ -65,18 +72,18 @@ function AddItem() {
         placeholder="Description"
         required
         maxLength={500}
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        value={editDescription}
+        onChange={(e) => setEditDescription(e.target.value)}
       ></textarea>
 
       <button
-        onClick={handleSubmit}
+        onClick={handleEdit}
         className="rounded-md bg-sky-500 px-5 py-2 text-white"
       >
-        Submit
+        Save Changes
       </button>
     </div>
   );
 }
 
-export default AddItem;
+export default EditItem;

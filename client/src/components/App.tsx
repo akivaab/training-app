@@ -8,6 +8,7 @@ import AddUser from "./user/AddUser";
 import User from "./user/User";
 import UserList from "./user/UserList";
 import ItemMainPage from "./item/ItemMainPage";
+import EditItem from "./item/EditItem";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="items" element={<ItemMainPage />} />
           <Route path="items/lend" element={<AddItem />} />
           <Route path="items/:id" element={<Item />} />
+          <Route path="items/:id/edit" element={<EditItem />} />
 
           {/* Error Route Here */}
         </Route>
