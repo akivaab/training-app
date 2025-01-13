@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteItem, getItem, ItemType } from "../../api/itemsApi";
+import Comments from "./Comments";
 
 function Item() {
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ function Item() {
             <button onClick={handleEdit}>Edit</button>
             <button onClick={handleDelete}>Delete</button>
           </div>
+          <Comments />
         </div>
       )}
     </div>

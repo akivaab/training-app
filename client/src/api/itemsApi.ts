@@ -12,6 +12,13 @@ export type ItemType = {
   borrowerId?: number;
 };
 
+export type CommentType = {
+  id: number;
+  content: string;
+  itemId: number;
+  userId: number;
+};
+
 let globalId = 3;
 
 let db: ItemType[] = [
@@ -30,6 +37,8 @@ let db: ItemType[] = [
     lenderId: 2
   }
 ];
+
+let commentDb: CommentType[] = [];
 
 export async function getItems(): Promise<ItemType[]> {
   const res = {
@@ -75,4 +84,24 @@ export async function putItem(
 
 export async function deleteItem(id: string) {
   db = db.filter((i) => i.id.toString() !== id);
+}
+
+export async function getItemComments(itemId: string): Promise<CommentType[]> {
+  console.log("get comments of item " + itemId);
+  return commentDb.filter((c) => c.itemId.toString() === itemId);
+}
+
+export async function postItemComment(content: string, itemId: string) {
+  console.log("post comment " + content + " on item " + itemId);
+  commentDb.push({
+    id: globalId++,
+    content,
+    itemId: parseInt(itemId),
+    userId: 2
+  });
+}
+
+export async function deleteItemComment(commentId: number) {
+  console.log("delete comment " + commentId);
+  commentDb = commentDb.filter((c) => c.id !== commentId);
 }
