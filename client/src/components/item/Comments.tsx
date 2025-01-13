@@ -5,7 +5,7 @@ import {
   deleteItemComment,
   getItemComments,
   postItemComment
-} from "../../api/itemsApi";
+} from "../../api/commentsApi";
 
 function Comments() {
   const { id } = useParams();

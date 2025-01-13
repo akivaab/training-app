@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CategoryType, putItem } from "../../api/itemsApi";
+import { CategoryType, patchItem } from "../../api/itemsApi";
 import { useState } from "react";
 
 function EditItem() {
@@ -24,7 +24,7 @@ function EditItem() {
   async function handleEdit() {
     try {
       if (id && editCategory && !isNaN(editSize)) {
-        await putItem(id, editCategory, editSize, editDescription);
+        await patchItem(id, editCategory, editSize, editDescription);
         navigate(`/items/${id}`);
       }
     } catch (err) {
