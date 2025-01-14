@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./layout/Layout";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Login from "./user/Login";
 import AddItem from "./item/AddItem";
 import Item from "./item/Item";
 import AddUser from "./user/AddUser";
@@ -16,16 +16,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
 
           <Route path="users" element={<UserList />} />
-          <Route path="users/register" element={<AddUser />} />
           <Route path="users/:id" element={<User />} />
+          <Route path="users/login" element={<Login />} />
+          <Route path="users/register" element={<AddUser />} />
 
           <Route path="items" element={<ItemMainPage />} />
-          <Route path="items/lend" element={<AddItem />} />
           <Route path="items/:id" element={<Item />} />
           <Route path="items/:id/edit" element={<EditItem />} />
+          <Route path="items/lend" element={<AddItem />} />
 
           {/* Error Route Here */}
         </Route>

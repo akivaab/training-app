@@ -3,6 +3,7 @@ import {
   deleteUser,
   getAllUsers,
   getUser,
+  loginUser,
   postUser,
 } from "../controllers/usersController";
 
@@ -10,5 +11,6 @@ const usersRouter = express.Router();
 
 usersRouter.route("/").get(getAllUsers).post(postUser);
 usersRouter.route("/:id").get(getUser).delete(deleteUser);
+usersRouter.route("/login").post(loginUser);
 
 export default usersRouter;

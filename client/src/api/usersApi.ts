@@ -96,3 +96,24 @@ export async function deleteUser(id: string) {
     }
   }
 }
+
+export async function loginUser(
+  email: string,
+  password: string
+): Promise<boolean> {
+  try {
+    const credentials: Partial<UserType> = {
+      email,
+      password
+    };
+    const res = await axios.post(`${url}/login`, credentials);
+    return res.data.success;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("An unexpected error occurred. Please try again later.");
+    }
+  }
+}

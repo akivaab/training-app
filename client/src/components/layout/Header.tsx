@@ -19,7 +19,7 @@ function Header() {
             Lend an Item
           </Link>
           <Link
-            to="login"
+            to="users/login"
             className="text-white transition-colors duration-200 hover:text-teal-900"
           >
             Login
