@@ -16,3 +16,12 @@ export type CommentType = {
   itemId: number;
   userId: number;
 };
+
+export type UserType = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  password: string;
+};
