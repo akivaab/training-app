@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { CategoryType, postItem } from "../../api/itemsApi";
 import { useNavigate } from "react-router-dom";
+import { postItem } from "../../api/itemsApi";
+import { CategoryType } from "../../types/types";
 
 function AddItem() {
   const navigate = useNavigate();

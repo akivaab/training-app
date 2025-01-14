@@ -1,11 +1,5 @@
 import axios from "axios";
-
-export type CommentType = {
-  id: number;
-  content: string;
-  itemId: number;
-  userId: number;
-};
+import { CommentType } from "../types/types";
 
 const url = (itemId: string) =>
   `http://localhost:5000/items/${itemId}/comments`;

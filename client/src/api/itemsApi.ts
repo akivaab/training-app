@@ -1,16 +1,5 @@
 import axios from "axios";
-
-export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
-export type SizeRangeType = { min: number; max: number };
-
-export type ItemType = {
-  id: number;
-  category: CategoryType;
-  size: number;
-  description: string;
-  lenderId: number;
-  borrowerId?: number;
-};
+import { ItemType, CategoryType } from "../types/types";
 
 const url = "http://localhost:5000/items";
 

@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  getItems,
-  ItemType,
-  CategoryType,
-  SizeRangeType
-} from "../../api/itemsApi";
 import ItemList from "./ItemList";
 import ItemSearchMenu from "./ItemSearchMenu";
+import { getItems } from "../../api/itemsApi";
+import { ItemType, CategoryType, SizeRangeType } from "../../types/types";
 
 function ItemMainPage() {
   const [items, setItems] = useState<ItemType[]>([]);

@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  CommentType,
-  deleteComment,
-  getComments,
-  postComment
-} from "../../api/commentsApi";
+import { deleteComment, getComments, postComment } from "../../api/commentsApi";
+import { CommentType } from "../../types/types";
 
 function Comments() {
   const { id } = useParams();

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ItemType } from "../../api/itemsApi";
+import { ItemType } from "../../types/types";
 
 type PropsType = {
   items: ItemType[];

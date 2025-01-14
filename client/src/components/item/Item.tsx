@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteItem, getItem, ItemType } from "../../api/itemsApi";
 import Comments from "./Comments";
+import { deleteItem, getItem } from "../../api/itemsApi";
+import { ItemType } from "../../types/types";
 
 function Item() {
   const navigate = useNavigate();

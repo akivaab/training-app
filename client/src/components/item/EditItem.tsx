@@ -1,6 +1,7 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CategoryType, patchItem } from "../../api/itemsApi";
 import { useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { patchItem } from "../../api/itemsApi";
+import { CategoryType } from "../../types/types";
 
 function EditItem() {
   const location = useLocation();

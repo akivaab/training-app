@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CategoryType, SizeRangeType } from "../../api/itemsApi";
+import { CategoryType, SizeRangeType } from "../../types/types";
 
 type PropsType = {
   onSubmit: (
