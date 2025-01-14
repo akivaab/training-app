@@ -9,7 +9,7 @@ export async function getAllUsers(
   try {
     const [users]: [any[], any] = await pool.query(
       `
-      SELECT *
+      SELECT id, first_name AS firstName, last_name AS lastName, email, phone
       FROM users
       `
     );
@@ -67,7 +67,7 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
   try {
     const [users]: [any[], any] = await pool.query(
       `
-      SELECT *
+      SELECT id, first_name AS firstName, last_name AS lastName, email, phone
       FROM users
       WHERE id = ?
       `,

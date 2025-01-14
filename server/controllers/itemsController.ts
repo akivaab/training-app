@@ -9,7 +9,7 @@ export async function getAllItems(
   try {
     const [items]: [any[], any] = await pool.query(
       `
-      SELECT *
+      SELECT id, category, size, description
       FROM items
       `
     );
@@ -65,7 +65,7 @@ export async function getItem(req: Request, res: Response, next: NextFunction) {
   try {
     const [items]: [any[], any] = await pool.query(
       `
-      SELECT *
+      SELECT id, category, size, description, lender_id AS lenderId, borrower_id as borrowerId
       FROM items
       WHERE id = ?
       `,

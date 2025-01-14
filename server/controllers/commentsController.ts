@@ -13,7 +13,7 @@ export async function getAllItemComments(
   try {
     const [comments]: [any[], any] = await pool.query(
       `
-      SELECT *
+      SELECT id, content, item_id AS itemId, user_id AS userId
       FROM comments
       WHERE item_id = ?
       `,
