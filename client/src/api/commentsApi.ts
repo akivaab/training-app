@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export type CommentType = {
   id: number;
   content: string;
@@ -5,22 +7,53 @@ export type CommentType = {
   userId: number;
 };
 
-export async function getItemComments(itemId: string): Promise<CommentType[]> {
-  console.log("get comments of item " + itemId);
-  return commentDb.filter((c) => c.itemId.toString() === itemId);
+const url = (itemId: string) =>
+  `http://localhost:5000/items/${itemId}/comments`;
+
+export async function getComments(itemId: string): Promise<CommentType[]> {
+  try {
+    const res = await axios.get(`${url(itemId)}`);
+    if (res.status === 200) {
+      return res.data;
+    } /*if (res.status === 204)*/ else {
+      return [];
+    }
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("An unexpected error occurred. Please try again later.");
+    }
+  }
 }
 
-export async function postItemComment(content: string, itemId: string) {
-  console.log("post comment " + content + " on item " + itemId);
-  commentDb.push({
-    id: globalId++,
-    content,
-    itemId: parseInt(itemId),
-    userId: 2
-  });
+export async function postComment(itemId: string, content: string) {
+  try {
+    const newContent: Partial<CommentType> = {
+      content,
+      userId: 1
+    };
+    await axios.post(`${url(itemId)}`, newContent);
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("An unexpected error occurred. Please try again later.");
+    }
+  }
 }
 
-export async function deleteItemComment(commentId: number) {
-  console.log("delete comment " + commentId);
-  commentDb = commentDb.filter((c) => c.id !== commentId);
+export async function deleteComment(itemId: string, commentId: number) {
+  try {
+    await axios.delete(`${url(itemId)}/${commentId}`);
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("An unexpected error occurred. Please try again later.");
+    }
+  }
 }

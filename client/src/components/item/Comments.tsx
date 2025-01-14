@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   CommentType,
-  deleteItemComment,
-  getItemComments,
-  postItemComment
+  deleteComment,
+  getComments,
+  postComment
 } from "../../api/commentsApi";
 
 function Comments() {
@@ -20,7 +20,7 @@ function Comments() {
   async function handleGetComments() {
     try {
       if (id) {
-        setComments(await getItemComments(id));
+        setComments(await getComments(id));
       }
     } catch (err) {
       console.error(err);
@@ -30,7 +30,7 @@ function Comments() {
   async function handleSubmit() {
     try {
       if (id) {
-        await postItemComment(content, id);
+        await postComment(id, content);
       }
       setIsCommenting(false);
       handleGetComments();
@@ -41,7 +41,9 @@ function Comments() {
 
   async function handleDelete(commentId: number) {
     try {
-      await deleteItemComment(commentId);
+      if (id) {
+        await deleteComment(id, commentId);
+      }
       handleGetComments();
     } catch (err) {
       console.error(err);
