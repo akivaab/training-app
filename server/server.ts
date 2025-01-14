@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import itemsRouter from "./routes/itemsRoute";
+import usersRouter from "./routes/usersRoute";
 
 // Create a new express application instance
 const app = express();
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/items", itemsRouter);
+app.use("/users", usersRouter);
 
 // Define the root path with a greeting message
 // app.get("/", (req: Request, res: Response) => {
