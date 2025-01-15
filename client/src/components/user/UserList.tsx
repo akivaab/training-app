@@ -39,11 +39,14 @@ function UserList() {
     }
   }
   return (
-    <div className="flex flex-col gap-2">
+    <div className="mt-2 flex flex-col gap-3">
       {users.map((user) => (
-        <div key={user.id} className="container mx-auto bg-sky-500">
+        <div
+          key={user.id}
+          className="container mx-auto rounded-md bg-sky-200 p-4 transition-colors duration-75 hover:bg-sky-600 hover:text-white"
+        >
           <Link to={`${user.id}`}>
-            <div>
+            <div className="text-lg">
               {user.lastName}, {user.firstName}
             </div>
             <div>{user.email}</div>

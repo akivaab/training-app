@@ -7,15 +7,17 @@ type PropsType = {
 
 function ItemList({ items }: PropsType) {
   return (
-    <div>
+    <div className="mt-4 flex flex-col gap-2">
       {items.map((item) => (
-        <Link
-          to={`${item.id}`}
-          key={item.id}
-          className="container mx-auto bg-blue-400 text-white"
-        >
-          {item.description}
-        </Link>
+        <div className="container mx-auto rounded-md bg-sky-200 p-4 transition-colors duration-75 hover:bg-sky-600 hover:text-white">
+          <Link to={`${item.id}`} key={item.id}>
+            <h3 className="text-xl">
+              {item.category.charAt(0).toUpperCase() + item.category.slice(1)},
+              Size {item.size}
+            </h3>
+            <p>{item.description}</p>
+          </Link>
+        </div>
       ))}
     </div>
   );

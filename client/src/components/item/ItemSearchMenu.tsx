@@ -20,20 +20,16 @@ function ItemSearchMenu({ onSubmit }: PropsType) {
 
   const [inputCategory, setInputCategory] = useState<CategoryType | null>(null);
   const [inputNumericalSize, setInputNumericalSize] = useState({
-    min: "",
-    max: ""
+    min: 0,
+    max: 0
   });
 
   function handleSubmit() {
-    const sizeMin = parseInt(inputNumericalSize.min);
-    const sizeMax = parseInt(inputNumericalSize.max);
+    const sizeMin = inputNumericalSize.min;
+    const sizeMax = inputNumericalSize.max;
     if (!inputCategory) {
       alert("Select a category");
-    } else if (
-      isNaN(sizeMin) ||
-      isNaN(sizeMax) ||
-      inputNumericalSize.min > inputNumericalSize.max
-    ) {
+    } else if (inputNumericalSize.min > inputNumericalSize.max) {
       alert("Invalid size range");
     } else {
       onSubmit(inputCategory, { min: sizeMin, max: sizeMax });
@@ -49,7 +45,7 @@ function ItemSearchMenu({ onSubmit }: PropsType) {
         onChange={(e) =>
           setInputCategory((e.target.value as CategoryType) || null)
         }
-        className="mx-auto w-96 rounded-xl border border-sky-500 px-3 py-2"
+        className="mx-auto w-96 rounded-xl border border-slate-400 px-3 py-2"
       >
         <option value="" disabled>
           Select a category
@@ -62,37 +58,42 @@ function ItemSearchMenu({ onSubmit }: PropsType) {
       </select>
 
       {/* Size */}
-      <div>
+      <div className="flex flex-col text-center">
         <label className="text-lg">Size Range:</label>
-        <input
-          type="number"
-          placeholder="Min"
-          value={inputNumericalSize.min}
-          onChange={(e) =>
-            setInputNumericalSize((prev) => ({
-              ...prev,
-              min: e.target.value
-            }))
-          }
-          className="m-2 w-20 rounded border border-sky-500 px-3 py-2"
-        />
-        <input
-          type="number"
-          placeholder="Max"
-          value={inputNumericalSize.max}
-          onChange={(e) =>
-            setInputNumericalSize((prev) => ({
-              ...prev,
-              max: e.target.value
-            }))
-          }
-          className="m-2 w-20 rounded border border-sky-500 px-3 py-2"
-        />
+        <div className="mt-2">
+          <input
+            type="number"
+            placeholder="Min"
+            value={inputNumericalSize.min}
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              setInputNumericalSize((prev) => ({
+                ...prev,
+                min: val >= 0 ? val : 0
+              }));
+            }}
+            className="mx-2 mb-2 w-20 rounded-md border border-slate-400 p-1"
+          />
+          -
+          <input
+            type="number"
+            placeholder="Max"
+            value={inputNumericalSize.max}
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              setInputNumericalSize((prev) => ({
+                ...prev,
+                max: val >= 0 ? val : 0
+              }));
+            }}
+            className="mx-2 mb-2 w-20 rounded-md border border-slate-400 p-1"
+          />
+        </div>
       </div>
 
       <button
         onClick={handleSubmit}
-        className="rounded-md bg-sky-500 px-5 py-2 text-white"
+        className="rounded-md bg-teal-900 px-5 py-2 text-white transition-colors duration-100 hover:bg-teal-700"
       >
         Submit
       </button>
