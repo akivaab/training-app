@@ -169,15 +169,18 @@ export async function loginUser(
       [req.body.email]
     );
     if (results.length === 0) {
-      res.status(404).json({ message: "Could not authenticate user" });
-    } else if (await bcrypt.compare(req.body.password, results[0].password)) {
-      res
-        .status(200)
-        .json({ success: true, message: "User logged in successfully" });
+      res.status(404).json({ message: "Invalid email or password" });
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(
+      req.body.password,
+      results[0].password
+    );
+    if (isMatch) {
+      res.status(200).json({ message: "User logged in successfully" });
     } else {
-      res
-        .status(200)
-        .json({ success: false, message: "Could not authenticate user" });
+      res.status(401).json({ message: "Invalid email or password" });
     }
   } catch (err) {
     next(err);

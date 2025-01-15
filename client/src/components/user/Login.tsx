@@ -6,19 +6,18 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [failedAttempt, setFailedAttempt] = useState<boolean>(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      const accepted = await loginUser(email, password);
-      if (accepted) {
-        navigate("/items");
-      } else {
-        setEmail("");
-        setPassword("");
-      }
+      await loginUser(email, password);
+      setEmail("");
+      setPassword("");
+      navigate("/items");
     } catch (err) {
       console.error(err);
+      setFailedAttempt(true);
     }
   }
 
@@ -48,9 +47,15 @@ function Login() {
           className="mb-2 block w-full rounded-md border border-slate-400 bg-sky-50 p-1"
         />
 
+        {failedAttempt && (
+          <div className="text-sm text-red-700">
+            Invalid email or password, please try again.
+          </div>
+        )}
+
         <button
           type="submit"
-          className="mx-auto mt-10 block rounded-lg bg-teal-900 p-3 text-white transition-colors duration-100 hover:bg-teal-700"
+          className="mx-auto mt-8 block rounded-lg bg-teal-900 p-3 text-white transition-colors duration-100 hover:bg-teal-700"
         >
           Submit
         </button>
