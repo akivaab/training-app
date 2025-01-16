@@ -6,10 +6,11 @@ import {
   loginUser,
   postUser,
 } from "../controllers/usersController";
+import { verifyJWT } from "../middleware/verifyJWT";
 
 const usersRouter = express.Router();
 
-usersRouter.route("/").get(getAllUsers).post(postUser);
+usersRouter.route("/").get(verifyJWT, getAllUsers).post(postUser);
 usersRouter.route("/:id").get(getUser).delete(deleteUser);
 usersRouter.route("/login").post(loginUser);
 

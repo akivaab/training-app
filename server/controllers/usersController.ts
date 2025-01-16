@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt, { Secret } from "jsonwebtoken";
 import { pool } from "../db/dbConn";
 
 export async function getAllUsers(
@@ -162,7 +163,7 @@ export async function loginUser(
   try {
     const [results]: [any[], any] = await pool.query(
       `
-      SELECT email, password
+      SELECT id, email, password
       FROM users
       WHERE email = ?
       `,
@@ -173,12 +174,36 @@ export async function loginUser(
       return;
     }
 
-    const isMatch = await bcrypt.compare(
-      req.body.password,
-      results[0].password
-    );
+    const user = results[0];
+
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (isMatch) {
-      res.status(200).json({ message: "User logged in successfully" });
+      const accessToken = jwt.sign(
+        { user: { id: user.id } },
+        process.env.ACCESS_TOKEN_SECRET as Secret,
+        { expiresIn: "30s" }
+      );
+      const refreshToken = jwt.sign(
+        { user: { id: user.id } },
+        process.env.REFRESH_TOKEN_SECRET as Secret,
+        { expiresIn: "1d" }
+      );
+      await pool.query(
+        `
+        UPDATE users
+        SET refresh_token = ?
+        WHERE id = ?
+        `,
+        [refreshToken, user.id]
+      );
+
+      res
+        .status(200)
+        .cookie("jwt", refreshToken, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        })
+        .json({ message: "User logged in successfully", accessToken });
     } else {
       res.status(401).json({ message: "Invalid email or password" });
     }
