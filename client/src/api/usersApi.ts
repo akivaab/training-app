@@ -21,32 +21,6 @@ export async function getUsers(): Promise<UserType[]> {
   }
 }
 
-export async function postUser(
-  firstName: string,
-  lastName: string,
-  email: string,
-  phone: string,
-  password: string
-) {
-  try {
-    const newUser: Partial<UserType> = {
-      firstName,
-      lastName,
-      email,
-      phone,
-      password
-    };
-    await axios.post(`${url}`, newUser);
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
-  }
-}
-
 export async function getUser(id: string): Promise<UserType> {
   try {
     const res = await axios.get(`${url}/${id}`);
@@ -87,26 +61,6 @@ export async function getUser(id: string): Promise<UserType> {
 export async function deleteUser(id: string) {
   try {
     await axios.delete(`${url}/${id}`);
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
-  }
-}
-
-export async function loginUser(
-  email: string,
-  password: string
-): Promise<void> {
-  try {
-    const credentials: Partial<UserType> = {
-      email,
-      password
-    };
-    await axios.post(`${url}/login`, credentials);
   } catch (err) {
     if (axios.isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
