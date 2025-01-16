@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt, { Secret } from "jsonwebtoken";
 import { pool } from "../db/dbConn";
 
-export async function loginUser(
+export async function authLogin(
   req: Request,
   res: Response,
   next: NextFunction
@@ -64,7 +64,7 @@ export async function loginUser(
   }
 }
 
-export async function registerUser(
+export async function authRegister(
   req: Request,
   res: Response,
   next: NextFunction
@@ -95,6 +95,56 @@ export async function registerUser(
       ]
     );
     res.status(201).json({ message: "User added successfully" });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function authRefresh(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const cookies = req.cookies;
+  if (!cookies?.jwt) {
+    res.status(401).json({ message: "Required token not provided" });
+    return;
+  }
+  const refreshToken = cookies.jwt;
+  try {
+    const [results]: [any[], any] = await pool.query(
+      `
+          SELECT id
+          FROM users
+          WHERE refresh_token = ?
+          `,
+      [refreshToken]
+    );
+    if (results.length === 0) {
+      res.status(403).json({ message: "Could not authenticate" });
+      return;
+    }
+
+    const user = results[0];
+
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as Secret,
+      (err, decoded) => {
+        if (err || decoded.user.id !== user.id) {
+          res.status(403).json({ message: "Could not authenticate" });
+          return;
+        }
+        const accessToken = jwt.sign(
+          { user: { id: decoded.user.id } },
+          process.env.ACCESS_TOKEN_SECRET as Secret,
+          { expiresIn: "30s" }
+        );
+        res
+          .status(200)
+          .json({ message: "User login refreshed successfully", accessToken });
+      }
+    );
   } catch (err) {
     next(err);
   }
