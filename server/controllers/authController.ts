@@ -130,7 +130,7 @@ export async function authRefresh(
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET as Secret,
-      (err, decoded) => {
+      (err: any, decoded: any) => {
         if (err || decoded.user.id !== user.id) {
           res.status(403).json({ message: "Could not authenticate" });
           return;
@@ -145,6 +145,50 @@ export async function authRefresh(
           .json({ message: "User login refreshed successfully", accessToken });
       }
     );
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function authLogout(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  //note: delete access token in frontend
+  const cookies = req.cookies;
+  if (!cookies?.jwt) {
+    res.status(204).json({ message: "Already logged out" });
+    return;
+  }
+  const refreshToken = cookies.jwt;
+  try {
+    const [results]: [any[], any] = await pool.query(
+      `
+            SELECT id
+            FROM users
+            WHERE refresh_token = ?
+            `,
+      [refreshToken]
+    );
+    if (results.length === 0) {
+      res.clearCookie("jwt", { httpOnly: true });
+      res.status(204).json({ message: "Logged out successfully" });
+      return;
+    }
+
+    const user = results[0];
+
+    await pool.query(
+      `
+      UPDATE users
+      SET refresh_token = NULL
+      WHERE id = ?
+      `,
+      [user.id]
+    );
+    res.clearCookie("jwt", { httpOnly: true });
+    res.status(204).json({ message: "Logged out successfully" });
   } catch (err) {
     next(err);
   }

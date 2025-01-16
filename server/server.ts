@@ -12,6 +12,7 @@ const app = express();
 // Set the network port
 const port = process.env.PORT || 5000;
 
+//note: fine-tune cors, figure out secure and sameSite for refresh token cookies
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
