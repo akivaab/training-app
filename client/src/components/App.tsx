@@ -9,28 +9,31 @@ import User from "./user/User";
 import UserList from "./user/UserList";
 import ItemMainPage from "./item/ItemMainPage";
 import EditItem from "./item/EditItem";
+import { AuthProvider } from "../context/AuthProvider";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
 
-          <Route path="auth/login" element={<Login />} />
-          <Route path="auth/register" element={<Register />} />
+            <Route path="auth/login" element={<Login />} />
+            <Route path="auth/register" element={<Register />} />
 
-          <Route path="users" element={<UserList />} />
-          <Route path="users/:id" element={<User />} />
+            <Route path="users" element={<UserList />} />
+            <Route path="users/:id" element={<User />} />
 
-          <Route path="items" element={<ItemMainPage />} />
-          <Route path="items/:id" element={<Item />} />
-          <Route path="items/:id/edit" element={<EditItem />} />
-          <Route path="items/lend" element={<AddItem />} />
+            <Route path="items" element={<ItemMainPage />} />
+            <Route path="items/:id" element={<Item />} />
+            <Route path="items/:id/edit" element={<EditItem />} />
+            <Route path="items/lend" element={<AddItem />} />
 
-          {/* Error Route Here */}
-        </Route>
-      </Routes>
+            {/* Error Route Here */}
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

@@ -1,3 +1,5 @@
+import { Dispatch, ReactNode, SetStateAction } from "react";
+
 export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
 export type SizeRangeType = { min: number; max: number };
 
@@ -26,4 +28,19 @@ export type UserType = {
   password: string;
   role: string;
   refreshToken: string;
+};
+
+export type AuthStateType = {
+  userId?: number;
+  userRole?: string;
+  accessToken?: string;
+};
+
+export type AuthContextValueType = {
+  auth: AuthStateType;
+  setAuth: Dispatch<SetStateAction<AuthStateType>>;
+};
+
+export type AuthProviderPropsType = {
+  children: ReactNode;
 };
