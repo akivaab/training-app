@@ -4,10 +4,14 @@ import {
   getAllUsers,
   getUser,
 } from "../controllers/usersController";
+import verifyPermission from "../middleware/verifyPermission";
 
 const usersRouter = express.Router();
 
-usersRouter.route("/").get(getAllUsers);
-usersRouter.route("/:id").get(getUser).delete(deleteUser);
+usersRouter.route("/").get(verifyPermission, getAllUsers);
+usersRouter
+  .route("/:id")
+  .get(/*allow only if is oneself*/ getUser)
+  .delete(verifyPermission, deleteUser);
 
 export default usersRouter;

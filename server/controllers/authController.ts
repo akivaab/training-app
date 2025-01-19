@@ -15,7 +15,7 @@ export async function authLogin(
   try {
     const [results]: [any[], any] = await pool.query(
       `
-        SELECT id, email, password
+        SELECT id, email, password, role
         FROM users
         WHERE email = ?
         `,
@@ -31,7 +31,7 @@ export async function authLogin(
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (isMatch) {
       const accessToken = jwt.sign(
-        { user: { id: user.id } },
+        { user: { id: user.id, role: user.role } },
         process.env.ACCESS_TOKEN_SECRET as Secret,
         { expiresIn: "30s" }
       );
@@ -136,7 +136,7 @@ export async function authRefresh(
           return;
         }
         const accessToken = jwt.sign(
-          { user: { id: decoded.user.id } },
+          { user: { id: decoded.user.id, role: decoded.user.role } },
           process.env.ACCESS_TOKEN_SECRET as Secret,
           { expiresIn: "30s" }
         );
