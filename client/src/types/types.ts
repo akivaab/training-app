@@ -3,6 +3,10 @@ import { Dispatch, ReactNode, SetStateAction } from "react";
 export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
 export type SizeRangeType = { min: number; max: number };
 
+export type RequireAuthPropType = {
+  allowedRoles: string[];
+};
+
 export type ItemType = {
   id: number;
   category: CategoryType;
@@ -43,4 +47,8 @@ export type AuthContextValueType = {
 
 export type AuthProviderPropsType = {
   children: ReactNode;
+};
+
+export type TokenPayload = {
+  user: Pick<UserType, "id" | "role">;
 };

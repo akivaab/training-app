@@ -10,6 +10,7 @@ import UserList from "./user/UserList";
 import ItemMainPage from "./item/ItemMainPage";
 import EditItem from "./item/EditItem";
 import { AuthProvider } from "../context/AuthProvider";
+import RequireAuth from "./auth/RequireAuth";
 
 function App() {
   return (
@@ -19,16 +20,30 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
 
-            <Route path="auth/login" element={<Login />} />
-            <Route path="auth/register" element={<Register />} />
+            <Route path="auth">
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+            </Route>
 
-            <Route path="users" element={<UserList />} />
-            <Route path="users/:id" element={<User />} />
+            <Route path="users">
+              <Route element={<RequireAuth allowedRoles={["admin"]} />}>
+                <Route index element={<UserList />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={["user", "admin"]} />}>
+                <Route path=":id" element={<User />} />
+              </Route>
+            </Route>
 
-            <Route path="items" element={<ItemMainPage />} />
-            <Route path="items/:id" element={<Item />} />
-            <Route path="items/:id/edit" element={<EditItem />} />
-            <Route path="items/lend" element={<AddItem />} />
+            <Route path="items">
+              <Route element={<RequireAuth allowedRoles={["user", "admin"]} />}>
+                <Route index element={<ItemMainPage />} />
+                <Route path=":id" element={<Item />} />
+                <Route path="lend" element={<AddItem />} />
+              </Route>
+              <Route element={<RequireAuth allowedRoles={["admin"]} />}>
+                <Route path=":id/edit" element={<EditItem />} />
+              </Route>
+            </Route>
 
             {/* Error Route Here */}
           </Route>

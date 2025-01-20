@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
+import { AuthStateType } from "../../types/types";
+import useAuth from "../../hooks/useAuth";
 
 function Login() {
   const navigate = useNavigate();
+  const setAuth = useAuth()?.setAuth as Dispatch<SetStateAction<AuthStateType>>;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [failedAttempt, setFailedAttempt] = useState<boolean>(false);
@@ -11,7 +14,7 @@ function Login() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      await loginUser(email, password);
+      setAuth(await loginUser(email, password));
       setEmail("");
       setPassword("");
       navigate("/items");
