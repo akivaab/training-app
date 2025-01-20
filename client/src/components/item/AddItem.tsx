@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postItem } from "../../api/itemsApi";
 import { CategoryType } from "../../types/types";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function AddItem() {
   const navigate = useNavigate();
+  const axios = useAxiosInstance();
   const categories: CategoryType[] = [
     "shirt",
     "pants",
@@ -20,7 +22,7 @@ function AddItem() {
   async function handleSubmit() {
     try {
       if (category && !isNaN(size)) {
-        await postItem(category, size, description);
+        await postItem(axios, category, size, description);
         navigate("/items");
       }
     } catch (err) {

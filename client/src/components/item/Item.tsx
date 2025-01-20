@@ -3,9 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Comments from "./Comments";
 import { deleteItem, getItem } from "../../api/itemsApi";
 import { ItemType } from "../../types/types";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function Item() {
   const navigate = useNavigate();
+  const axios = useAxiosInstance();
   const { id } = useParams();
   const [item, setItem] = useState<ItemType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,7 +21,7 @@ function Item() {
       if (!id) {
         return;
       }
-      const data = await getItem(id);
+      const data = await getItem(axios, id);
       if (data) {
         setItem(data);
       }
@@ -43,7 +45,7 @@ function Item() {
       if (!id) {
         return;
       }
-      await deleteItem(id);
+      await deleteItem(axios, id);
       navigate("/items", { replace: true });
     } catch (err) {
       console.error(err);

@@ -21,6 +21,8 @@ async function initialize() {
         email VARCHAR(100) NOT NULL UNIQUE,
         phone VARCHAR(20) NOT NULL UNIQUE,
         password CHAR(60) NOT NULL,
+        role VARCHAR(10) DEFAULT 'user' NOT NULL,
+        refresh_token VARCHAR(600),
         PRIMARY KEY (id)
       )`;
 

@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteComment, getComments, postComment } from "../../api/commentsApi";
 import { CommentType } from "../../types/types";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function Comments() {
+  const axios = useAxiosInstance();
   const { id } = useParams();
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
@@ -16,7 +18,7 @@ function Comments() {
   async function handleGetComments() {
     try {
       if (id) {
-        setComments(await getComments(id));
+        setComments(await getComments(axios, id));
       }
     } catch (err) {
       console.error(err);
@@ -26,7 +28,7 @@ function Comments() {
   async function handleSubmit() {
     try {
       if (id) {
-        await postComment(id, content);
+        await postComment(axios, id, content);
       }
       setIsCommenting(false);
       handleGetComments();
@@ -38,7 +40,7 @@ function Comments() {
   async function handleDelete(commentId: number) {
     try {
       if (id) {
-        await deleteComment(id, commentId);
+        await deleteComment(axios, id, commentId);
       }
       handleGetComments();
     } catch (err) {

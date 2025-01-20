@@ -1,11 +1,11 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+declare module "express-serve-static-core" {
+  interface Request {
+    requesterId?: number;
+    requesterRole?: string;
+  }
+}
 
 export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
-export type SizeRangeType = { min: number; max: number };
-
-export type RequireAuthPropType = {
-  allowedRoles: string[];
-};
 
 export type ItemType = {
   id: number;
@@ -32,21 +32,6 @@ export type UserType = {
   password: string;
   role: string;
   refreshToken: string;
-};
-
-export type AuthStateType = {
-  userId?: number;
-  userRole?: string;
-  accessToken?: string;
-};
-
-export type AuthContextValueType = {
-  auth: AuthStateType;
-  setAuth: Dispatch<SetStateAction<AuthStateType>>;
-};
-
-export type AuthProviderPropsType = {
-  children: ReactNode;
 };
 
 export type TokenPayload = {
