@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "../context/AuthProvider";
 import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import Login from "./auth/Login";
@@ -9,8 +10,9 @@ import User from "./user/User";
 import UserList from "./user/UserList";
 import ItemMainPage from "./item/ItemMainPage";
 import EditItem from "./item/EditItem";
-import { AuthProvider } from "../context/AuthProvider";
 import RequireAuth from "./auth/RequireAuth";
+import Unauthorized from "./auth/Unauthorized";
+import Missing from "./pages/Missing";
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
             <Route path="auth">
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
+              <Route path="unauthorized" element={<Unauthorized />} />
             </Route>
 
             <Route path="users">
@@ -45,7 +48,7 @@ function App() {
               </Route>
             </Route>
 
-            {/* Error Route Here */}
+            <Route path="*" element={<Missing />} />
           </Route>
         </Routes>
       </AuthProvider>
