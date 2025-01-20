@@ -13,7 +13,9 @@ export async function loginUser(
       email,
       password
     };
-    const response = await axios.post(`${url}/login`, credentials);
+    const response = await axios.post(`${url}/login`, credentials, {
+      withCredentials: true
+    });
     const accessToken = response?.data?.accessToken;
     const decoded = jwtDecode(accessToken) as TokenPayload;
     return {
