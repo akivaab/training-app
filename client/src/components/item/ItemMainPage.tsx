@@ -3,8 +3,10 @@ import ItemList from "./ItemList";
 import ItemSearchMenu from "./ItemSearchMenu";
 import { getItems } from "../../api/itemsApi";
 import { ItemType, CategoryType, SizeRangeType } from "../../types/types";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function ItemMainPage() {
+  const axios = useAxiosInstance();
   const [items, setItems] = useState<ItemType[]>([]);
   const [category, setCategory] = useState<CategoryType | null>(null);
   const [numericalSize, setNumericalSize] = useState<SizeRangeType>({
@@ -23,7 +25,7 @@ function ItemMainPage() {
     selectedSizeRange: SizeRangeType
   ) {
     try {
-      const allItems = await getItems();
+      const allItems = await getItems(axios);
       const categoryItems = allItems.filter(
         (i) => i.category === selectedCategory
       );

@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UserType } from "../../types/types";
 import { getUsers } from "../../api/usersApi";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function UserList() {
+  const axios = useAxiosInstance();
   const [users, setUsers] = useState<UserType[]>([]);
 
   useEffect(() => {
@@ -12,7 +14,7 @@ function UserList() {
 
   async function handleGetUsers() {
     try {
-      const allUsers = await getUsers();
+      const allUsers = await getUsers(axios);
       console.log(allUsers);
       const sortedUsers = allUsers.sort((a: UserType, b: UserType) => {
         const aFirstName = a.firstName.toLowerCase();

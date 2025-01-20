@@ -1,10 +1,11 @@
-import axios from "axios";
 import { AuthStateType, TokenPayload, UserType } from "../types/types";
 import { jwtDecode } from "jwt-decode";
+import { AxiosInstance, isAxiosError } from "axios";
 
-const url = "http://localhost:5000/auth";
+const url = "/auth";
 
 export async function loginUser(
+  axios: AxiosInstance,
   email: string,
   password: string
 ): Promise<AuthStateType> {
@@ -13,9 +14,7 @@ export async function loginUser(
       email,
       password
     };
-    const response = await axios.post(`${url}/login`, credentials, {
-      withCredentials: true
-    });
+    const response = await axios.post(`${url}/login`, credentials);
     const accessToken = response?.data?.accessToken;
     const decoded = jwtDecode(accessToken) as TokenPayload;
     return {
@@ -24,7 +23,7 @@ export async function loginUser(
       accessToken: accessToken
     };
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -34,6 +33,7 @@ export async function loginUser(
 }
 
 export async function registerUser(
+  axios: AxiosInstance,
   firstName: string,
   lastName: string,
   email: string,
@@ -50,7 +50,7 @@ export async function registerUser(
     };
     await axios.post(`${url}/register`, newUser);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {

@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { patchItem } from "../../api/itemsApi";
 import { CategoryType } from "../../types/types";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function EditItem() {
   const location = useLocation();
   const { category, size, description } = location.state || {};
   const navigate = useNavigate();
+  const axios = useAxiosInstance();
   const { id } = useParams();
   const [editCategory, setEditCategory] = useState<CategoryType | null>(
     category
@@ -25,7 +27,7 @@ function EditItem() {
   async function handleEdit() {
     try {
       if (id && editCategory && !isNaN(editSize)) {
-        await patchItem(id, editCategory, editSize, editDescription);
+        await patchItem(axios, id, editCategory, editSize, editDescription);
         navigate(`/items/${id}`);
       }
     } catch (err) {

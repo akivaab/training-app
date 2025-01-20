@@ -1,10 +1,12 @@
-import axios from "axios";
 import { CommentType } from "../types/types";
+import { AxiosInstance, isAxiosError } from "axios";
 
-const url = (itemId: string) =>
-  `http://localhost:5000/items/${itemId}/comments`;
+const url = (itemId: string) => `/items/${itemId}/comments`;
 
-export async function getComments(itemId: string): Promise<CommentType[]> {
+export async function getComments(
+  axios: AxiosInstance,
+  itemId: string
+): Promise<CommentType[]> {
   try {
     const res = await axios.get(`${url(itemId)}`);
     if (res.status === 200) {
@@ -13,7 +15,7 @@ export async function getComments(itemId: string): Promise<CommentType[]> {
       return [];
     }
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -22,7 +24,11 @@ export async function getComments(itemId: string): Promise<CommentType[]> {
   }
 }
 
-export async function postComment(itemId: string, content: string) {
+export async function postComment(
+  axios: AxiosInstance,
+  itemId: string,
+  content: string
+) {
   try {
     const newContent: Partial<CommentType> = {
       content,
@@ -30,7 +36,7 @@ export async function postComment(itemId: string, content: string) {
     };
     await axios.post(`${url(itemId)}`, newContent);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -39,11 +45,15 @@ export async function postComment(itemId: string, content: string) {
   }
 }
 
-export async function deleteComment(itemId: string, commentId: number) {
+export async function deleteComment(
+  axios: AxiosInstance,
+  itemId: string,
+  commentId: number
+) {
   try {
     await axios.delete(`${url(itemId)}/${commentId}`);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {

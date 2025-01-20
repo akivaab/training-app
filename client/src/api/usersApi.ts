@@ -1,9 +1,9 @@
-import axios from "axios";
 import { UserType } from "../types/types";
+import { AxiosInstance, isAxiosError } from "axios";
 
-const url = "http://localhost:5000/users";
+const url = "/users";
 
-export async function getUsers(): Promise<UserType[]> {
+export async function getUsers(axios: AxiosInstance): Promise<UserType[]> {
   try {
     const res = await axios.get(`${url}`);
     if (res.status === 200) {
@@ -12,7 +12,7 @@ export async function getUsers(): Promise<UserType[]> {
       return [];
     }
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -21,12 +21,15 @@ export async function getUsers(): Promise<UserType[]> {
   }
 }
 
-export async function getUser(id: string): Promise<UserType> {
+export async function getUser(
+  axios: AxiosInstance,
+  id: string
+): Promise<UserType> {
   try {
     const res = await axios.get(`${url}/${id}`);
     return res.data;
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -58,11 +61,11 @@ export async function getUser(id: string): Promise<UserType> {
 //   }
 // }
 
-export async function deleteUser(id: string) {
+export async function deleteUser(axios: AxiosInstance, id: string) {
   try {
     await axios.delete(`${url}/${id}`);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {

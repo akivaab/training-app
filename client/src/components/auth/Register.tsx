@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../api/authApi";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function Register() {
   const navigate = useNavigate();
+  const axios = useAxiosInstance();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -13,7 +15,7 @@ function Register() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      await registerUser(firstName, lastName, email, phone, password);
+      await registerUser(axios, firstName, lastName, email, phone, password);
       navigate("/items");
     } catch (err) {
       console.error(err);

@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserType } from "../../types/types";
 import { deleteUser, getUser } from "../../api/usersApi";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 
 function User() {
   const navigate = useNavigate();
+  const axios = useAxiosInstance();
   const { id } = useParams();
   const [user, setUser] = useState<UserType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -18,7 +20,7 @@ function User() {
       if (!id) {
         return;
       }
-      const data = await getUser(id);
+      const data = await getUser(axios, id);
       if (data) {
         setUser(data);
       }
@@ -33,7 +35,7 @@ function User() {
       if (!id) {
         return;
       }
-      await deleteUser(id);
+      await deleteUser(axios, id);
       navigate("/users", { replace: true });
     } catch (err) {
       console.error(err);

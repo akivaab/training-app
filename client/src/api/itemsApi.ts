@@ -1,9 +1,9 @@
-import axios from "axios";
 import { ItemType, CategoryType } from "../types/types";
+import { AxiosInstance, isAxiosError } from "axios";
 
-const url = "http://localhost:5000/items";
+const url = "/items";
 
-export async function getItems(): Promise<ItemType[]> {
+export async function getItems(axios: AxiosInstance): Promise<ItemType[]> {
   try {
     const res = await axios.get(`${url}`);
     if (res.status === 200) {
@@ -12,7 +12,7 @@ export async function getItems(): Promise<ItemType[]> {
       return [];
     }
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -22,6 +22,7 @@ export async function getItems(): Promise<ItemType[]> {
 }
 
 export async function postItem(
+  axios: AxiosInstance,
   category: CategoryType,
   size: number,
   description: string
@@ -31,11 +32,11 @@ export async function postItem(
       category,
       size,
       description,
-      lenderId: 1
+      lenderId: 7
     };
     await axios.post(`${url}`, newItem);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -44,12 +45,15 @@ export async function postItem(
   }
 }
 
-export async function getItem(id: string): Promise<ItemType> {
+export async function getItem(
+  axios: AxiosInstance,
+  id: string
+): Promise<ItemType> {
   try {
     const res = await axios.get(`${url}/${id}`);
     return res.data;
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -59,6 +63,7 @@ export async function getItem(id: string): Promise<ItemType> {
 }
 
 export async function patchItem(
+  axios: AxiosInstance,
   id: string,
   category: CategoryType,
   size: number,
@@ -72,7 +77,7 @@ export async function patchItem(
     };
     await axios.patch(`${url}/${id}`, updatedItem);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
@@ -81,11 +86,11 @@ export async function patchItem(
   }
 }
 
-export async function deleteItem(id: string) {
+export async function deleteItem(axios: AxiosInstance, id: string) {
   try {
     await axios.delete(`${url}/${id}`);
   } catch (err) {
-    if (axios.isAxiosError(err)) {
+    if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";
       throw new Error(errorMessage);
     } else {
