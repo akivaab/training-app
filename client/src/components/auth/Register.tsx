@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../../api/authApi";
+import { loginUser, registerUser } from "../../api/authApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
+import useAuth from "../../hooks/useAuth";
+import { AuthStateType } from "../../types/types";
 
 function Register() {
   const navigate = useNavigate();
   const axios = useAxiosInstance();
+  const setAuth = useAuth()?.setAuth as Dispatch<SetStateAction<AuthStateType>>;
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -16,6 +19,7 @@ function Register() {
     try {
       e.preventDefault();
       await registerUser(axios, firstName, lastName, email, phone, password);
+      setAuth(await loginUser(axios, email, password));
       navigate("/menu");
     } catch (err) {
       console.error(err);
