@@ -5,6 +5,7 @@ import {
   getItem,
   patchItem,
   deleteItem,
+  patchItemBorrower,
 } from "../controllers/itemsController";
 import {
   deleteItemComment,
@@ -21,6 +22,7 @@ itemsRouter
   .get(getItem)
   .patch(verifyPermission, patchItem)
   .delete(/*allow only if posted by oneself*/ deleteItem);
+itemsRouter.route("/:id/borrow").patch(patchItemBorrower);
 itemsRouter
   .route("/:itemId/comments")
   .get(getAllItemComments)

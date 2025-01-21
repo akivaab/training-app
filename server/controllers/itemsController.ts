@@ -117,6 +117,36 @@ export async function patchItem(
   }
 }
 
+export async function patchItemBorrower(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req?.params?.id) {
+    res.status(400).json({ message: "ID was not provided" });
+    return;
+  }
+  try {
+    const [result]: any = await pool.query(
+      `
+      UPDATE items
+      SET borrower_id = ?
+      WHERE id = ?
+      `,
+      [req.requesterId, req.params.id]
+    );
+    if (result.affectedRows === 0) {
+      res
+        .status(404)
+        .json({ message: `No item found with ID: ${req.params.id}` });
+    } else {
+      res.status(200).json({ message: "Item updated successfully" });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function deleteItem(
   req: Request,
   res: Response,
