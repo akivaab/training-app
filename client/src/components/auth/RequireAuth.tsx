@@ -13,7 +13,7 @@ function RequireAuth({ allowedRoles }: RequireAuthPropType) {
       <Navigate to="/auth/unauthorized" state={{ from: location }} replace />
     )
   ) : (
-    <Navigate to="/auth/login" state={{ from: location }} replace />
+    <Navigate to="/" state={{ from: location }} replace />
   );
 }
 

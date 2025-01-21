@@ -58,3 +58,16 @@ export async function registerUser(
     }
   }
 }
+
+export async function logoutUser(axios: AxiosInstance) {
+  try {
+    await axios.get(`${url}/logout`);
+  } catch (err) {
+    if (isAxiosError(err)) {
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("An unexpected error occurred. Please try again later.");
+    }
+  }
+}
