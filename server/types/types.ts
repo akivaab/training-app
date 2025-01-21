@@ -1,10 +1,3 @@
-declare module "express-serve-static-core" {
-  interface Request {
-    requesterId?: number;
-    requesterRole?: string;
-  }
-}
-
 export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
 
 export type ItemType = {
