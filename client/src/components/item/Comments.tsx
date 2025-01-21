@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteComment, getComments, postComment } from "../../api/commentsApi";
-import { CommentType } from "../../types/types";
+import { AuthStateType, CommentType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
+import useAuth from "../../hooks/useAuth";
 
 function Comments() {
+  const auth = useAuth()?.auth as AuthStateType;
   const axios = useAxiosInstance();
   const { id } = useParams();
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -84,18 +86,20 @@ function Comments() {
           >
             <h3 className="flex items-start text-sm font-light text-slate-700">
               <span className="mr-[3px] max-w-[70%] truncate">
-                {comment.userId}
+                User #{comment.userId} says:
               </span>
             </h3>
             <p className="font-verdana whitespace-pre-line break-words text-base font-light text-slate-900">
               {comment.content}
             </p>
-            <button
-              className="bg-red-300"
-              onClick={() => handleDelete(comment.id)}
-            >
-              Delete
-            </button>
+            {(auth.userRole === "admin" || auth.userId === comment.userId) && (
+              <button
+                className="bg-red-300"
+                onClick={() => handleDelete(comment.id)}
+              >
+                Delete
+              </button>
+            )}
           </div>
         ))
       ) : (
