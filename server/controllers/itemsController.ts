@@ -29,12 +29,7 @@ export async function postItem(
   res: Response,
   next: NextFunction
 ) {
-  if (
-    !req?.body?.category ||
-    !req?.body?.size ||
-    !req?.body?.description ||
-    !req?.body?.lenderId
-  ) {
+  if (!req?.body?.category || !req?.body?.size || !req?.body?.description) {
     res.status(400).json({ message: "Required fields not provided" });
     return;
   }
@@ -44,12 +39,7 @@ export async function postItem(
       INSERT INTO items (category, size, description, lender_id)
       VALUES (?, ?, ?, ?)
       `,
-      [
-        req.body.category,
-        req.body.size,
-        req.body.description,
-        req.body.lenderId,
-      ]
+      [req.body.category, req.body.size, req.body.description, req.requesterId]
     );
     res.status(201).json({ message: "Item added successfully" });
   } catch (err) {

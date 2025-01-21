@@ -31,8 +31,7 @@ export async function postItem(
     const newItem: Partial<ItemType> = {
       category,
       size,
-      description,
-      lenderId: 7
+      description
     };
     await axios.post(`${url}`, newItem);
   } catch (err) {

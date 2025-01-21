@@ -31,8 +31,7 @@ export async function postComment(
 ) {
   try {
     const newContent: Partial<CommentType> = {
-      content,
-      userId: 1
+      content
     };
     await axios.post(`${url(itemId)}`, newContent);
   } catch (err) {

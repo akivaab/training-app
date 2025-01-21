@@ -38,8 +38,7 @@ export async function postItemComment(
   if (
     !req?.params?.itemId ||
     isNaN(parseInt(req.params.itemId)) ||
-    !req?.body?.content ||
-    !req?.body?.userId
+    !req?.body?.content
   ) {
     res.status(400).json({ message: "Required fields not provided" });
     return;
@@ -50,7 +49,7 @@ export async function postItemComment(
       INSERT INTO comments (content, item_id, user_id)
       VALUES (?, ?, ?)
       `,
-      [req.body.content, parseInt(req.params.itemId), req.body.userId]
+      [req.body.content, parseInt(req.params.itemId), req.requesterId]
     );
     res.status(201).json({ message: "Comment added successfully" });
   } catch (err) {
