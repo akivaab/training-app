@@ -13,6 +13,7 @@ import EditItem from "./item/EditItem";
 import RequireAuth from "./auth/RequireAuth";
 import Unauthorized from "./auth/Unauthorized";
 import Missing from "./pages/Missing";
+import Menu from "./pages/Menu";
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="unauthorized" element={<Unauthorized />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={["user", "admin"]} />}>
+              <Route path="menu" element={<Menu />} />
             </Route>
 
             <Route path="users">

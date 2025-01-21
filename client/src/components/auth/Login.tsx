@@ -19,7 +19,7 @@ function Login() {
       setAuth(await loginUser(axios, email, password));
       setEmail("");
       setPassword("");
-      navigate("/items");
+      navigate("/menu");
     } catch (err) {
       console.error(err);
       setFailedAttempt(true);

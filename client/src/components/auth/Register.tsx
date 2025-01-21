@@ -16,7 +16,7 @@ function Register() {
     try {
       e.preventDefault();
       await registerUser(axios, firstName, lastName, email, phone, password);
-      navigate("/items");
+      navigate("/menu");
     } catch (err) {
       console.error(err);
     }
