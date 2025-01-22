@@ -23,6 +23,12 @@ function Header() {
         <h1 className="text-4xl font-extrabold">Gemach</h1>
         <nav className="space-x-8">
           <Link
+            to="menu"
+            className="text-white transition-colors duration-200 hover:text-teal-900"
+          >
+            Home
+          </Link>
+          <Link
             to="items"
             className="text-white transition-colors duration-200 hover:text-teal-900"
           >
@@ -33,6 +39,12 @@ function Header() {
             className="text-white transition-colors duration-200 hover:text-teal-900"
           >
             Lend an Item
+          </Link>
+          <Link
+            to={`users/${auth.userId}`}
+            className="text-white transition-colors duration-200 hover:text-teal-900"
+          >
+            My Profile
           </Link>
           {!auth?.accessToken ? (
             <Link

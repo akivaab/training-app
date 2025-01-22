@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { AuthStateType, ItemType, UserType } from "../../types/types";
 import { deleteUser, getUser } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
@@ -58,7 +58,7 @@ function User() {
     }
   }
 
-  return (
+  return auth.userRole === "admin" || auth.userId?.toString() === id ? (
     <div>
       {isLoading && <div>Loading...</div>}
       {!isLoading && !user && <div>Error</div>}
@@ -109,6 +109,8 @@ function User() {
         </div>
       )}
     </div>
+  ) : (
+    <Navigate to="/auth/unauthorized" state={{ from: location }} replace />
   );
 }
 
