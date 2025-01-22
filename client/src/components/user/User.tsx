@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { AuthStateType, ItemType, UserType } from "../../types/types";
-import { deleteUser, getUser } from "../../api/usersApi";
+import { deleteUser, getUser, patchUserRole } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
 
@@ -35,12 +35,25 @@ function User() {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
-          phone: data.phone
+          phone: data.phone,
+          role: data.role
         });
         setLentItems(data.lentItems);
         setBorrowedItems(data.borrowedItems);
       }
       setIsLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleAdmin() {
+    try {
+      if (!id) {
+        return;
+      }
+      await patchUserRole(axios, id);
+      handleGetUser();
     } catch (err) {
       console.error(err);
     }
@@ -70,6 +83,7 @@ function User() {
             </div>
             <div>{user.email}</div>
             <div>{user.phone}</div>
+            <div>{user.role}</div>
             <h4>Lent:</h4>
             {lentItems.map((item) => (
               <div
@@ -102,8 +116,15 @@ function User() {
             ))}
           </div>
           {auth.userRole === "admin" && (
-            <div className="bg-teal-900">
-              <button onClick={handleDelete}>Delete</button>
+            <div>
+              {user.role !== "admin" && (
+                <div className="bg-teal-900">
+                  <button onClick={handleAdmin}>Grant Admin Status</button>
+                </div>
+              )}
+              <div className="bg-teal-900">
+                <button onClick={handleDelete}>Ban</button>
+              </div>
             </div>
           )}
         </div>

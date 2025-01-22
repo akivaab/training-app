@@ -1,4 +1,5 @@
 import mysql from "mysql2";
+import bcrypt from "bcrypt";
 
 export const pool = mysql
   .createPool({
@@ -50,9 +51,16 @@ async function initialize() {
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
       )`;
 
+    const adminPwd = await bcrypt.hash("admin", 10);
+    const createDefaultAdmin = `
+      INSERT IGNORE INTO users (first_name, last_name, email, phone, password, role)
+        VALUES ("admin", "admin", "admin@gemach.com", "000-000-0000", ?, "admin")
+      `;
+
     await pool.query(createUsersTable);
     await pool.query(createItemsTable);
     await pool.query(createCommentsTable);
+    await pool.query(createDefaultAdmin, adminPwd);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

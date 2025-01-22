@@ -43,28 +43,18 @@ export async function getUser(
   }
 }
 
-// export async function patchItem(
-//   id: string,
-//   category: CategoryType,
-//   size: number,
-//   description: string
-// ) {
-//   try {
-//     const updatedItem: Partial<ItemType> = {
-//       category,
-//       size,
-//       description
-//     };
-//     await axios.patch(`${url}/${id}`, updatedItem);
-//   } catch (err) {
-//     if (axios.isAxiosError(err)) {
-//       const errorMessage = err.response?.data?.message || "An error occurred";
-//       throw new Error(errorMessage);
-//     } else {
-//       throw new Error("An unexpected error occurred. Please try again later.");
-//     }
-//   }
-// }
+export async function patchUserRole(axios: AxiosInstance, id: string) {
+  try {
+    await axios.patch(`${url}/${id}`);
+  } catch (err) {
+    if (isAxiosError(err)) {
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("An unexpected error occurred. Please try again later.");
+    }
+  }
+}
 
 export async function deleteUser(axios: AxiosInstance, id: string) {
   try {
