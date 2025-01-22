@@ -36,7 +36,7 @@ export async function authLogin(
         { expiresIn: "30s" }
       );
       const refreshToken = jwt.sign(
-        { user: { id: user.id } },
+        { user: { id: user.id, role: user.role } },
         process.env.REFRESH_TOKEN_SECRET as Secret,
         { expiresIn: "1d" }
       );
