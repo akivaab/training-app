@@ -1,4 +1,4 @@
-import { CommentType } from "../types/types";
+import { CommentType, UserType } from "../types/types";
 import { AxiosInstance, isAxiosError } from "axios";
 
 const url = (itemId: string) => `/items/${itemId}/comments`;
@@ -6,7 +6,7 @@ const url = (itemId: string) => `/items/${itemId}/comments`;
 export async function getComments(
   axios: AxiosInstance,
   itemId: string
-): Promise<CommentType[]> {
+): Promise<(CommentType & Pick<UserType, "firstName" | "lastName">)[]> {
   try {
     const res = await axios.get(`${url(itemId)}`);
     if (res.status === 200) {

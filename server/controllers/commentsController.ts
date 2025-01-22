@@ -13,8 +13,10 @@ export async function getAllItemComments(
   try {
     const [comments]: [any[], any] = await pool.query(
       `
-      SELECT id, content, item_id AS itemId, user_id AS userId
-      FROM comments
+      SELECT c.id, content, item_id AS itemId, user_id AS userId, first_name AS firstName, last_name AS lastName
+      FROM comments AS c
+      INNER JOIN users AS u
+      ON c.user_id = u.id
       WHERE item_id = ?
       `,
       [req.params.itemId]

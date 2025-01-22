@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteComment, getComments, postComment } from "../../api/commentsApi";
-import { AuthStateType, CommentType } from "../../types/types";
+import { AuthStateType, CommentType, UserType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
 
@@ -9,7 +9,9 @@ function Comments() {
   const auth = useAuth()?.auth as AuthStateType;
   const axios = useAxiosInstance();
   const { id } = useParams();
-  const [comments, setComments] = useState<CommentType[]>([]);
+  const [comments, setComments] = useState<
+    (CommentType & Pick<UserType, "firstName" | "lastName">)[]
+  >([]);
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
 
@@ -86,7 +88,7 @@ function Comments() {
           >
             <h3 className="flex items-start text-sm font-light text-slate-700">
               <span className="mr-[3px] max-w-[70%] truncate">
-                User #{comment.userId} says:
+                {comment.firstName} {comment.lastName} says:
               </span>
             </h3>
             <p className="font-verdana whitespace-pre-line break-words text-base font-light text-slate-900">
