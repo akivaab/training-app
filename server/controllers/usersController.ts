@@ -44,7 +44,25 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
         .json({ message: `No user found with ID: ${req.params.id}.` });
       return;
     }
-    res.status(200).json(users[0]);
+
+    const [lentItems]: [any[], any] = await pool.query(
+      `
+      SELECT id, category, size
+      FROM items
+      WHERE lender_id = ?
+      `,
+      [req.params.id]
+    );
+    const [borrowedItems]: [any[], any] = await pool.query(
+      `
+      SELECT id, category, size
+      FROM items
+      WHERE borrower_id = ?
+      `,
+      [req.params.id]
+    );
+
+    res.status(200).json({ ...users[0], lentItems, borrowedItems });
   } catch (err) {
     next(err);
   }

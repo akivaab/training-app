@@ -4,7 +4,6 @@ import Comments from "./Comments";
 import { deleteItem, getItem, patchItemBorrower } from "../../api/itemsApi";
 import { AuthStateType, ItemType, UserType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
-import { getUser } from "../../api/usersApi";
 import useAuth from "../../hooks/useAuth";
 
 function Item() {
@@ -12,8 +11,7 @@ function Item() {
   const auth = useAuth()?.auth as AuthStateType;
   const axios = useAxiosInstance();
   const { id } = useParams();
-  const [item, setItem] = useState<ItemType | null>(null);
-  const [lender, setLender] = useState<UserType | null>(null);
+  const [item, setItem] = useState<(ItemType & UserType) | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -28,10 +26,6 @@ function Item() {
       const itemData = await getItem(axios, id);
       if (itemData) {
         setItem(itemData);
-      }
-      const userData = await getUser(axios, itemData.lenderId.toString());
-      if (userData) {
-        setLender(userData);
       }
       setIsLoading(false);
     } catch (err) {
@@ -85,7 +79,10 @@ function Item() {
               </h2>
               <h3 className="text-lg">Size {item.size}</h3>
               <p>{item.description}</p>
-              <h3>Contact Lender at {lender?.phone}</h3>
+              <h3>
+                Contact Lender {item.firstName} {item.lastName} at {item.email}{" "}
+                or {item.phone}
+              </h3>
             </div>
 
             {item.borrowerId && <p>This item is currently lent out.</p>}

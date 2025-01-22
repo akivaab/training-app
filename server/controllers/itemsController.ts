@@ -55,9 +55,11 @@ export async function getItem(req: Request, res: Response, next: NextFunction) {
   try {
     const [items]: [any[], any] = await pool.query(
       `
-      SELECT id, category, size, description, lender_id AS lenderId, borrower_id as borrowerId
-      FROM items
-      WHERE id = ?
+      SELECT i.id, category, size, description, lender_id AS lenderId, borrower_id as borrowerId, first_name AS firstName, last_name as lastName, email, phone
+      FROM items AS i
+      INNER JOIN users AS u
+      ON i.lender_id = u.id
+      WHERE i.id = ?
       `,
       [req.params.id]
     );

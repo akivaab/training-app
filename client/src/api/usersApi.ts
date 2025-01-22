@@ -1,4 +1,4 @@
-import { UserType } from "../types/types";
+import { ItemType, UserType } from "../types/types";
 import { AxiosInstance, isAxiosError } from "axios";
 
 const url = "/users";
@@ -24,7 +24,12 @@ export async function getUsers(axios: AxiosInstance): Promise<UserType[]> {
 export async function getUser(
   axios: AxiosInstance,
   id: string
-): Promise<UserType> {
+): Promise<
+  Partial<UserType> & {
+    lentItems: Pick<ItemType, "id" | "category" | "size">[];
+    borrowedItems: Pick<ItemType, "id" | "category" | "size">[];
+  }
+> {
   try {
     const res = await axios.get(`${url}/${id}`);
     return res.data;

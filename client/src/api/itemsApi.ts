@@ -1,4 +1,4 @@
-import { ItemType, CategoryType } from "../types/types";
+import { ItemType, CategoryType, UserType } from "../types/types";
 import { AxiosInstance, isAxiosError } from "axios";
 
 const url = "/items";
@@ -47,7 +47,7 @@ export async function postItem(
 export async function getItem(
   axios: AxiosInstance,
   id: string
-): Promise<ItemType> {
+): Promise<ItemType & UserType> {
   try {
     const res = await axios.get(`${url}/${id}`);
     return res.data;
