@@ -85,9 +85,13 @@ export async function patchItem(
   }
 }
 
-export async function patchItemBorrower(axios: AxiosInstance, id: string) {
+export async function patchItemBorrower(
+  axios: AxiosInstance,
+  id: string,
+  isBorrowed: boolean
+) {
   try {
-    await axios.patch(`${url}/${id}/borrow`);
+    await axios.patch(`${url}/${id}/borrow`, { isBorrowed });
   } catch (err) {
     if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";

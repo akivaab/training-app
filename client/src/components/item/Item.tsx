@@ -33,12 +33,12 @@ function Item() {
     }
   }
 
-  async function handleBorrow() {
+  async function handleBorrow(isBorrowed: boolean) {
     try {
       if (!id) {
         return;
       }
-      await patchItemBorrower(axios, id);
+      await patchItemBorrower(axios, id, isBorrowed);
       handleGetItem();
     } catch (err) {
       console.error(err);
@@ -88,22 +88,39 @@ function Item() {
               </h3>
               {item.borrowerId && (
                 <p className="mt-2 text-sm text-red-600">
-                  This item is currently lent out.
+                  {auth.userId === item.borrowerId
+                    ? "You have borrowed this item."
+                    : "This item is currently lent out."}
                 </p>
               )}
             </div>
 
             {/* Buttons */}
             <div className="mt-auto flex flex-col items-center">
-              {/* Borrow */}
-              <button
-                className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
-                onClick={handleBorrow}
-                disabled={item.borrowerId !== null}
-              >
-                Borrow {item.borrowerId}
-              </button>
+              {/* Borrow/Return */}
+              {auth.userId === item.lenderId ? (
+                // Return
+                <button
+                  className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
+                  onClick={() => handleBorrow(false)}
+                  disabled={item.borrowerId === null}
+                >
+                  {item.borrowerId
+                    ? `Returned from User #${item.borrowerId}`
+                    : "Available to Borrow"}
+                </button>
+              ) : (
+                // Borrow
+                <button
+                  className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
+                  onClick={() => handleBorrow(true)}
+                  disabled={item.borrowerId !== null}
+                >
+                  Borrow
+                </button>
+              )}
 
+              {/* Edit/Delete */}
               <div
                 className={`flex w-full ${
                   auth.userRole === "admin"

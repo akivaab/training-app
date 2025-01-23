@@ -118,6 +118,11 @@ export async function patchItemBorrower(
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
+  console.log(req.body);
+  if (!req.body.hasOwnProperty("isBorrowed")) {
+    res.status(400).json({ message: "Required fields not provided" });
+    return;
+  }
   try {
     const [result]: any = await pool.query(
       `
@@ -125,7 +130,7 @@ export async function patchItemBorrower(
       SET borrower_id = ?
       WHERE id = ?
       `,
-      [req.requesterId, req.params.id]
+      [req.body.isBorrowed ? req.requesterId : null, req.params.id]
     );
     if (result.affectedRows === 0) {
       res
