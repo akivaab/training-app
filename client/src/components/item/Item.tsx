@@ -72,46 +72,66 @@ function Item() {
       {!isLoading && !item && <div>Error</div>}
       {!isLoading && item && (
         <>
-          <div className="mx-auto mt-8 max-w-xl rounded-lg bg-sky-200 p-4">
-            <div>
-              <h2 className="text-2xl">
+          <div className="relative mx-auto mt-8 flex max-w-xl flex-col rounded-lg bg-sky-100 p-6 shadow-md">
+            {/* Item Info */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-sky-600">
                 {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
               </h2>
-              <h3 className="text-lg">Size {item.size}</h3>
-              <p>{item.description}</p>
-              <h3>
-                Contact Lender {item.firstName} {item.lastName} at {item.email}{" "}
+              <h3 className="mt-2 text-lg text-gray-800">Size {item.size}</h3>
+              <p className="mt-4 text-base text-slate-700">
+                {item.description}
+              </p>
+              <h3 className="mt-4 text-sm text-gray-600">
+                Contact lender {item.firstName} {item.lastName} at {item.email}{" "}
                 or {item.phone}
               </h3>
+              {item.borrowerId && (
+                <p className="mt-2 text-sm text-red-600">
+                  This item is currently lent out.
+                </p>
+              )}
             </div>
 
-            {item.borrowerId && <p>This item is currently lent out.</p>}
-            <button
-              className="rounded-lg bg-teal-900 p-3 text-white transition-colors duration-100 hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-gray-500"
-              onClick={handleBorrow}
-              disabled={item.borrowerId !== null}
-            >
-              Borrow {item.borrowerId}
-            </button>
+            {/* Buttons */}
+            <div className="mt-auto flex flex-col items-center">
+              {/* Borrow */}
+              <button
+                className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
+                onClick={handleBorrow}
+                disabled={item.borrowerId !== null}
+              >
+                Borrow {item.borrowerId}
+              </button>
 
-            <section>
-              {auth.userRole === "admin" && (
-                <button
-                  className="rounded-lg bg-teal-900 p-3 text-white transition-colors duration-100 hover:bg-teal-700"
-                  onClick={handleEdit}
-                >
-                  Edit
-                </button>
-              )}
-              {(auth.userRole === "admin" || auth.userId === item.lenderId) && (
-                <button
-                  className="rounded-lg bg-teal-900 p-3 text-white transition-colors duration-100 hover:bg-teal-700"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </button>
-              )}
-            </section>
+              <div
+                className={`flex w-full ${
+                  auth.userRole === "admin"
+                    ? "justify-between"
+                    : "justify-center"
+                }`}
+              >
+                {/* Edit */}
+                {auth.userRole === "admin" && (
+                  <button
+                    className="mx-2 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
+                    onClick={handleEdit}
+                  >
+                    Edit
+                  </button>
+                )}
+                {/* Delete */}
+                {(auth.userRole === "admin" ||
+                  auth.userId === item.lenderId) && (
+                  <button
+                    className="mx-2 w-2/5 rounded-lg bg-red-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-red-700"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           <Comments />

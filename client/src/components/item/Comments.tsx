@@ -53,50 +53,49 @@ function Comments() {
   }
 
   return (
-    <section className="mr-auto max-w-xl">
+    <section className="mx-auto mt-8 max-w-xl p-4">
+      {/* Write Comment */}
       <button
-        className="mb-2 w-56 rounded bg-sky-400 p-3 text-white shadow transition-all duration-100 hover:bg-sky-700"
+        className="mb-4 w-5/12 rounded-lg bg-sky-400 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-700"
         onClick={() => setIsCommenting(!isCommenting)}
       >
         {`Click Here to ${isCommenting ? "Cancel" : "Comment!"}`}
       </button>
+
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
           isCommenting ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <textarea
-          className="m-1 w-full rounded-sm border p-2"
+          className="mb-px w-full rounded-md border p-3"
           required
-          placeholder="Comment"
+          placeholder="Write your comment here..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
         <button
-          className="mx-1 rounded bg-sky-400 p-2 text-white shadow transition-all duration-100 hover:bg-sky-700"
-          type="submit"
+          className="mb-4 w-1/4 rounded-lg bg-sky-400 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-700"
           onClick={handleSubmit}
         >
           Submit
         </button>
       </div>
+
+      {/* Comments */}
       {comments.length > 0 ? (
         comments.map((comment) => (
           <div
             key={comment.id}
-            className="my-1 rounded border-2 p-4 shadow transition-shadow hover:shadow-md"
+            className="mb-4 rounded-md border border-gray-300 bg-white p-4 shadow-sm"
           >
-            <h3 className="flex items-start text-sm font-light text-slate-700">
-              <span className="mr-[3px] max-w-[70%] truncate">
-                {comment.firstName} {comment.lastName} says:
-              </span>
+            <h3 className="mb-2 text-sm font-medium text-slate-600">
+              {comment.firstName} {comment.lastName} says:
             </h3>
-            <p className="font-verdana whitespace-pre-line break-words text-base font-light text-slate-900">
-              {comment.content}
-            </p>
+            <p className="text-base text-slate-800">{comment.content}</p>
             {(auth.userRole === "admin" || auth.userId === comment.userId) && (
               <button
-                className="bg-red-300"
+                className="mt-2 rounded-md bg-red-500 px-3 py-1 text-sm text-white shadow-sm hover:bg-red-700"
                 onClick={() => handleDelete(comment.id)}
               >
                 Delete
@@ -105,9 +104,7 @@ function Comments() {
           </div>
         ))
       ) : (
-        <h2 className="my-1 text-lg text-slate-800">
-          This post has no comments.
-        </h2>
+        <h2 className="text-lg text-slate-800">This post has no comments.</h2>
       )}
     </section>
   );

@@ -2,20 +2,20 @@ import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="container mx-auto mt-12">
-      <h1 className="text-wrap text-center text-5xl font-medium text-sky-500">
+    <div className="container mx-auto mt-12 px-4">
+      <h1 className="text-center text-5xl font-extrabold tracking-wide text-sky-600">
         WELCOME TO THE CLOTHES GEMACH
       </h1>
-      <div className="mx-auto mt-40 flex max-w-md flex-col gap-4 text-center text-xl">
+      <div className="mx-auto mt-20 flex max-w-lg flex-col gap-6 text-center text-xl">
         <Link
           to="auth/login"
-          className="mx-4 rounded-lg bg-teal-900 py-5 text-white transition-colors duration-100 hover:bg-teal-700"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
         >
           Click here to login and use the site!
         </Link>
         <Link
           to="auth/register"
-          className="mx-4 rounded-lg bg-teal-900 py-5 text-white transition-colors duration-100 hover:bg-teal-700"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
         >
           Not registered? Click here to sign up!
         </Link>

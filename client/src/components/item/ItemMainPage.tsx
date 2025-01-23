@@ -50,7 +50,7 @@ function ItemMainPage() {
   return (
     <>
       <ItemSearchMenu onSubmit={handleSearchMenuSubmit} />
-      <hr />
+      <hr className="mx-auto w-4/5" />
       <ItemList items={items} />
     </>
   );

@@ -76,55 +76,99 @@ function User() {
       {isLoading && <div>Loading...</div>}
       {!isLoading && !user && <div>Error</div>}
       {!isLoading && user && (
-        <div>
-          <div>
-            <div>
+        <div className="p-6">
+          {/* User Info */}
+          <div className="mb-6 px-6 py-3">
+            <h2 className="text-2xl font-semibold text-sky-700">
               {user.lastName}, {user.firstName}
-            </div>
-            <div>{user.email}</div>
-            <div>{user.phone}</div>
-            <div>{user.role}</div>
-            <h4>Lent:</h4>
-            {lentItems.map((item) => (
-              <div
-                key={item.id}
-                className="container mx-auto rounded-md bg-sky-200 p-4 transition-colors duration-75 hover:bg-sky-600 hover:text-white"
-              >
-                <Link to={`/items/${item.id}`}>
-                  <h3 className="text-xl">
-                    {item.category.charAt(0).toUpperCase() +
-                      item.category.slice(1)}
-                    , Size {item.size}
-                  </h3>
-                </Link>
-              </div>
-            ))}
-            <h4>Borrowed:</h4>
-            {borrowedItems.map((item) => (
-              <div
-                key={item.id}
-                className="container mx-auto rounded-md bg-sky-200 p-4 transition-colors duration-75 hover:bg-sky-600 hover:text-white"
-              >
-                <Link to={`/items/${item.id}`}>
-                  <h3 className="text-xl">
-                    {item.category.charAt(0).toUpperCase() +
-                      item.category.slice(1)}
-                    , Size {item.size}
-                  </h3>
-                </Link>
-              </div>
-            ))}
+            </h2>
+            <h3 className="text-lg text-gray-800">
+              <u className="mr-2 font-medium">Email:</u>
+              {user.email}
+            </h3>
+            <h3 className="text-lg text-gray-800">
+              <u className="mr-2 font-medium">Tel:</u>
+              {user.phone}
+            </h3>
+            <h3 className="text-lg text-gray-800">
+              <u className="mr-2 font-medium">Role:</u>
+              {user.role}
+            </h3>
           </div>
-          {auth.userRole === "admin" && (
-            <div>
-              {user.role !== "admin" && (
-                <div className="bg-teal-900">
-                  <button onClick={handleAdmin}>Grant Admin Status</button>
-                </div>
-              )}
-              <div className="bg-teal-900">
-                <button onClick={handleDelete}>Ban</button>
+
+          {/* Items */}
+          <div className="flex gap-4">
+            {/* Lent */}
+            <div className="flex-1">
+              <h3 className="mb-2 text-lg font-semibold text-sky-700">Lent:</h3>
+              <div className="h-64 overflow-y-auto rounded-lg border-2 bg-sky-100 p-4">
+                {lentItems.length > 0 ? (
+                  lentItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="mb-4 rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-100 hover:bg-sky-400 hover:text-white"
+                    >
+                      <Link to={`/items/${item.id}`}>
+                        <h3 className="text-2xl font-bold">
+                          {item.category.charAt(0).toUpperCase() +
+                            item.category.slice(1)}{" "}
+                          &#9679; Size {item.size}
+                        </h3>
+                      </Link>
+                    </div>
+                  ))
+                ) : (
+                  <div>No items lent out.</div>
+                )}
               </div>
+            </div>
+
+            {/* Borrowed */}
+            <div className="flex-1">
+              <h4 className="mb-2 text-lg font-semibold text-sky-700">
+                Borrowed:
+              </h4>
+              <div className="h-64 overflow-y-auto rounded-lg border-2 bg-sky-100 p-4">
+                {borrowedItems.length > 0 ? (
+                  borrowedItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="mb-4 rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-100 hover:bg-sky-400 hover:text-white"
+                    >
+                      <Link to={`/items/${item.id}`}>
+                        <h3 className="text-2xl font-bold">
+                          {item.category.charAt(0).toUpperCase() +
+                            item.category.slice(1)}{" "}
+                          &#9679; Size {item.size}
+                        </h3>
+                      </Link>
+                    </div>
+                  ))
+                ) : (
+                  <div>No items borrowed.</div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {auth.userRole === "admin" && (
+            <div className="mt-6 flex flex-col gap-2">
+              {/* Admin Status */}
+              {user.role !== "admin" && (
+                <button
+                  onClick={handleAdmin}
+                  className="mx-auto w-1/2 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
+                >
+                  Grant Admin Status
+                </button>
+              )}
+              {/* Ban */}
+              <button
+                onClick={handleDelete}
+                className="mx-auto w-1/2 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
+              >
+                Ban
+              </button>
             </div>
           )}
         </div>

@@ -24,38 +24,38 @@ function Header() {
         <nav className="space-x-8">
           <Link
             to="menu"
-            className="text-white transition-colors duration-200 hover:text-teal-900"
+            className="text-white transition-colors duration-200 hover:text-teal-300"
           >
             Home
           </Link>
           <Link
             to="items"
-            className="text-white transition-colors duration-200 hover:text-teal-900"
+            className="text-white transition-colors duration-200 hover:text-teal-300"
           >
             Browse Items
           </Link>
           <Link
             to="items/lend"
-            className="text-white transition-colors duration-200 hover:text-teal-900"
+            className="text-white transition-colors duration-200 hover:text-teal-300"
           >
             Lend an Item
           </Link>
           <Link
             to={`users/${auth.userId}`}
-            className="text-white transition-colors duration-200 hover:text-teal-900"
+            className="text-white transition-colors duration-200 hover:text-teal-300"
           >
             My Profile
           </Link>
           {!auth?.accessToken ? (
             <Link
               to="auth/login"
-              className="text-white transition-colors duration-200 hover:text-teal-900"
+              className="text-white transition-colors duration-200 hover:text-teal-300"
             >
               Login
             </Link>
           ) : (
             <button
-              className="text-white transition-colors duration-200 hover:text-teal-900"
+              className="text-white transition-colors duration-200 hover:text-teal-300"
               onClick={handleLogout}
             >
               Logout

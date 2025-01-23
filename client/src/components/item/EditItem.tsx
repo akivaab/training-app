@@ -24,9 +24,11 @@ function EditItem() {
     "tie"
   ];
 
-  async function handleEdit() {
+  async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     try {
       if (id && editCategory && !isNaN(editSize)) {
+        console.log(editCategory, editSize, editDescription);
         await patchItem(axios, id, editCategory, editSize, editDescription);
         navigate(`/items/${id}`);
       }
@@ -36,56 +38,72 @@ function EditItem() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3 p-6">
+    <form className="mx-auto mt-8 max-w-3xl p-6" onSubmit={handleEdit}>
       {/* Category */}
-      <label className="text-lg">Choose Category:</label>
-      <select
-        required
-        value={editCategory || ""}
-        onChange={(e) =>
-          setEditCategory((e.target.value as CategoryType) || null)
-        }
-        className="mx-auto w-96 rounded-xl border border-sky-500 px-3 py-2"
-      >
-        <option value="" disabled>
-          Select a category
-        </option>
-        {categories.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+      <div className="mb-6 text-center">
+        <label className="mb-2 block text-lg font-medium text-sky-600">
+          Choose Category:
+        </label>
+        <select
+          required
+          value={editCategory || ""}
+          onChange={(e) =>
+            setEditCategory((e.target.value as CategoryType) || null)
+          }
+          className="w-7/12 rounded-xl border border-slate-400 bg-sky-50 px-4 py-3 text-gray-800"
+        >
+          <option value="" disabled>
+            Select a category
           </option>
-        ))}
-      </select>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Size */}
-      <div>
-        <label className="text-lg">Size:</label>
+      <div className="mb-6 text-center">
+        <label className="mb-3 block text-lg font-medium text-sky-600">
+          Size:
+        </label>
         <input
           type="number"
           placeholder="Size"
           required
           value={editSize}
-          onChange={(e) => setEditSize(parseInt(e.target.value))}
-          className="m-2 w-20 rounded border border-sky-500 px-3 py-2"
+          onChange={(e) =>
+            setEditSize(
+              parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 1
+            )
+          }
+          className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
         />
       </div>
 
-      <textarea
-        className="mb-2 block h-40 w-full rounded-sm border border-slate-400 bg-sky-50 p-1"
-        placeholder="Description"
-        required
-        maxLength={500}
-        value={editDescription}
-        onChange={(e) => setEditDescription(e.target.value)}
-      ></textarea>
+      {/* Description */}
+      <div className="w-full text-center">
+        <label className="mb-3 block text-lg font-medium text-sky-600">
+          Description:
+        </label>
+        <textarea
+          className="mb-2 block h-28 w-full rounded-lg border border-slate-400 bg-sky-50 p-1"
+          placeholder="Description"
+          required
+          maxLength={500}
+          value={editDescription}
+          onChange={(e) => setEditDescription(e.target.value)}
+        ></textarea>
+      </div>
 
       <button
-        onClick={handleEdit}
-        className="rounded-md bg-sky-500 px-5 py-2 text-white"
+        type="submit"
+        className="mx-auto mt-8 block w-full max-w-sm rounded-lg bg-sky-500 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
       >
         Save Changes
       </button>
-    </div>
+    </form>
   );
 }
 

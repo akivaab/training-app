@@ -15,7 +15,6 @@ function UserList() {
   async function handleGetUsers() {
     try {
       const allUsers = await getUsers(axios);
-      console.log(allUsers);
       const sortedUsers = allUsers.sort((a: UserType, b: UserType) => {
         const aFirstName = a.firstName.toLowerCase();
         const aLastName = a.lastName.toLowerCase();
@@ -40,23 +39,31 @@ function UserList() {
       console.error(err);
     }
   }
-  return (
-    <div className="mt-2 flex flex-col gap-3">
+  return users.length > 0 ? (
+    <div className="mt-6 space-y-4">
       {users.map((user) => (
         <div
           key={user.id}
-          className="container mx-auto rounded-md bg-sky-200 p-4 transition-colors duration-75 hover:bg-sky-600 hover:text-white"
+          className="mx-auto max-w-xl rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-200 hover:bg-sky-300"
         >
           <Link to={`${user.id}`}>
-            <div className="text-lg">
+            <h2 className="text-xl font-semibold">
               {user.lastName}, {user.firstName}
-            </div>
-            <div>{user.email}</div>
-            <div>{user.phone}</div>
+            </h2>
+            <h3 className="text-md">
+              <u className="mr-2 font-medium">Email:</u>
+              {user.email}
+            </h3>
+            <h3 className="text-md">
+              <u className="mr-2 font-medium">Tel:</u>
+              {user.phone}
+            </h3>
           </Link>
         </div>
       ))}
     </div>
+  ) : (
+    <h2 className="mt-6 text-center text-xl text-slate-800">No users found.</h2>
   );
 }
 

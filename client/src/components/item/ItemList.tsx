@@ -6,23 +6,27 @@ type PropsType = {
 };
 
 function ItemList({ items }: PropsType) {
-  return (
-    <div className="mt-4 flex flex-col gap-2">
+  return items.length > 0 ? (
+    <div className="mt-6 space-y-4">
       {items.map((item) => (
         <div
           key={item.id}
-          className="container mx-auto rounded-md bg-sky-200 p-4 transition-colors duration-75 hover:bg-sky-600 hover:text-white"
+          className="mx-auto max-w-xl rounded-lg bg-sky-200 p-6 shadow-sm transition-colors duration-200 hover:bg-sky-400 hover:text-white"
         >
           <Link to={`${item.id}`}>
-            <h3 className="text-xl">
-              {item.category.charAt(0).toUpperCase() + item.category.slice(1)},
-              Size {item.size}
+            <h3 className="text-2xl font-bold">
+              {item.category.charAt(0).toUpperCase() + item.category.slice(1)}{" "}
+              &#9679; Size {item.size}
             </h3>
-            <p>{item.description}</p>
+            <p className="mt-2 text-gray-800">{item.description}</p>
           </Link>
         </div>
       ))}
     </div>
+  ) : (
+    <h2 className="mt-6 text-center text-lg text-slate-800">
+      No items found with the above criteria.
+    </h2>
   );
 }
 
