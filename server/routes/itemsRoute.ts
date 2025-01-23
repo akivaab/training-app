@@ -12,7 +12,7 @@ import {
   getAllItemComments,
   postItemComment,
 } from "../controllers/commentsController";
-import verifyPermission from "../middleware/verifyPermission";
+import verifyAdmin from "../middleware/verifyAdmin";
 
 const itemsRouter = express.Router();
 
@@ -20,15 +20,13 @@ itemsRouter.route("/").get(getAllItems).post(postItem);
 itemsRouter
   .route("/:id")
   .get(getItem)
-  .patch(verifyPermission, patchItem)
-  .delete(/*allow only if posted by oneself*/ deleteItem);
+  .patch(verifyAdmin, patchItem)
+  .delete(deleteItem);
 itemsRouter.route("/:id/borrow").patch(patchItemBorrower);
 itemsRouter
   .route("/:itemId/comments")
   .get(getAllItemComments)
   .post(postItemComment);
-itemsRouter
-  .route("/:itemId/comments/:commentId")
-  .delete(/*allow only if written by oneself*/ deleteItemComment);
+itemsRouter.route("/:itemId/comments/:commentId").delete(deleteItemComment);
 
 export default itemsRouter;

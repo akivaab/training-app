@@ -29,6 +29,13 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
+  if (
+    req.requesterId?.toString() !== req.params.id &&
+    req.requesterRole !== "admin"
+  ) {
+    res.status(401).json({ message: "Cannot view another user's profile" });
+    return;
+  }
   try {
     const [users]: [any[], any] = await pool.query(
       `

@@ -69,6 +69,27 @@ export async function deleteItemComment(
     return;
   }
   try {
+    const [comments]: [any[], any] = await pool.query(
+      `
+      SELECT user_id AS userId
+      FROM comments
+      WHERE id = ?
+      `,
+      [req.params.commentId]
+    );
+    if (comments.length === 0) {
+      res.status(404).json({
+        message: `No comment found with ID: ${req.params.commentId}.`,
+      });
+      return;
+    }
+    if (
+      req.requesterId !== comments[0].userId &&
+      req.requesterRole !== "admin"
+    ) {
+      res.status(401).json({ message: "Cannot delete another user's comment" });
+      return;
+    }
     const [result]: any = await pool.query(
       `
       DELETE FROM comments

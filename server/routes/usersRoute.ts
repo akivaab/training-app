@@ -5,15 +5,15 @@ import {
   getUser,
   patchUserRole,
 } from "../controllers/usersController";
-import verifyPermission from "../middleware/verifyPermission";
+import verifyAdmin from "../middleware/verifyAdmin";
 
 const usersRouter = express.Router();
 
-usersRouter.route("/").get(verifyPermission, getAllUsers);
+usersRouter.route("/").get(verifyAdmin, getAllUsers);
 usersRouter
   .route("/:id")
-  .get(/*allow only if is oneself*/ getUser)
+  .get(getUser)
   .patch(patchUserRole)
-  .delete(verifyPermission, deleteUser);
+  .delete(verifyAdmin, deleteUser);
 
 export default usersRouter;

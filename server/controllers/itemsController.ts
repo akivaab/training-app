@@ -154,6 +154,28 @@ export async function deleteItem(
     return;
   }
   try {
+    const [items]: [any[], any] = await pool.query(
+      `
+      SELECT lender_id AS lenderId
+      FROM items
+      WHERE id = ?
+      `,
+      [req.params.id]
+    );
+    if (items.length === 0) {
+      res
+        .status(404)
+        .json({ message: `No item found with ID: ${req.params.id}.` });
+      return;
+    }
+    if (
+      req.requesterId !== items[0].lenderId &&
+      req.requesterRole !== "admin"
+    ) {
+      res.status(401).json({ message: "Cannot delete another user's item" });
+      return;
+    }
+
     const [result]: any = await pool.query(
       `
       DELETE FROM items
