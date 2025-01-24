@@ -14,6 +14,7 @@ import RequireAuth from "./auth/RequireAuth";
 import Unauthorized from "./auth/Unauthorized";
 import Missing from "./pages/Missing";
 import Menu from "./pages/Menu";
+import EditUser from "./user/EditUser";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
               </Route>
               <Route element={<RequireAuth allowedRoles={["user", "admin"]} />}>
                 <Route path=":id" element={<User />} />
+                <Route path=":id/edit" element={<EditUser />} />
               </Route>
             </Route>
 

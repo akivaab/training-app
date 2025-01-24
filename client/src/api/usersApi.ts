@@ -43,9 +43,29 @@ export async function getUser(
   }
 }
 
+export async function patchUser(
+  axios: AxiosInstance,
+  id: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  phone: string
+) {
+  try {
+    await axios.patch(`${url}/${id}`, { firstName, lastName, email, phone });
+  } catch (err) {
+    if (isAxiosError(err)) {
+      const errorMessage = err.response?.data?.message || "An error occurred";
+      throw new Error(errorMessage);
+    } else {
+      throw new Error("An unexpected error occurred. Please try again later.");
+    }
+  }
+}
+
 export async function patchUserRole(axios: AxiosInstance, id: string) {
   try {
-    await axios.patch(`${url}/${id}`);
+    await axios.patch(`${url}/${id}/admin`);
   } catch (err) {
     if (isAxiosError(err)) {
       const errorMessage = err.response?.data?.message || "An error occurred";

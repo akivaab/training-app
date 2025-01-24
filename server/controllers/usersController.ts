@@ -75,6 +75,58 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function patchUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req?.params?.id) {
+    res.status(400).json({ message: "ID was not provided" });
+    return;
+  }
+  if (
+    !req?.body?.firstName ||
+    !req?.body?.lastName ||
+    !req?.body?.email ||
+    !req?.body?.phone
+  ) {
+    res.status(400).json({ message: "Required fields not provided" });
+    return;
+  }
+  if (
+    req.requesterId?.toString() !== req.params.id &&
+    req.requesterRole !== "admin"
+  ) {
+    res.status(401).json({ message: "Cannot view another user's profile" });
+    return;
+  }
+  try {
+    const [result]: any = await pool.query(
+      `
+      UPDATE users
+      SET first_name = ?, last_name = ?, email = ?, phone = ?
+      WHERE id = ?
+      `,
+      [
+        req.body.firstName,
+        req.body.lastName,
+        req.body.email,
+        req.body.phone,
+        req.params.id,
+      ]
+    );
+    if (result.affectedRows === 0) {
+      res
+        .status(404)
+        .json({ message: `No user found with ID: ${req.params.id}` });
+    } else {
+      res.status(200).json({ message: "User updated successfully" });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function patchUserRole(
   req: Request,
   res: Response,
@@ -87,10 +139,10 @@ export async function patchUserRole(
   try {
     const [result]: any = await pool.query(
       `
-        UPDATE users
-        SET role = "admin"
-        WHERE id = ?
-        `,
+      UPDATE users
+      SET role = "admin"
+      WHERE id = ?
+      `,
       [req.params.id]
     );
     if (result.affectedRows === 0) {
@@ -98,7 +150,7 @@ export async function patchUserRole(
         .status(404)
         .json({ message: `No user found with ID: ${req.params.id}` });
     } else {
-      res.status(200).json({ message: "Item updated successfully" });
+      res.status(200).json({ message: "User updated successfully" });
     }
   } catch (err) {
     next(err);

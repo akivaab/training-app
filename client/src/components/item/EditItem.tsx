@@ -28,7 +28,6 @@ function EditItem() {
     e.preventDefault();
     try {
       if (id && editCategory && !isNaN(editSize)) {
-        console.log(editCategory, editSize, editDescription);
         await patchItem(axios, id, editCategory, editSize, editDescription);
         navigate(`/items/${id}`);
       }

@@ -59,6 +59,16 @@ function User() {
     }
   }
 
+  function handleEdit() {
+    const data = {
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+      phone: user?.phone
+    };
+    navigate("edit", { state: data });
+  }
+
   async function handleDelete() {
     try {
       if (!id) {
@@ -94,6 +104,12 @@ function User() {
               <u className="mr-2 font-medium">Role:</u>
               {user.role}
             </h3>
+            <button
+              className="mx-2 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
+              onClick={handleEdit}
+            >
+              Edit
+            </button>
           </div>
 
           {/* Items */}
@@ -163,12 +179,14 @@ function User() {
                 </button>
               )}
               {/* Ban */}
-              <button
-                onClick={handleDelete}
-                className="mx-auto w-1/2 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
-              >
-                Ban
-              </button>
+              {auth.userId !== user.id && (
+                <button
+                  onClick={handleDelete}
+                  className="mx-auto w-1/2 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
+                >
+                  Ban
+                </button>
+              )}
             </div>
           )}
         </div>
