@@ -5,6 +5,7 @@ import { deleteItem, getItem, patchItemBorrower } from "../../api/itemsApi";
 import { AuthStateType, ItemType, UserType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
+import Alert from "../layout/Alert";
 
 function Item() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ function Item() {
   const { id } = useParams();
   const [item, setItem] = useState<(ItemType & UserType) | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     handleGetItem();
@@ -29,7 +31,7 @@ function Item() {
       }
       setIsLoading(false);
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
@@ -41,7 +43,7 @@ function Item() {
       await patchItemBorrower(axios, id, isBorrowed);
       handleGetItem();
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
@@ -62,12 +64,13 @@ function Item() {
       await deleteItem(axios, id);
       navigate("/items", { replace: true });
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
   return (
     <div>
+      {errorMsg && <Alert message={errorMsg} />}
       {isLoading && <div>Loading...</div>}
       {!isLoading && !item && <div>Error</div>}
       {!isLoading && item && (

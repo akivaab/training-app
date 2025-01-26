@@ -7,6 +7,10 @@ export type RequireAuthPropType = {
   allowedRoles: string[];
 };
 
+export type AlertPropType = {
+  message: string;
+};
+
 export type ItemType = {
   id: number;
   category: CategoryType;

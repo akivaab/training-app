@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { patchItem } from "../../api/itemsApi";
 import { CategoryType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
+import Alert from "../layout/Alert";
 
 function EditItem() {
   const location = useLocation();
@@ -15,6 +16,7 @@ function EditItem() {
   );
   const [editSize, setEditSize] = useState<number>(size);
   const [editDescription, setEditDescription] = useState<string>(description);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const categories: CategoryType[] = [
     "shirt",
     "pants",
@@ -32,77 +34,80 @@ function EditItem() {
         navigate(`/items/${id}`);
       }
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
   return (
-    <form className="mx-auto mt-8 max-w-3xl p-6" onSubmit={handleEdit}>
-      {/* Category */}
-      <div className="mb-6 text-center">
-        <label className="mb-2 block text-lg font-medium text-sky-600">
-          Choose Category:
-        </label>
-        <select
-          required
-          value={editCategory || ""}
-          onChange={(e) =>
-            setEditCategory((e.target.value as CategoryType) || null)
-          }
-          className="w-7/12 rounded-xl border border-slate-400 bg-sky-50 px-4 py-3 text-gray-800"
-        >
-          <option value="" disabled>
-            Select a category
-          </option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+    <>
+      {errorMsg && <Alert message={errorMsg} />}
+      <form className="mx-auto mt-8 max-w-3xl p-6" onSubmit={handleEdit}>
+        {/* Category */}
+        <div className="mb-6 text-center">
+          <label className="mb-2 block text-lg font-medium text-sky-600">
+            Choose Category:
+          </label>
+          <select
+            required
+            value={editCategory || ""}
+            onChange={(e) =>
+              setEditCategory((e.target.value as CategoryType) || null)
+            }
+            className="w-7/12 rounded-xl border border-slate-400 bg-sky-50 px-4 py-3 text-gray-800"
+          >
+            <option value="" disabled>
+              Select a category
             </option>
-          ))}
-        </select>
-      </div>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* Size */}
-      <div className="mb-6 text-center">
-        <label className="mb-3 block text-lg font-medium text-sky-600">
-          Size:
-        </label>
-        <input
-          type="number"
-          placeholder="Size"
-          required
-          value={editSize}
-          onChange={(e) =>
-            setEditSize(
-              parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 1
-            )
-          }
-          className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
-        />
-      </div>
+        {/* Size */}
+        <div className="mb-6 text-center">
+          <label className="mb-3 block text-lg font-medium text-sky-600">
+            Size:
+          </label>
+          <input
+            type="number"
+            placeholder="Size"
+            required
+            value={editSize}
+            onChange={(e) =>
+              setEditSize(
+                parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 1
+              )
+            }
+            className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
+          />
+        </div>
 
-      {/* Description */}
-      <div className="w-full text-center">
-        <label className="mb-3 block text-lg font-medium text-sky-600">
-          Description:
-        </label>
-        <textarea
-          className="mb-2 block h-28 w-full rounded-lg border border-slate-400 bg-sky-50 p-1"
-          placeholder="Description"
-          required
-          maxLength={500}
-          value={editDescription}
-          onChange={(e) => setEditDescription(e.target.value)}
-        ></textarea>
-      </div>
+        {/* Description */}
+        <div className="w-full text-center">
+          <label className="mb-3 block text-lg font-medium text-sky-600">
+            Description:
+          </label>
+          <textarea
+            className="mb-2 block h-28 w-full rounded-lg border border-slate-400 bg-sky-50 p-1"
+            placeholder="Description"
+            required
+            maxLength={500}
+            value={editDescription}
+            onChange={(e) => setEditDescription(e.target.value)}
+          ></textarea>
+        </div>
 
-      <button
-        type="submit"
-        className="mx-auto mt-8 block w-full max-w-sm rounded-lg bg-sky-500 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
-      >
-        Save Changes
-      </button>
-    </form>
+        <button
+          type="submit"
+          className="mx-auto mt-8 block w-full max-w-sm rounded-lg bg-sky-500 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
+        >
+          Save Changes
+        </button>
+      </form>
+    </>
   );
 }
 

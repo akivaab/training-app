@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { UserType } from "../../types/types";
 import { getUsers } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
+import Alert from "../layout/Alert";
 
 function UserList() {
   const axios = useAxiosInstance();
   const [users, setUsers] = useState<UserType[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     handleGetUsers();
@@ -36,34 +38,43 @@ function UserList() {
       });
       setUsers(sortedUsers);
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
-  return users.length > 0 ? (
-    <div className="mt-6 space-y-4">
-      {users.map((user) => (
-        <div
-          key={user.id}
-          className="mx-auto max-w-xl rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-200 hover:bg-sky-300"
-        >
-          <Link to={`${user.id}`}>
-            <h2 className="text-xl font-semibold">
-              {user.lastName}, {user.firstName}
-            </h2>
-            <h3 className="text-md">
-              <u className="mr-2 font-medium">Email:</u>
-              {user.email}
-            </h3>
-            <h3 className="text-md">
-              <u className="mr-2 font-medium">Tel:</u>
-              {user.phone}
-            </h3>
-          </Link>
+
+  return (
+    <>
+      {errorMsg && <Alert message={errorMsg} />}
+      {users.length > 0 ? (
+        <div className="mt-6 space-y-4">
+          {users.map((user) => (
+            <div
+              key={user.id}
+              className="mx-auto max-w-xl rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-200 hover:bg-sky-300"
+            >
+              <Link to={`${user.id}`}>
+                <h2 className="text-xl font-semibold">
+                  {user.lastName}, {user.firstName}
+                </h2>
+                <h3 className="text-md">
+                  <u className="mr-2 font-medium">Email:</u>
+                  {user.email}
+                </h3>
+                <h3 className="text-md">
+                  <u className="mr-2 font-medium">Tel:</u>
+                  {user.phone}
+                </h3>
+              </Link>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  ) : (
-    <h2 className="mt-6 text-center text-xl text-slate-800">No users found.</h2>
+      ) : (
+        <h2 className="mt-6 text-center text-xl text-slate-800">
+          No users found.
+        </h2>
+      )}
+      ;
+    </>
   );
 }
 

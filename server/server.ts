@@ -1,10 +1,11 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import itemsRouter from "./routes/itemsRoute";
 import usersRouter from "./routes/usersRoute";
 import authRouter from "./routes/authRoute";
-import { verifyJWT } from "./middleware/verifyJWT";
+import verifyJWT from "./middleware/verifyJWT";
+import errorHandler from "./middleware/errorHandler";
 
 // Create a new express application instance
 const app = express();
@@ -29,17 +30,7 @@ app.use(verifyJWT);
 app.use("/items", itemsRouter);
 app.use("/users", usersRouter);
 
-// Define the root path with a greeting message
-// app.get("/", (req: Request, res: Response) => {
-//   res.json({ message: "Welcome to the Express + TypeScript Server!" });
-// });
-
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res
-    .status(500)
-    .json({ message: "Internal Server Error", error: err.message });
-});
+app.use(errorHandler);
 
 // Start the Express server
 app.listen(port, () => {

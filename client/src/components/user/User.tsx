@@ -4,6 +4,7 @@ import { AuthStateType, ItemType, UserType } from "../../types/types";
 import { deleteUser, getUser, patchUserRole } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
+import Alert from "../layout/Alert";
 
 function User() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ function User() {
     Pick<ItemType, "id" | "category" | "size">[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     handleGetUser();
@@ -43,7 +45,7 @@ function User() {
       }
       setIsLoading(false);
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
@@ -55,7 +57,7 @@ function User() {
       await patchUserRole(axios, id);
       handleGetUser();
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
@@ -77,7 +79,7 @@ function User() {
       await deleteUser(axios, id);
       navigate("/users", { replace: true });
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
@@ -85,6 +87,7 @@ function User() {
     <div>
       {isLoading && <div>Loading...</div>}
       {!isLoading && !user && <div>Error</div>}
+      {errorMsg && <Alert message={errorMsg} />}
       {!isLoading && user && (
         <div className="p-6">
           {/* User Info */}

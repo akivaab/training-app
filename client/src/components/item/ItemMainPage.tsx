@@ -4,6 +4,7 @@ import ItemSearchMenu from "./ItemSearchMenu";
 import { getItems } from "../../api/itemsApi";
 import { ItemType, CategoryType, SizeRangeType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
+import Alert from "../layout/Alert";
 
 function ItemMainPage() {
   const axios = useAxiosInstance();
@@ -13,6 +14,7 @@ function ItemMainPage() {
     min: 0,
     max: 0
   });
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     if (category) {
@@ -35,7 +37,7 @@ function ItemMainPage() {
       );
       setItems(sizeItems);
     } catch (err) {
-      console.error(err);
+      setErrorMsg((err as Error).message);
     }
   }
 
@@ -49,6 +51,7 @@ function ItemMainPage() {
 
   return (
     <>
+      {errorMsg && <Alert message={errorMsg} />}
       <ItemSearchMenu onSubmit={handleSearchMenuSubmit} />
       <hr className="mx-auto w-4/5" />
       <ItemList items={items} />

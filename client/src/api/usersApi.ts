@@ -1,5 +1,6 @@
 import { ItemType, UserType } from "../types/types";
-import { AxiosInstance, isAxiosError } from "axios";
+import { AxiosInstance } from "axios";
+import throwError from "../util/throwError";
 
 const url = "/users";
 
@@ -12,12 +13,7 @@ export async function getUsers(axios: AxiosInstance): Promise<UserType[]> {
       return [];
     }
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -34,12 +30,7 @@ export async function getUser(
     const res = await axios.get(`${url}/${id}`);
     return res.data;
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -54,12 +45,7 @@ export async function patchUser(
   try {
     await axios.patch(`${url}/${id}`, { firstName, lastName, email, phone });
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -67,12 +53,7 @@ export async function patchUserRole(axios: AxiosInstance, id: string) {
   try {
     await axios.patch(`${url}/${id}/admin`);
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -80,11 +61,6 @@ export async function deleteUser(axios: AxiosInstance, id: string) {
   try {
     await axios.delete(`${url}/${id}`);
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }

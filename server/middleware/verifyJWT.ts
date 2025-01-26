@@ -2,7 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { Secret } from "jsonwebtoken";
 import { TokenPayload } from "../types/types";
 
-export function verifyJWT(req: Request, res: Response, next: NextFunction) {
+export default function verifyJWT(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     res.status(401).json({ message: "Could not authenticate" });

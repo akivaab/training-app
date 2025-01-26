@@ -1,6 +1,7 @@
 import { AuthStateType, TokenPayload, UserType } from "../types/types";
 import { jwtDecode } from "jwt-decode";
-import { AxiosInstance, isAxiosError } from "axios";
+import { AxiosInstance } from "axios";
+import throwError from "../util/throwError";
 
 const url = "/auth";
 
@@ -23,12 +24,7 @@ export async function loginUser(
       accessToken: accessToken
     };
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -50,12 +46,7 @@ export async function registerUser(
     };
     await axios.post(`${url}/register`, newUser);
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -63,11 +54,6 @@ export async function logoutUser(axios: AxiosInstance) {
   try {
     await axios.get(`${url}/logout`);
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }

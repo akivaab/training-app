@@ -1,5 +1,6 @@
 import { CommentType, UserType } from "../types/types";
-import { AxiosInstance, isAxiosError } from "axios";
+import { AxiosInstance } from "axios";
+import throwError from "../util/throwError";
 
 const url = (itemId: string) => `/items/${itemId}/comments`;
 
@@ -15,12 +16,7 @@ export async function getComments(
       return [];
     }
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -35,12 +31,7 @@ export async function postComment(
     };
     await axios.post(`${url(itemId)}`, newContent);
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
 
@@ -52,11 +43,6 @@ export async function deleteComment(
   try {
     await axios.delete(`${url(itemId)}/${commentId}`);
   } catch (err) {
-    if (isAxiosError(err)) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      throw new Error(errorMessage);
-    } else {
-      throw new Error("An unexpected error occurred. Please try again later.");
-    }
+    throwError(err);
   }
 }
