@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
-import { ItemType } from "../../types/types";
+import { ItemListPropType } from "../../types/types";
 
-type PropsType = {
-  items: ItemType[];
-};
-
-function ItemList({ items }: PropsType) {
+function ItemList({ items }: ItemListPropType) {
   return items.length > 0 ? (
     <div className="mt-6 space-y-4">
       {items.map((item) => (

@@ -11,6 +11,10 @@ export type AlertPropType = {
   message: string;
 };
 
+export type ItemListPropType = {
+  items: ItemType[];
+};
+
 export type ItemType = {
   id: number;
   category: CategoryType;

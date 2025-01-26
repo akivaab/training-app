@@ -35,7 +35,10 @@ function ItemMainPage() {
         (i) =>
           i.size >= selectedSizeRange.min && i.size <= selectedSizeRange.max
       );
-      setItems(sizeItems);
+      const sortedItems = sizeItems.sort((a: ItemType, b: ItemType) => {
+        return a.size - b.size;
+      });
+      setItems(sortedItems);
     } catch (err) {
       setErrorMsg((err as Error).message);
     }

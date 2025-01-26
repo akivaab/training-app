@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import { AuthStateType, ItemType, UserType } from "../../types/types";
+import {
+  AuthStateType,
+  CategoryType,
+  ItemType,
+  UserType
+} from "../../types/types";
 import { deleteUser, getUser, patchUserRole } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
@@ -23,6 +28,14 @@ function User() {
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const categories: CategoryType[] = [
+    "shirt",
+    "pants",
+    "shoes",
+    "suit",
+    "hat",
+    "tie"
+  ];
 
   useEffect(() => {
     handleGetUser();
@@ -43,8 +56,24 @@ function User() {
           phone: data.phone,
           role: data.role
         });
-        setLentItems(data.lentItems);
-        setBorrowedItems(data.borrowedItems);
+        setLentItems(
+          data.lentItems.sort((a, b) => {
+            const categoryComparison =
+              categories.indexOf(a.category) - categories.indexOf(b.category);
+            return categoryComparison === 0
+              ? a.size - b.size
+              : categoryComparison;
+          })
+        );
+        setBorrowedItems(
+          data.borrowedItems.sort((a, b) => {
+            const categoryComparison =
+              categories.indexOf(a.category) - categories.indexOf(b.category);
+            return categoryComparison === 0
+              ? a.size - b.size
+              : categoryComparison;
+          })
+        );
       }
       setIsLoading(false);
     } catch (err) {

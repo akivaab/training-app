@@ -31,7 +31,7 @@ function ItemSearchMenu({ onSubmit }: PropsType) {
     const sizeMin = inputNumericalSize.min;
     const sizeMax = inputNumericalSize.max;
     if (sizeMin > sizeMax) {
-      setErrorMsg("Invalid size range");
+      setErrorMsg("Error: Invalid size range");
     } else {
       onSubmit(inputCategory as CategoryType, { min: sizeMin, max: sizeMax });
     }
