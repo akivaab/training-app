@@ -16,7 +16,7 @@ const port = process.env.PORT || 5000;
 //note: fine-tune cors, figure out secure and sameSite for refresh token cookies
 app.use(
   cors({
-    origin: "http://localhost:5173", // React frontend origin
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"], // React frontend origin
     credentials: true, // Allow credentials (cookies) to be sent
   })
 );

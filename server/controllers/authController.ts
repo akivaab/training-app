@@ -53,6 +53,8 @@ export async function authLogin(
         .status(200)
         .cookie("jwt", refreshToken, {
           httpOnly: true,
+          secure: true,
+          sameSite: "strict",
           maxAge: 24 * 60 * 60 * 1000,
         })
         .json({ message: "User logged in successfully", accessToken });
