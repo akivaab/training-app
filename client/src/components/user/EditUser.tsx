@@ -47,7 +47,7 @@ function EditUser() {
   return auth.userRole === "admin" || auth.userId?.toString() === id ? (
     <>
       {errorMsg && <Alert message={errorMsg} />}
-      <form onSubmit={handleEdit}>
+      <form onSubmit={handleEdit} className="mx-auto mt-12 max-w-3xl p-4">
         {/* First Name */}
         <label className="block px-1 pt-1 text-lg text-sky-950">
           First Name:

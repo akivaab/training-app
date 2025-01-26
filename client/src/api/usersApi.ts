@@ -21,7 +21,7 @@ export async function getUser(
   axios: AxiosInstance,
   id: string
 ): Promise<
-  Partial<UserType> & {
+  Omit<UserType, "password" | "refreshToken"> & {
     lentItems: Pick<ItemType, "id" | "category" | "size">[];
     borrowedItems: Pick<ItemType, "id" | "category" | "size">[];
   }

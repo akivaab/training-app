@@ -11,7 +11,10 @@ function User() {
   const auth = useAuth()?.auth as AuthStateType;
   const axios = useAxiosInstance();
   const { id } = useParams();
-  const [user, setUser] = useState<Partial<UserType> | null>(null);
+  const [user, setUser] = useState<Omit<
+    UserType,
+    "password" | "refreshToken"
+  > | null>(null);
   const [lentItems, setLentItems] = useState<
     Pick<ItemType, "id" | "category" | "size">[]
   >([]);
@@ -91,7 +94,15 @@ function User() {
       {!isLoading && user && (
         <div className="p-6">
           {/* User Info */}
-          <div className="mb-6 px-6 py-3">
+          <div className="relative mb-6 max-w-[75%] rounded-lg bg-sky-50 px-6 py-3 shadow md:max-w-[45%]">
+            {/* Edit */}
+            <button
+              className="absolute right-3 top-3 rounded-xl bg-sky-500 px-3 py-2 text-sm text-white transition duration-100 hover:bg-sky-400"
+              onClick={handleEdit}
+              title="Edit User"
+            >
+              Edit
+            </button>
             <h2 className="text-2xl font-semibold text-sky-700">
               {user.lastName}, {user.firstName}
             </h2>
@@ -105,14 +116,8 @@ function User() {
             </h3>
             <h3 className="text-lg text-gray-800">
               <u className="mr-2 font-medium">Role:</u>
-              {user.role}
+              {user.role?.charAt(0).toUpperCase() + user.role?.slice(1)}
             </h3>
-            <button
-              className="mx-2 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
-              onClick={handleEdit}
-            >
-              Edit
-            </button>
           </div>
 
           {/* Items */}
@@ -120,7 +125,7 @@ function User() {
             {/* Lent */}
             <div className="flex-1">
               <h3 className="mb-2 text-lg font-semibold text-sky-700">Lent:</h3>
-              <div className="h-64 overflow-y-auto rounded-lg border-2 bg-sky-100 p-4">
+              <div className="h-64 overflow-y-auto rounded-lg border bg-sky-50 p-4 shadow">
                 {lentItems.length > 0 ? (
                   lentItems.map((item) => (
                     <div
@@ -147,7 +152,7 @@ function User() {
               <h4 className="mb-2 text-lg font-semibold text-sky-700">
                 Borrowed:
               </h4>
-              <div className="h-64 overflow-y-auto rounded-lg border-2 bg-sky-100 p-4">
+              <div className="h-64 overflow-y-auto rounded-lg border bg-sky-50 p-4 shadow">
                 {borrowedItems.length > 0 ? (
                   borrowedItems.map((item) => (
                     <div
