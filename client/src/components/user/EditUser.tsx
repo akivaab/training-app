@@ -27,7 +27,8 @@ function EditUser() {
   async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      if (!id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
         return;
       }
       await patchUser(

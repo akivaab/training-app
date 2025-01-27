@@ -14,7 +14,7 @@ function EditItem() {
   const [editCategory, setEditCategory] = useState<CategoryType | null>(
     category
   );
-  const [editSize, setEditSize] = useState<number>(size);
+  const [editSize, setEditSize] = useState<number>(size || 1);
   const [editDescription, setEditDescription] = useState<string>(description);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const categories: CategoryType[] = [
@@ -29,7 +29,9 @@ function EditItem() {
   async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      if (id && editCategory && !isNaN(editSize)) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
+      } else if (editCategory && !isNaN(editSize)) {
         await patchItem(axios, id, editCategory, editSize, editDescription);
         navigate(`/items/${id}`, { replace: true });
       }

@@ -22,7 +22,8 @@ function Item() {
 
   async function handleGetItem() {
     try {
-      if (!id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
         return;
       }
       const itemData = await getItem(axios, id);
@@ -37,7 +38,8 @@ function Item() {
 
   async function handleBorrow(isBorrowed: boolean) {
     try {
-      if (!id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
         return;
       }
       await patchItemBorrower(axios, id, isBorrowed);
@@ -58,7 +60,8 @@ function Item() {
 
   async function handleDelete() {
     try {
-      if (!id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
         return;
       }
       await deleteItem(axios, id);
