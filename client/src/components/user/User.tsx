@@ -96,13 +96,7 @@ function User() {
   }
 
   function handleEdit() {
-    const data = {
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      email: user?.email,
-      phone: user?.phone
-    };
-    navigate("edit", { state: data });
+    navigate("edit");
   }
 
   async function handleDelete() {

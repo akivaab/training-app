@@ -23,7 +23,7 @@ function Item() {
   async function handleGetItem() {
     try {
       if (!id || !/^\d+$/.test(id)) {
-        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
         return;
       }
       const itemData = await getItem(axios, id);
@@ -39,7 +39,7 @@ function Item() {
   async function handleBorrow(isBorrowed: boolean) {
     try {
       if (!id || !/^\d+$/.test(id)) {
-        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
         return;
       }
       await patchItemBorrower(axios, id, isBorrowed);
@@ -50,18 +50,13 @@ function Item() {
   }
 
   function handleEdit() {
-    const data = {
-      category: item?.category,
-      size: item?.size,
-      description: item?.description
-    };
-    navigate("edit", { state: data });
+    navigate("edit");
   }
 
   async function handleDelete() {
     try {
       if (!id || !/^\d+$/.test(id)) {
-        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
         return;
       }
       await deleteItem(axios, id);
