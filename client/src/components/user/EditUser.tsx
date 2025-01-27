@@ -38,7 +38,7 @@ function EditUser() {
         editEmail,
         editPhone
       );
-      navigate(`/users/${id}`);
+      navigate(`/users/${id}`, { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -107,7 +107,7 @@ function EditUser() {
       </form>
     </>
   ) : (
-    <Navigate to="/auth/unauthorized" state={{ from: location }} replace />
+    <Navigate to="/auth/unauthorized" replace />
   );
 }
 

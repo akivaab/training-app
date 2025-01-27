@@ -20,7 +20,7 @@ function Login() {
       setAuth(await loginUser(axios, email, password));
       setEmail("");
       setPassword("");
-      navigate("/menu");
+      navigate("/menu", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }

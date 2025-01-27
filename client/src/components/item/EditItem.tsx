@@ -31,7 +31,7 @@ function EditItem() {
     try {
       if (id && editCategory && !isNaN(editSize)) {
         await patchItem(axios, id, editCategory, editSize, editDescription);
-        navigate(`/items/${id}`);
+        navigate(`/items/${id}`, { replace: true });
       }
     } catch (err) {
       setErrorMsg((err as Error).message);

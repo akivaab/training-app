@@ -230,7 +230,7 @@ function User() {
       )}
     </div>
   ) : (
-    <Navigate to="/auth/unauthorized" state={{ from: location }} replace />
+    <Navigate to="/auth/unauthorized" replace />
   );
 }
 

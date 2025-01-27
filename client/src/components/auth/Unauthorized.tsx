@@ -11,9 +11,9 @@ function Unauthorized() {
       <div className="mt-8">
         <button
           className="rounded-lg bg-sky-500 px-6 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/menu", { replace: true })}
         >
-          Go Back
+          Home
         </button>
       </div>
     </div>

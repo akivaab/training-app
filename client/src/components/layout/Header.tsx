@@ -42,13 +42,13 @@ function Header() {
               to="items/lend"
               className="text-white transition-colors duration-200 hover:text-teal-300"
             >
-              Lend an Item
+              Lend Item
             </Link>
             <Link
               to={`users/${auth.userId}`}
               className="text-white transition-colors duration-200 hover:text-teal-300"
             >
-              My Profile
+              User Profile
             </Link>
             {!auth?.accessToken ? (
               <Link

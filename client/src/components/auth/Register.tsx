@@ -22,7 +22,7 @@ function Register() {
       e.preventDefault();
       await registerUser(axios, firstName, lastName, email, phone, password);
       setAuth(await loginUser(axios, email, password));
-      navigate("/menu");
+      navigate("/menu", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }

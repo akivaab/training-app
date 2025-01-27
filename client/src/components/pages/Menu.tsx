@@ -17,6 +17,12 @@ function Menu() {
           Browse Items
         </Link>
         <Link
+          to="/items/lend"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
+        >
+          Lend an Item
+        </Link>
+        <Link
           to={`/users/${auth?.userId}`}
           className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
         >
