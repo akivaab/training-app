@@ -1,15 +1,9 @@
-import { useState } from "react";
-import { CategoryType, SizeRangeType } from "../../types/types";
+import { useEffect, useState } from "react";
+import { CategoryType, ItemSearchMenuPropType } from "../../types/types";
 import Alert from "../layout/Alert";
+import { useSearchParams } from "react-router-dom";
 
-type PropsType = {
-  onSubmit: (
-    newCategory: CategoryType,
-    newNumericalSize: SizeRangeType
-  ) => void;
-};
-
-function ItemSearchMenu({ onSubmit }: PropsType) {
+function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
   const categories: CategoryType[] = [
     "shirt",
     "pants",
@@ -19,21 +13,25 @@ function ItemSearchMenu({ onSubmit }: PropsType) {
     "tie"
   ];
 
+  const [searchParams] = useSearchParams();
   const [inputCategory, setInputCategory] = useState<CategoryType | null>(null);
-  const [inputNumericalSize, setInputNumericalSize] = useState({
-    min: 1,
-    max: 1
-  });
+  const [inputMin, setInputMin] = useState<number>(1);
+  const [inputMax, setInputMax] = useState<number>(1);
   const [errorMsg, setErrorMsg] = useState<string>("");
+
+  useEffect(() => {
+    setInputCategory((searchParams.get("category") as CategoryType) || null);
+    setInputMin(parseInt(searchParams.get("min") || "1"));
+    setInputMax(parseInt(searchParams.get("max") || "1"));
+  }, [searchParams]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const sizeMin = inputNumericalSize.min;
-    const sizeMax = inputNumericalSize.max;
-    if (sizeMin > sizeMax) {
+    if (inputMin > inputMax) {
       setErrorMsg("Error: Invalid size range");
     } else {
-      onSubmit(inputCategory as CategoryType, { min: sizeMin, max: sizeMax });
+      setErrorMsg("");
+      onSubmit(inputCategory as CategoryType, inputMin, inputMax);
     }
   }
 
@@ -74,14 +72,11 @@ function ItemSearchMenu({ onSubmit }: PropsType) {
             <input
               type="number"
               placeholder="Min"
-              value={inputNumericalSize.min}
+              value={inputMin}
               required
               onChange={(e) => {
                 const val = parseInt(e.target.value);
-                setInputNumericalSize((prev) => ({
-                  ...prev,
-                  min: val > 0 ? val : 1
-                }));
+                setInputMin(val > 0 ? val : 1);
               }}
               className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
             />
@@ -89,14 +84,11 @@ function ItemSearchMenu({ onSubmit }: PropsType) {
             <input
               type="number"
               placeholder="Max"
-              value={inputNumericalSize.max}
+              value={inputMax}
               required
               onChange={(e) => {
                 const val = parseInt(e.target.value);
-                setInputNumericalSize((prev) => ({
-                  ...prev,
-                  max: val > 0 ? val : 1
-                }));
+                setInputMax(val > 0 ? val : 1);
               }}
               className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
             />

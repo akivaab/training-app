@@ -2,29 +2,32 @@ import { useEffect, useState } from "react";
 import ItemList from "./ItemList";
 import ItemSearchMenu from "./ItemSearchMenu";
 import { getItems } from "../../api/itemsApi";
-import { ItemType, CategoryType, SizeRangeType } from "../../types/types";
+import { ItemType, CategoryType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
+import { useSearchParams } from "react-router-dom";
 
 function ItemMainPage() {
   const axios = useAxiosInstance();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [items, setItems] = useState<ItemType[]>([]);
-  const [category, setCategory] = useState<CategoryType | null>(null);
-  const [numericalSize, setNumericalSize] = useState<SizeRangeType>({
-    min: 0,
-    max: 0
-  });
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
+    const category = searchParams.get("category") as CategoryType | null;
+    const min = parseInt(searchParams.get("min") || "0");
+    const max = parseInt(searchParams.get("max") || "0");
     if (category) {
-      handleGetItems(category, numericalSize);
+      handleGetItems(category, min, max);
+    } else {
+      setItems([]);
     }
-  }, [category, numericalSize]);
+  }, [searchParams]);
 
   async function handleGetItems(
     selectedCategory: CategoryType,
-    selectedSizeRange: SizeRangeType
+    selectedMin: number,
+    selectedMax: number
   ) {
     try {
       const allItems = await getItems(axios);
@@ -32,8 +35,7 @@ function ItemMainPage() {
         (i) => i.category === selectedCategory
       );
       const sizeItems = categoryItems.filter(
-        (i) =>
-          i.size >= selectedSizeRange.min && i.size <= selectedSizeRange.max
+        (i) => i.size >= selectedMin && i.size <= selectedMax
       );
       const sortedItems = sizeItems.sort((a: ItemType, b: ItemType) => {
         return a.size - b.size;
@@ -46,10 +48,14 @@ function ItemMainPage() {
 
   function handleSearchMenuSubmit(
     newCategory: CategoryType,
-    newNumericalSize: SizeRangeType
+    newMin: number,
+    newMax: number
   ) {
-    setCategory(newCategory);
-    setNumericalSize(newNumericalSize);
+    setSearchParams({
+      category: newCategory,
+      min: newMin.toString(),
+      max: newMax.toString()
+    });
   }
 
   return (

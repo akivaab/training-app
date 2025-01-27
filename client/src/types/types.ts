@@ -1,7 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
 export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
-export type SizeRangeType = { min: number; max: number };
 
 export type RequireAuthPropType = {
   allowedRoles: string[];
@@ -9,6 +8,10 @@ export type RequireAuthPropType = {
 
 export type AlertPropType = {
   message: string;
+};
+
+export type ItemSearchMenuPropType = {
+  onSubmit: (newCategory: CategoryType, newMin: number, newMax: number) => void;
 };
 
 export type ItemListPropType = {
