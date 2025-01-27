@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { AuthContextValueType } from "../../types/types";
 import { logoutUser } from "../../api/authApi";
@@ -7,14 +7,16 @@ import { useState } from "react";
 import Alert from "./Alert";
 
 function Header() {
+  const navigate = useNavigate();
   const axios = useAxiosInstance();
-  const { auth, setAuth } = useAuth() as AuthContextValueType;
+  const { auth, logout } = useAuth() as AuthContextValueType;
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   async function handleLogout() {
     try {
       await logoutUser(axios);
-      setAuth({});
+      logout();
+      navigate("/", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }

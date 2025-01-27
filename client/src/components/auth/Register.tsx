@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../../api/authApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
@@ -8,6 +8,7 @@ import Alert from "../layout/Alert";
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
   const axios = useAxiosInstance();
   const setAuth = useAuth()?.setAuth as Dispatch<SetStateAction<AuthStateType>>;
   const [firstName, setFirstName] = useState<string>("");
@@ -22,7 +23,11 @@ function Register() {
       e.preventDefault();
       await registerUser(axios, firstName, lastName, email, phone, password);
       setAuth(await loginUser(axios, email, password));
-      navigate("/menu", { replace: true });
+      navigate(
+        location.state?.from?.pathname + location.state?.from?.search ||
+          "/menu",
+        { replace: true }
+      );
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
