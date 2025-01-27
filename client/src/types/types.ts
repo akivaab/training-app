@@ -54,6 +54,8 @@ export type AuthStateType = {
 export type AuthContextValueType = {
   auth: AuthStateType;
   setAuth: Dispatch<SetStateAction<AuthStateType>>;
+  isLoggingOut: boolean;
+  logout: () => void;
 };
 
 export type AuthProviderPropsType = {

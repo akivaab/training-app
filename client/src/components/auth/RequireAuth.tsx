@@ -1,18 +1,21 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import { RequireAuthPropType } from "../../types/types";
+import { AuthContextValueType, RequireAuthPropType } from "../../types/types";
 
 function RequireAuth({ allowedRoles }: RequireAuthPropType) {
-  const auth = useAuth()?.auth;
+  const location = useLocation();
+  const { auth, isLoggingOut } = useAuth() as AuthContextValueType;
 
-  return auth && auth.userId && auth.userRole && auth.accessToken ? (
+  return isLoggingOut ? null : auth.userId &&
+    auth.userRole &&
+    auth.accessToken ? (
     allowedRoles?.includes(auth.userRole) ? (
       <Outlet />
     ) : (
       <Navigate to="/auth/unauthorized" replace />
     )
   ) : (
-    <Navigate to="/" replace />
+    <Navigate to="/" state={{ from: location }} replace />
   );
 }
 

@@ -1,21 +1,17 @@
-import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { patchItem } from "../../api/itemsApi";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getItem, patchItem } from "../../api/itemsApi";
 import { CategoryType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
 
 function EditItem() {
-  const location = useLocation();
-  const { category, size, description } = location.state || {};
   const navigate = useNavigate();
   const axios = useAxiosInstance();
   const { id } = useParams();
-  const [editCategory, setEditCategory] = useState<CategoryType | null>(
-    category
-  );
-  const [editSize, setEditSize] = useState<number>(size);
-  const [editDescription, setEditDescription] = useState<string>(description);
+  const [editCategory, setEditCategory] = useState<CategoryType | null>(null);
+  const [editSize, setEditSize] = useState<number>(1);
+  const [editDescription, setEditDescription] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const categories: CategoryType[] = [
     "shirt",
@@ -26,10 +22,33 @@ function EditItem() {
     "tie"
   ];
 
+  useEffect(() => {
+    handleGetItem();
+  }, []);
+
+  async function handleGetItem() {
+    try {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
+        return;
+      }
+      const itemData = await getItem(axios, id);
+      if (itemData) {
+        setEditCategory(itemData.category);
+        setEditSize(itemData.size);
+        setEditDescription(itemData.description);
+      }
+    } catch (err) {
+      setErrorMsg((err as Error).message);
+    }
+  }
+
   async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      if (id && editCategory && !isNaN(editSize)) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
+      } else if (editCategory && !isNaN(editSize)) {
         await patchItem(axios, id, editCategory, editSize, editDescription);
         navigate(`/items/${id}`, { replace: true });
       }

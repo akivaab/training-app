@@ -23,7 +23,9 @@ function Comments() {
 
   async function handleGetComments() {
     try {
-      if (id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
+      } else {
         setComments(await getComments(axios, id));
       }
     } catch (err) {
@@ -33,7 +35,9 @@ function Comments() {
 
   async function handleSubmit() {
     try {
-      if (id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+      } else {
         await postComment(axios, id, content);
       }
       setIsCommenting(false);
@@ -45,7 +49,9 @@ function Comments() {
 
   async function handleDelete(commentId: number) {
     try {
-      if (id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+      } else {
         await deleteComment(axios, id, commentId);
       }
       handleGetComments();

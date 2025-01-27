@@ -1,33 +1,50 @@
-import { useState } from "react";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams
-} from "react-router-dom";
-import { patchUser } from "../../api/usersApi";
+import { useEffect, useState } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { getUser, patchUser } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
 import { AuthStateType } from "../../types/types";
 import Alert from "../layout/Alert";
 
 function EditUser() {
-  const location = useLocation();
-  const { firstName, lastName, email, phone } = location.state || {};
   const navigate = useNavigate();
   const auth = useAuth()?.auth as AuthStateType;
   const axios = useAxiosInstance();
   const { id } = useParams();
-  const [editFirstName, setEditFirstName] = useState<string>(firstName);
-  const [editLastName, setEditLastName] = useState<string>(lastName);
-  const [editEmail, setEditEmail] = useState<string>(email);
-  const [editPhone, setEditPhone] = useState<string>(phone);
+  const [editFirstName, setEditFirstName] = useState<string>("");
+  const [editLastName, setEditLastName] = useState<string>("");
+  const [editEmail, setEditEmail] = useState<string>("");
+  const [editPhone, setEditPhone] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
+
+  useEffect(() => {
+    handleGetUser();
+  }, []);
+
+  async function handleGetUser() {
+    try {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+        return;
+      }
+      const data = await getUser(axios, id);
+      if (data) {
+        setEditFirstName(data.firstName);
+        setEditLastName(data.lastName);
+        setEditEmail(data.email);
+        setEditPhone(data.phone);
+      }
+      setErrorMsg("");
+    } catch (err) {
+      setErrorMsg((err as Error).message);
+    }
+  }
 
   async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      if (!id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
         return;
       }
       await patchUser(

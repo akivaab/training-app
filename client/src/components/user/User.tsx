@@ -43,7 +43,8 @@ function User() {
 
   async function handleGetUser() {
     try {
-      if (!id) {
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
         return;
       }
       const data = await getUser(axios, id);
@@ -76,6 +77,7 @@ function User() {
         );
       }
       setIsLoading(false);
+      setErrorMsg("");
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -94,13 +96,7 @@ function User() {
   }
 
   function handleEdit() {
-    const data = {
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      email: user?.email,
-      phone: user?.phone
-    };
-    navigate("edit", { state: data });
+    navigate("edit");
   }
 
   async function handleDelete() {
