@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import jwt, { Secret } from "jsonwebtoken";
 import { pool } from "../db/dbConn";
-import { DBResultType, UserType } from "../types/types";
+import { DBResultType, TokenPayload, UserType } from "../types/types";
 import { ResultSetHeader } from "mysql2";
 
 export async function authLogin(
@@ -34,13 +34,14 @@ export async function authLogin(
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (isMatch) {
+      const payload: TokenPayload = { user: { id: user.id, role: user.role } };
       const accessToken = jwt.sign(
-        { user: { id: user.id, role: user.role } },
+        payload,
         process.env.ACCESS_TOKEN_SECRET as Secret,
         { expiresIn: "30s" }
       );
       const refreshToken = jwt.sign(
-        { user: { id: user.id, role: user.role } },
+        payload,
         process.env.REFRESH_TOKEN_SECRET as Secret,
         { expiresIn: "1d" }
       );
@@ -145,8 +146,11 @@ export async function authRefresh(
           res.status(403).json({ message: "Could not authenticate" });
           return;
         }
+        const payload: TokenPayload = {
+          user: { id: decoded.user.id, role: decoded.user.role },
+        };
         const accessToken = jwt.sign(
-          { user: { id: decoded.user.id, role: decoded.user.role } },
+          payload,
           process.env.ACCESS_TOKEN_SECRET as Secret,
           { expiresIn: "30s" }
         );
