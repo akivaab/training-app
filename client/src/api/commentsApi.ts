@@ -24,7 +24,7 @@ export async function postComment(
   axios: AxiosInstance,
   itemId: string,
   content: string
-) {
+): Promise<void> {
   try {
     const newContent: Partial<CommentType> = {
       content
@@ -39,7 +39,7 @@ export async function deleteComment(
   axios: AxiosInstance,
   itemId: string,
   commentId: number
-) {
+): Promise<void> {
   try {
     await axios.delete(`${url(itemId)}/${commentId}`);
   } catch (err) {

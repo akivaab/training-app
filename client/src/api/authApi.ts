@@ -11,7 +11,7 @@ export async function loginUser(
   password: string
 ): Promise<AuthStateType> {
   try {
-    const credentials: Partial<UserType> = {
+    const credentials: Pick<UserType, "email" | "password"> = {
       email,
       password
     };
@@ -35,9 +35,12 @@ export async function registerUser(
   email: string,
   phone: string,
   password: string
-) {
+): Promise<void> {
   try {
-    const newUser: Partial<UserType> = {
+    const newUser: Pick<
+      UserType,
+      "firstName" | "lastName" | "email" | "phone" | "password"
+    > = {
       firstName,
       lastName,
       email,
@@ -50,7 +53,7 @@ export async function registerUser(
   }
 }
 
-export async function logoutUser(axios: AxiosInstance) {
+export async function logoutUser(axios: AxiosInstance): Promise<void> {
   try {
     await axios.get(`${url}/logout`);
   } catch (err) {

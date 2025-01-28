@@ -7,11 +7,11 @@ import {
 
 const AuthContext = createContext<AuthContextValueType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: AuthProviderPropsType) => {
+export function AuthProvider({ children }: AuthProviderPropsType): JSX.Element {
   const [auth, setAuth] = useState<AuthStateType>({});
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
 
-  function logout() {
+  function logout(): void {
     setIsLoggingOut(true);
     setAuth({});
     setTimeout(() => setIsLoggingOut(false), 100);
@@ -22,6 +22,6 @@ export const AuthProvider = ({ children }: AuthProviderPropsType) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export default AuthContext;

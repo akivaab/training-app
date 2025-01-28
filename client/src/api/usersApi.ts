@@ -4,7 +4,11 @@ import throwError from "../util/throwError";
 
 const url = "/users";
 
-export async function getUsers(axios: AxiosInstance): Promise<UserType[]> {
+export async function getUsers(
+  axios: AxiosInstance
+): Promise<
+  Pick<UserType, "id" | "firstName" | "lastName" | "email" | "phone">[]
+> {
   try {
     const res = await axios.get(`${url}`);
     if (res.status === 200) {
@@ -21,7 +25,10 @@ export async function getUser(
   axios: AxiosInstance,
   id: string
 ): Promise<
-  Omit<UserType, "password" | "refreshToken"> & {
+  Pick<
+    UserType,
+    "id" | "firstName" | "lastName" | "email" | "phone" | "role"
+  > & {
     lentItems: Pick<ItemType, "id" | "category" | "size">[];
     borrowedItems: Pick<ItemType, "id" | "category" | "size">[];
   }
@@ -41,7 +48,7 @@ export async function patchUser(
   lastName: string,
   email: string,
   phone: string
-) {
+): Promise<void> {
   try {
     await axios.patch(`${url}/${id}`, { firstName, lastName, email, phone });
   } catch (err) {
@@ -49,7 +56,10 @@ export async function patchUser(
   }
 }
 
-export async function patchUserRole(axios: AxiosInstance, id: string) {
+export async function patchUserRole(
+  axios: AxiosInstance,
+  id: string
+): Promise<void> {
   try {
     await axios.patch(`${url}/${id}/admin`);
   } catch (err) {
@@ -57,7 +67,10 @@ export async function patchUserRole(axios: AxiosInstance, id: string) {
   }
 }
 
-export async function deleteUser(axios: AxiosInstance, id: string) {
+export async function deleteUser(
+  axios: AxiosInstance,
+  id: string
+): Promise<void> {
   try {
     await axios.delete(`${url}/${id}`);
   } catch (err) {

@@ -3,12 +3,12 @@ import axios from "../api/axios";
 import { AuthStateType } from "../types/types";
 import useAuth from "./useAuth";
 
-function useRefreshToken() {
+function useRefreshToken(): () => Promise<string> {
   const setAuth = useAuth()?.setAuth as Dispatch<SetStateAction<AuthStateType>>;
 
   const refresh = useCallback(async (): Promise<string> => {
     const response = await axios.get("/auth/refresh");
-    const accessToken = response?.data?.accessToken;
+    const accessToken: string = response?.data?.accessToken;
     setAuth((prev) => {
       return { ...prev, accessToken };
     });

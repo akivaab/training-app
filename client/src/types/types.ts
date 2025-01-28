@@ -1,6 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
 export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
+export type RoleType = "user" | "admin";
 
 export type RequireAuthPropType = {
   allowedRoles: string[];
@@ -41,7 +42,7 @@ export type UserType = {
   email: string;
   phone: string;
   password: string;
-  role: string;
+  role: RoleType;
   refreshToken: string;
 };
 
