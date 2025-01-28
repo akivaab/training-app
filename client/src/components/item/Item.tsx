@@ -12,7 +12,10 @@ function Item() {
   const auth = useAuth()?.auth as AuthStateType;
   const axios = useAxiosInstance();
   const { id } = useParams();
-  const [item, setItem] = useState<(ItemType & UserType) | null>(null);
+  const [item, setItem] = useState<
+    | (ItemType & Pick<UserType, "firstName" | "lastName" | "email" | "phone">)
+    | null
+  >(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
@@ -20,7 +23,7 @@ function Item() {
     handleGetItem();
   }, []);
 
-  async function handleGetItem() {
+  async function handleGetItem(): Promise<void> {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
@@ -36,7 +39,7 @@ function Item() {
     }
   }
 
-  async function handleBorrow(isBorrowed: boolean) {
+  async function handleBorrow(isBorrowed: boolean): Promise<void> {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
@@ -49,11 +52,7 @@ function Item() {
     }
   }
 
-  function handleEdit() {
-    navigate("edit");
-  }
-
-  async function handleDelete() {
+  async function handleDelete(): Promise<void> {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
@@ -133,7 +132,7 @@ function Item() {
                 {auth.userRole === "admin" && (
                   <button
                     className="mx-2 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
-                    onClick={handleEdit}
+                    onClick={() => navigate("edit")}
                   >
                     Edit
                   </button>

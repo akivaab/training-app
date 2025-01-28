@@ -25,7 +25,7 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
     setInputMax(parseInt(searchParams.get("max") || "1"));
   }, [searchParams]);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     if (inputMin > inputMax) {
       setErrorMsg("Error: Invalid size range");

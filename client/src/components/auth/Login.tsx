@@ -15,7 +15,9 @@ function Login() {
   const [password, setPassword] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     try {
       e.preventDefault();
       setAuth(await loginUser(axios, email, password));

@@ -12,7 +12,7 @@ function Header() {
   const { auth, logout } = useAuth() as AuthContextValueType;
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  async function handleLogout() {
+  async function handleLogout(): Promise<void> {
     try {
       await logoutUser(axios);
       logout();

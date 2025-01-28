@@ -21,7 +21,9 @@ function AddItem() {
   const [description, setDescription] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     e.preventDefault();
     try {
       if (category && !isNaN(size)) {

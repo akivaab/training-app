@@ -16,7 +16,7 @@ export type ItemSearchMenuPropType = {
 };
 
 export type ItemListPropType = {
-  items: ItemType[];
+  items: Pick<ItemType, "id" | "category" | "size" | "description">[];
 };
 
 export type ItemType = {
@@ -48,7 +48,7 @@ export type UserType = {
 
 export type AuthStateType = {
   userId?: number;
-  userRole?: string;
+  userRole?: RoleType;
   accessToken?: string;
 };
 

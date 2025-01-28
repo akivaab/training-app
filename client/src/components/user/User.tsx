@@ -16,9 +16,9 @@ function User() {
   const auth = useAuth()?.auth as AuthStateType;
   const axios = useAxiosInstance();
   const { id } = useParams();
-  const [user, setUser] = useState<Omit<
+  const [user, setUser] = useState<Pick<
     UserType,
-    "password" | "refreshToken"
+    "id" | "firstName" | "lastName" | "email" | "phone" | "role"
   > | null>(null);
   const [lentItems, setLentItems] = useState<
     Pick<ItemType, "id" | "category" | "size">[]
@@ -41,7 +41,7 @@ function User() {
     handleGetUser();
   }, []);
 
-  async function handleGetUser() {
+  async function handleGetUser(): Promise<void> {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid user ID.`);
@@ -83,7 +83,7 @@ function User() {
     }
   }
 
-  async function handleAdmin() {
+  async function handleAdmin(): Promise<void> {
     try {
       if (!id) {
         return;
@@ -95,11 +95,7 @@ function User() {
     }
   }
 
-  function handleEdit() {
-    navigate("edit");
-  }
-
-  async function handleDelete() {
+  async function handleDelete(): Promise<void> {
     try {
       if (!id) {
         return;
@@ -123,7 +119,7 @@ function User() {
             {/* Edit */}
             <button
               className="absolute right-3 top-3 rounded-xl bg-sky-500 px-3 py-2 text-sm text-white transition duration-100 hover:bg-sky-400"
-              onClick={handleEdit}
+              onClick={() => navigate("edit")}
               title="Edit User"
             >
               Edit

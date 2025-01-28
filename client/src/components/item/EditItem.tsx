@@ -26,7 +26,7 @@ function EditItem() {
     handleGetItem();
   }, []);
 
-  async function handleGetItem() {
+  async function handleGetItem(): Promise<void> {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
@@ -43,7 +43,9 @@ function EditItem() {
     }
   }
 
-  async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleEdit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     e.preventDefault();
     try {
       if (!id || !/^\d+$/.test(id)) {

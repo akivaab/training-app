@@ -7,7 +7,9 @@ import Alert from "../layout/Alert";
 
 function UserList() {
   const axios = useAxiosInstance();
-  const [users, setUsers] = useState<UserType[]>([]);
+  const [users, setUsers] = useState<
+    Pick<UserType, "id" | "firstName" | "lastName" | "email" | "phone">[]
+  >([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
@@ -17,7 +19,7 @@ function UserList() {
   async function handleGetUsers() {
     try {
       const allUsers = await getUsers(axios);
-      const sortedUsers = allUsers.sort((a: UserType, b: UserType) => {
+      const sortedUsers = allUsers.sort((a, b) => {
         const aFirstName = a.firstName.toLowerCase();
         const aLastName = a.lastName.toLowerCase();
         const bFirstName = b.firstName.toLowerCase();

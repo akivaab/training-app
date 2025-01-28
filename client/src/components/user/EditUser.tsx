@@ -21,7 +21,7 @@ function EditUser() {
     handleGetUser();
   }, []);
 
-  async function handleGetUser() {
+  async function handleGetUser(): Promise<void> {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid user ID.`);
@@ -40,7 +40,9 @@ function EditUser() {
     }
   }
 
-  async function handleEdit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleEdit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     e.preventDefault();
     try {
       if (!id || !/^\d+$/.test(id)) {

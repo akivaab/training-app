@@ -18,7 +18,9 @@ function Register() {
   const [password, setPassword] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
     try {
       e.preventDefault();
       await registerUser(axios, firstName, lastName, email, phone, password);

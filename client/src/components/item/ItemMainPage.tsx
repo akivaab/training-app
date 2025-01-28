@@ -10,7 +10,9 @@ import { useSearchParams } from "react-router-dom";
 function ItemMainPage() {
   const axios = useAxiosInstance();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [items, setItems] = useState<ItemType[]>([]);
+  const [items, setItems] = useState<
+    Pick<ItemType, "id" | "category" | "size" | "description">[]
+  >([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
@@ -28,7 +30,7 @@ function ItemMainPage() {
     selectedCategory: CategoryType,
     selectedMin: number,
     selectedMax: number
-  ) {
+  ): Promise<void> {
     try {
       const allItems = await getItems(axios);
       const categoryItems = allItems.filter(
@@ -37,7 +39,7 @@ function ItemMainPage() {
       const sizeItems = categoryItems.filter(
         (i) => i.size >= selectedMin && i.size <= selectedMax
       );
-      const sortedItems = sizeItems.sort((a: ItemType, b: ItemType) => {
+      const sortedItems = sizeItems.sort((a, b) => {
         return a.size - b.size;
       });
       setItems(sortedItems);
@@ -50,7 +52,7 @@ function ItemMainPage() {
     newCategory: CategoryType,
     newMin: number,
     newMax: number
-  ) {
+  ): void {
     setSearchParams({
       category: newCategory,
       min: newMin.toString(),
