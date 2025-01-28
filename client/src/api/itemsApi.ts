@@ -29,7 +29,8 @@ export async function postItem(
       size,
       description
     };
-    await axios.post(`${url}`, newItem);
+    const res = await axios.post(`${url}`, newItem);
+    return res.data;
   } catch (err) {
     throwError(err);
   }

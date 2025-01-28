@@ -25,8 +25,8 @@ function AddItem() {
     e.preventDefault();
     try {
       if (category && !isNaN(size)) {
-        await postItem(axios, category, size, description);
-        navigate("/items");
+        const newItemId = await postItem(axios, category, size, description);
+        navigate(`/items/${newItemId}`);
       }
     } catch (err) {
       setErrorMsg((err as Error).message);

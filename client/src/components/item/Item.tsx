@@ -60,7 +60,7 @@ function Item() {
         return;
       }
       await deleteItem(axios, id);
-      navigate("/items", { replace: true });
+      navigate("/menu", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }

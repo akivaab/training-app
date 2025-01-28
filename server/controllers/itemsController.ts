@@ -1,13 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 import { pool } from "../db/dbConn";
+import { DBResultType, ItemType, UserType } from "../types/types";
+import { ResultSetHeader } from "mysql2";
 
 export async function getAllItems(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
-    const [items]: [any[], any] = await pool.query(
+    const [items] = await pool.query<
+      DBResultType<Pick<ItemType, "id" | "category" | "size" | "description">>[]
+    >(
       `
       SELECT id, category, size, description
       FROM items
@@ -28,32 +32,44 @@ export async function postItem(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.body?.category || !req?.body?.size || !req?.body?.description) {
     res.status(400).json({ message: "Required fields not provided" });
     return;
   }
   try {
-    await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
       INSERT INTO items (category, size, description, lender_id)
       VALUES (?, ?, ?, ?)
       `,
       [req.body.category, req.body.size, req.body.description, req.requesterId]
     );
-    res.status(201).json({ message: "Item added successfully" });
+    if (result.affectedRows === 0) {
+      res.status(404).json({ message: `Failed to add item` });
+    } else {
+      res.status(201).json(result.insertId);
+    }
   } catch (err) {
     next(err);
   }
 }
 
-export async function getItem(req: Request, res: Response, next: NextFunction) {
+export async function getItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
   try {
-    const [items]: [any[], any] = await pool.query(
+    const [items] = await pool.query<
+      DBResultType<
+        ItemType & Pick<UserType, "firstName" | "lastName" | "email" | "phone">
+      >[]
+    >(
       `
       SELECT i.id, category, size, description, lender_id AS lenderId, borrower_id as borrowerId, first_name AS firstName, last_name as lastName, email, phone
       FROM items AS i
@@ -79,7 +95,7 @@ export async function patchItem(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
@@ -89,7 +105,7 @@ export async function patchItem(
     return;
   }
   try {
-    const [result]: any = await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
       UPDATE items
       SET category = ?, size = ?, description = ?
@@ -113,7 +129,7 @@ export async function patchItemBorrower(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
@@ -124,7 +140,7 @@ export async function patchItemBorrower(
     return;
   }
   try {
-    const [result]: any = await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
       UPDATE items
       SET borrower_id = ?
@@ -148,13 +164,15 @@ export async function deleteItem(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
   try {
-    const [items]: [any[], any] = await pool.query(
+    const [items] = await pool.query<
+      DBResultType<Pick<ItemType, "lenderId">>[]
+    >(
       `
       SELECT lender_id AS lenderId
       FROM items
@@ -176,7 +194,7 @@ export async function deleteItem(
       return;
     }
 
-    const [result]: any = await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
       DELETE FROM items
       WHERE id = ?

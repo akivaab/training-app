@@ -4,7 +4,7 @@ export default function verifyAdmin(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): void {
   if (
     !req?.requesterRole ||
     !req?.requesterId ||

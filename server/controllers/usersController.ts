@@ -1,13 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { pool } from "../db/dbConn";
+import { DBResultType, ItemType, UserType } from "../types/types";
+import { ResultSetHeader } from "mysql2";
 
 export async function getAllUsers(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
-    const [users]: [any[], any] = await pool.query(
+    const [users] = await pool.query<
+      DBResultType<
+        Pick<UserType, "id" | "firstName" | "lastName" | "email" | "phone">
+      >[]
+    >(
       `
       SELECT id, first_name AS firstName, last_name AS lastName, email, phone
       FROM users
@@ -24,7 +30,11 @@ export async function getAllUsers(
   }
 }
 
-export async function getUser(req: Request, res: Response, next: NextFunction) {
+export async function getUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
@@ -37,7 +47,14 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
     return;
   }
   try {
-    const [users]: [any[], any] = await pool.query(
+    const [users] = await pool.query<
+      DBResultType<
+        Pick<
+          UserType,
+          "id" | "firstName" | "lastName" | "email" | "phone" | "role"
+        >
+      >[]
+    >(
       `
       SELECT id, first_name AS firstName, last_name AS lastName, email, phone, role
       FROM users
@@ -52,7 +69,9 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
       return;
     }
 
-    const [lentItems]: [any[], any] = await pool.query(
+    const [lentItems] = await pool.query<
+      DBResultType<Pick<ItemType, "id" | "category" | "size">>[]
+    >(
       `
       SELECT id, category, size
       FROM items
@@ -60,7 +79,9 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
       `,
       [req.params.id]
     );
-    const [borrowedItems]: [any[], any] = await pool.query(
+    const [borrowedItems] = await pool.query<
+      DBResultType<Pick<ItemType, "id" | "category" | "size">>[]
+    >(
       `
       SELECT id, category, size
       FROM items
@@ -79,7 +100,7 @@ export async function patchUser(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
@@ -101,7 +122,7 @@ export async function patchUser(
     return;
   }
   try {
-    const [result]: any = await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
       UPDATE users
       SET first_name = ?, last_name = ?, email = ?, phone = ?
@@ -131,13 +152,13 @@ export async function patchUserRole(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
   try {
-    const [result]: any = await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
       UPDATE users
       SET role = "admin"
@@ -161,13 +182,13 @@ export async function deleteUser(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.params?.id) {
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
   try {
-    const [result]: any = await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
       DELETE FROM users
       WHERE id = ?

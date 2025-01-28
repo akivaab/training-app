@@ -11,7 +11,7 @@ export const pool = mysql
   })
   .promise();
 
-async function initialize() {
+async function initialize(): Promise<void> {
   try {
     //NOTE: refresh token and admin/user roles
     const createUsersTable = `

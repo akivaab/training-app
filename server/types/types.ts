@@ -1,4 +1,9 @@
-export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
+import { RowDataPacket } from "mysql2";
+
+type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
+type RoleType = "user" | "admin";
+
+export type DBResultType<T> = T & RowDataPacket;
 
 export type ItemType = {
   id: number;
@@ -23,7 +28,7 @@ export type UserType = {
   email: string;
   phone: string;
   password: string;
-  role: string;
+  role: RoleType;
   refreshToken: string;
 };
 

@@ -2,18 +2,22 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import jwt, { Secret } from "jsonwebtoken";
 import { pool } from "../db/dbConn";
+import { DBResultType, UserType } from "../types/types";
+import { ResultSetHeader } from "mysql2";
 
 export async function authLogin(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (!req?.body?.email || !req?.body?.password) {
     res.status(400).json({ message: "Required fields not provided" });
     return;
   }
   try {
-    const [results]: [any[], any] = await pool.query(
+    const [users] = await pool.query<
+      DBResultType<Pick<UserType, "id" | "email" | "password" | "role">>[]
+    >(
       `
         SELECT id, email, password, role
         FROM users
@@ -21,12 +25,12 @@ export async function authLogin(
         `,
       [req.body.email]
     );
-    if (results.length === 0) {
+    if (users.length === 0) {
       res.status(404).json({ message: "Invalid email or password" });
       return;
     }
 
-    const user = results[0];
+    const user = users[0];
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (isMatch) {
@@ -45,7 +49,7 @@ export async function authLogin(
           UPDATE users
           SET refresh_token = ?
           WHERE id = ?
-          `,
+        `,
         [refreshToken, user.id]
       );
 
@@ -70,7 +74,7 @@ export async function authRegister(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   if (
     !req?.body?.firstName ||
     !req?.body?.lastName ||
@@ -83,7 +87,7 @@ export async function authRegister(
   }
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    await pool.query(
+    const [result] = await pool.query<ResultSetHeader>(
       `
         INSERT INTO users (first_name, last_name, email, phone, password)
         VALUES (?, ?, ?, ?, ?)
@@ -96,7 +100,11 @@ export async function authRegister(
         hashedPassword,
       ]
     );
-    res.status(201).json({ message: "User added successfully" });
+    if (result.affectedRows === 0) {
+      res.status(404).json({ message: "Failed to register user" });
+    } else {
+      res.status(201).json({ message: "User added successfully" });
+    }
   } catch (err) {
     next(err);
   }
@@ -106,7 +114,7 @@ export async function authRefresh(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   const cookies = req.cookies;
   if (!cookies?.jwt) {
     res.status(401).json({ message: "Required token not provided" });
@@ -114,7 +122,7 @@ export async function authRefresh(
   }
   const refreshToken = cookies.jwt;
   try {
-    const [results]: [any[], any] = await pool.query(
+    const [users] = await pool.query<DBResultType<Pick<UserType, "id">>[]>(
       `
           SELECT id
           FROM users
@@ -122,12 +130,12 @@ export async function authRefresh(
           `,
       [refreshToken]
     );
-    if (results.length === 0) {
+    if (users.length === 0) {
       res.status(403).json({ message: "Could not authenticate" });
       return;
     }
 
-    const user = results[0];
+    const user = users[0];
 
     jwt.verify(
       refreshToken,
@@ -156,7 +164,7 @@ export async function authLogout(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   //note: delete access token in frontend
   const cookies = req.cookies;
   if (!cookies?.jwt) {
@@ -165,21 +173,21 @@ export async function authLogout(
   }
   const refreshToken = cookies.jwt;
   try {
-    const [results]: [any[], any] = await pool.query(
+    const [users] = await pool.query<DBResultType<Pick<UserType, "id">>[]>(
       `
-            SELECT id
-            FROM users
-            WHERE refresh_token = ?
-            `,
+      SELECT id
+      FROM users
+      WHERE refresh_token = ?
+      `,
       [refreshToken]
     );
-    if (results.length === 0) {
+    if (users.length === 0) {
       res.clearCookie("jwt", { httpOnly: true });
       res.status(204).json({ message: "Logged out successfully" });
       return;
     }
 
-    const user = results[0];
+    const user = users[0];
 
     await pool.query(
       `
