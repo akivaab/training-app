@@ -10,8 +10,8 @@ function Unauthorized() {
       </p>
       <div className="mt-8">
         <button
-          className="rounded-lg bg-sky-500 px-6 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
           onClick={() => navigate("/menu", { replace: true })}
+          className="rounded-lg bg-sky-500 px-6 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
         >
           Home
         </button>

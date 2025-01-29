@@ -1,14 +1,15 @@
-import axiosInstance from "../api/axios";
 import { useEffect } from "react";
+import { AxiosInstance } from "axios";
+import axiosInstance from "../api/axios";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
-import { AxiosInstance } from "axios";
 
 function useAxiosInstance(): AxiosInstance {
   const refresh = useRefreshToken();
   const auth = useAuth()?.auth;
 
   useEffect(() => {
+    // add access token to request header
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
         if (!config.headers.Authorization) {
@@ -19,6 +20,7 @@ function useAxiosInstance(): AxiosInstance {
       (error) => Promise.reject(error)
     );
 
+    // use refresh token if response status is 403 and resend request
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {

@@ -1,18 +1,10 @@
 import { useEffect, useState } from "react";
-import { CategoryType, ItemSearchMenuPropType } from "../../types/types";
-import Alert from "../layout/Alert";
 import { useSearchParams } from "react-router-dom";
+import Alert from "../layout/Alert";
+import { CategoryType, ItemSearchMenuPropType } from "../../types/types";
+import categoryList from "../../util/categoryList";
 
 function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
-  const categories: CategoryType[] = [
-    "shirt",
-    "pants",
-    "shoes",
-    "suit",
-    "hat",
-    "tie"
-  ];
-
   const [searchParams] = useSearchParams();
   const [inputCategory, setInputCategory] = useState<CategoryType | null>(null);
   const [inputMin, setInputMin] = useState<number>(1);
@@ -45,8 +37,8 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
             Choose Category:
           </label>
           <select
-            value={inputCategory || ""}
             required
+            value={inputCategory || ""}
             onChange={(e) =>
               setInputCategory((e.target.value as CategoryType) || null)
             }
@@ -55,7 +47,7 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
             <option value="" disabled>
               Select a category
             </option>
-            {categories.map((cat) => (
+            {categoryList.map((cat) => (
               <option key={cat} value={cat}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </option>
@@ -72,8 +64,8 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
             <input
               type="number"
               placeholder="Min"
-              value={inputMin}
               required
+              value={inputMin}
               onChange={(e) => {
                 const val = parseInt(e.target.value);
                 setInputMin(val > 0 ? val : 1);
@@ -84,8 +76,8 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
             <input
               type="number"
               placeholder="Max"
-              value={inputMax}
               required
+              value={inputMax}
               onChange={(e) => {
                 const val = parseInt(e.target.value);
                 setInputMax(val > 0 ? val : 1);

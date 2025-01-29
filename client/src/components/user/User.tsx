@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import {
-  AuthStateType,
-  CategoryType,
-  ItemType,
-  UserType
-} from "../../types/types";
 import { deleteUser, getUser, patchUserRole } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
 import Alert from "../layout/Alert";
+import categoryList from "../../util/categoryList";
+import { AuthStateType, ItemType, UserType } from "../../types/types";
 
 function User() {
   const navigate = useNavigate();
@@ -26,16 +22,7 @@ function User() {
   const [borrowedItems, setBorrowedItems] = useState<
     Pick<ItemType, "id" | "category" | "size">[]
   >([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const categories: CategoryType[] = [
-    "shirt",
-    "pants",
-    "shoes",
-    "suit",
-    "hat",
-    "tie"
-  ];
 
   useEffect(() => {
     handleGetUser();
@@ -45,10 +32,8 @@ function User() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid user ID.`);
-        return;
-      }
-      const data = await getUser(axios, id);
-      if (data) {
+      } else {
+        const data = await getUser(axios, id);
         setUser({
           id: data.id,
           firstName: data.firstName,
@@ -60,7 +45,8 @@ function User() {
         setLentItems(
           data.lentItems.sort((a, b) => {
             const categoryComparison =
-              categories.indexOf(a.category) - categories.indexOf(b.category);
+              categoryList.indexOf(a.category) -
+              categoryList.indexOf(b.category);
             return categoryComparison === 0
               ? a.size - b.size
               : categoryComparison;
@@ -69,15 +55,15 @@ function User() {
         setBorrowedItems(
           data.borrowedItems.sort((a, b) => {
             const categoryComparison =
-              categories.indexOf(a.category) - categories.indexOf(b.category);
+              categoryList.indexOf(a.category) -
+              categoryList.indexOf(b.category);
             return categoryComparison === 0
               ? a.size - b.size
               : categoryComparison;
           })
         );
+        setErrorMsg("");
       }
-      setIsLoading(false);
-      setErrorMsg("");
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -85,11 +71,13 @@ function User() {
 
   async function handleAdmin(): Promise<void> {
     try {
-      if (!id) {
-        return;
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+      } else {
+        await patchUserRole(axios, id);
+        setErrorMsg("");
+        handleGetUser();
       }
-      await patchUserRole(axios, id);
-      handleGetUser();
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -97,11 +85,13 @@ function User() {
 
   async function handleDelete(): Promise<void> {
     try {
-      if (!id) {
-        return;
+      if (!id || !/^\d+$/.test(id)) {
+        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+      } else {
+        await deleteUser(axios, id);
+        setErrorMsg("");
+        navigate("/users", { replace: true });
       }
-      await deleteUser(axios, id);
-      navigate("/users", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -109,21 +99,20 @@ function User() {
 
   return auth.userRole === "admin" || auth.userId?.toString() === id ? (
     <div>
-      {isLoading && <div>Loading...</div>}
-      {!isLoading && !user && <div>Error</div>}
       {errorMsg && <Alert message={errorMsg} />}
-      {!isLoading && user && (
+      {user && (
         <div className="p-6">
-          {/* User Info */}
+          {/* User Card */}
           <div className="relative mb-6 max-w-[75%] rounded-lg bg-sky-50 px-6 py-3 shadow md:max-w-[45%]">
             {/* Edit */}
             <button
-              className="absolute right-3 top-3 rounded-xl bg-sky-500 px-3 py-2 text-sm text-white transition duration-100 hover:bg-sky-400"
               onClick={() => navigate("edit")}
-              title="Edit User"
+              className="absolute right-3 top-3 rounded-xl bg-sky-500 px-3 py-2 text-sm text-white transition duration-100 hover:bg-sky-400"
             >
               Edit
             </button>
+
+            {/* User Info */}
             <h2 className="text-2xl font-semibold text-sky-700">
               {user.lastName}, {user.firstName}
             </h2>
@@ -196,9 +185,10 @@ function User() {
             </div>
           </div>
 
+          {/* Admins Only */}
           {auth.userRole === "admin" && (
             <div className="mt-6 flex flex-col gap-2">
-              {/* Admin Status */}
+              {/* Upgrade to Admin Status (if not admin) */}
               {user.role !== "admin" && (
                 <button
                   onClick={handleAdmin}
@@ -207,7 +197,7 @@ function User() {
                   Grant Admin Status
                 </button>
               )}
-              {/* Ban */}
+              {/* Ban (only if not user's own profile) */}
               {auth.userId !== user.id && (
                 <button
                   onClick={handleDelete}

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { UserType } from "../../types/types";
 import { getUsers } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
+import { UserType } from "../../types/types";
 
 function UserList() {
   const axios = useAxiosInstance();
@@ -38,6 +38,7 @@ function UserList() {
           }
         }
       });
+      setErrorMsg("");
       setUsers(sortedUsers);
     } catch (err) {
       setErrorMsg((err as Error).message);

@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
-import { AuthStateType } from "../../types/types";
 import useAuth from "../../hooks/useAuth";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
+import { AuthStateType } from "../../types/types";
 
 function Login() {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ function Login() {
       setAuth(await loginUser(axios, email, password));
       setEmail("");
       setPassword("");
+      setErrorMsg("");
       navigate(
         location.state?.from?.pathname + location.state?.from?.search ||
           "/menu",
@@ -47,7 +48,8 @@ function Login() {
           </label>
           <input
             type="email"
-            placeholder="example@gmail.com"
+            placeholder="example@email.com"
+            maxLength={100}
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -60,16 +62,13 @@ function Login() {
           </label>
           <input
             type="password"
-            placeholder="pa55w0rd"
+            placeholder="Password"
+            maxLength={60}
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mb-4 block w-full rounded-lg border border-slate-400 bg-sky-50 p-2 text-gray-800"
           />
-
-          {/* <div className="mb-4 h-5 text-center text-sm text-red-700">
-          {failedAttempt && "Invalid email or password, please try again."}
-        </div> */}
 
           <button
             type="submit"

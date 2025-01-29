@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Comments from "./Comments";
 import { deleteItem, getItem, patchItemBorrower } from "../../api/itemsApi";
-import { AuthStateType, ItemType, UserType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
+import Comments from "./Comments";
 import Alert from "../layout/Alert";
+import { AuthStateType, ItemType, UserType } from "../../types/types";
 
 function Item() {
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ function Item() {
     | (ItemType & Pick<UserType, "firstName" | "lastName" | "email" | "phone">)
     | null
   >(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
@@ -27,13 +26,10 @@ function Item() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
-        return;
+      } else {
+        setItem(await getItem(axios, id));
+        setErrorMsg("");
       }
-      const itemData = await getItem(axios, id);
-      if (itemData) {
-        setItem(itemData);
-      }
-      setIsLoading(false);
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -43,10 +39,11 @@ function Item() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
-        return;
+      } else {
+        await patchItemBorrower(axios, id, isBorrowed);
+        setErrorMsg("");
+        handleGetItem();
       }
-      await patchItemBorrower(axios, id, isBorrowed);
-      handleGetItem();
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -56,10 +53,11 @@ function Item() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
-        return;
+      } else {
+        await deleteItem(axios, id);
+        setErrorMsg("");
+        navigate("/menu", { replace: true });
       }
-      await deleteItem(axios, id);
-      navigate("/menu", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -68,9 +66,7 @@ function Item() {
   return (
     <div>
       {errorMsg && <Alert message={errorMsg} />}
-      {isLoading && <div>Loading...</div>}
-      {!isLoading && !item && <div>Error</div>}
-      {!isLoading && item && (
+      {item && (
         <>
           <div className="relative mx-auto mt-8 flex max-w-xl flex-col rounded-lg bg-sky-100 p-6 shadow-md">
             {/* Item Info */}
@@ -99,22 +95,22 @@ function Item() {
             <div className="mt-auto flex flex-col items-center">
               {/* Borrow/Return */}
               {auth.userId === item.lenderId ? (
-                // Return
+                // Return (if user is lender)
                 <button
-                  className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
                   onClick={() => handleBorrow(false)}
                   disabled={item.borrowerId === null}
+                  className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
                 >
                   {item.borrowerId
-                    ? `Returned from User #${item.borrowerId}`
-                    : "Available to Borrow"}
+                    ? `Returned from User ID#${item.borrowerId}`
+                    : "Item in Possession"}
                 </button>
               ) : (
-                // Borrow
+                // Borrow (if user is not lender)
                 <button
-                  className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
                   onClick={() => handleBorrow(true)}
                   disabled={item.borrowerId !== null}
+                  className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
                 >
                   Borrow
                 </button>
@@ -128,21 +124,21 @@ function Item() {
                     : "justify-center"
                 }`}
               >
-                {/* Edit */}
+                {/* Edit (if user is admin) */}
                 {auth.userRole === "admin" && (
                   <button
-                    className="mx-2 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
                     onClick={() => navigate("edit")}
+                    className="mx-2 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400"
                   >
                     Edit
                   </button>
                 )}
-                {/* Delete */}
+                {/* Delete (if user is admin or lender) */}
                 {(auth.userRole === "admin" ||
                   auth.userId === item.lenderId) && (
                   <button
-                    className="mx-2 w-2/5 rounded-lg bg-red-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-red-700"
                     onClick={handleDelete}
+                    className="mx-2 w-2/5 rounded-lg bg-red-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-red-700"
                   >
                     Delete
                   </button>

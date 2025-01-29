@@ -5,6 +5,7 @@ import {
   AuthStateType
 } from "../types/types";
 
+// context with auth and logout info
 const AuthContext = createContext<AuthContextValueType | undefined>(undefined);
 
 export function AuthProvider({ children }: AuthProviderPropsType): JSX.Element {

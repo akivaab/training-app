@@ -8,8 +8,8 @@ function Missing() {
       <p className="mt-4 text-lg text-gray-700">Page Not Found</p>
       <div className="mt-8">
         <button
-          className="rounded-lg bg-sky-500 px-6 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
           onClick={() => navigate(-1)}
+          className="rounded-lg bg-sky-500 px-6 py-3 text-white transition-colors duration-100 hover:bg-sky-400"
         >
           Go Back
         </button>

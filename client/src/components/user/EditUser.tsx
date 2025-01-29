@@ -3,8 +3,8 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getUser, patchUser } from "../../api/usersApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
-import { AuthStateType } from "../../types/types";
 import Alert from "../layout/Alert";
+import { AuthStateType } from "../../types/types";
 
 function EditUser() {
   const navigate = useNavigate();
@@ -25,16 +25,14 @@ function EditUser() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid user ID.`);
-        return;
-      }
-      const data = await getUser(axios, id);
-      if (data) {
+      } else {
+        const data = await getUser(axios, id);
         setEditFirstName(data.firstName);
         setEditLastName(data.lastName);
         setEditEmail(data.email);
         setEditPhone(data.phone);
+        setErrorMsg("");
       }
-      setErrorMsg("");
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -47,17 +45,18 @@ function EditUser() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid user ID.`);
-        return;
+      } else {
+        await patchUser(
+          axios,
+          id,
+          editFirstName,
+          editLastName,
+          editEmail,
+          editPhone
+        );
+        setErrorMsg("");
+        navigate(`/users/${id}`, { replace: true });
       }
-      await patchUser(
-        axios,
-        id,
-        editFirstName,
-        editLastName,
-        editEmail,
-        editPhone
-      );
-      navigate(`/users/${id}`, { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -74,6 +73,7 @@ function EditUser() {
         <input
           type="text"
           placeholder="John"
+          maxLength={30}
           required
           value={editFirstName}
           onChange={(e) => setEditFirstName(e.target.value)}
@@ -87,6 +87,7 @@ function EditUser() {
         <input
           type="text"
           placeholder="Doe"
+          maxLength={30}
           required
           value={editLastName}
           onChange={(e) => setEditLastName(e.target.value)}
@@ -98,6 +99,7 @@ function EditUser() {
         <input
           type="email"
           placeholder="example@gmail.com"
+          maxLength={100}
           required
           value={editEmail}
           onChange={(e) => setEditEmail(e.target.value)}
@@ -111,6 +113,8 @@ function EditUser() {
         <input
           type="tel"
           placeholder="123-456-7890"
+          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          maxLength={12}
           required
           value={editPhone}
           onChange={(e) => setEditPhone(e.target.value)}

@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { AuthContextValueType } from "../../types/types";
 import { logoutUser } from "../../api/authApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
-import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 import Alert from "./Alert";
+import { AuthContextValueType } from "../../types/types";
 
 function Header() {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ function Header() {
     try {
       await logoutUser(axios);
       logout();
+      setErrorMsg("");
       navigate("/", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);
@@ -61,8 +62,8 @@ function Header() {
               </Link>
             ) : (
               <button
-                className="text-white transition-colors duration-200 hover:text-teal-300"
                 onClick={handleLogout}
+                className="text-white transition-colors duration-200 hover:text-teal-300"
               >
                 Logout
               </button>

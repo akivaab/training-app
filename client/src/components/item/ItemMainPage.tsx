@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { getItems } from "../../api/itemsApi";
+import useAxiosInstance from "../../hooks/useAxiosInstance";
 import ItemList from "./ItemList";
 import ItemSearchMenu from "./ItemSearchMenu";
-import { getItems } from "../../api/itemsApi";
-import { ItemType, CategoryType } from "../../types/types";
-import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
-import { useSearchParams } from "react-router-dom";
+import { ItemType, CategoryType } from "../../types/types";
 
 function ItemMainPage() {
   const axios = useAxiosInstance();
@@ -33,15 +33,16 @@ function ItemMainPage() {
   ): Promise<void> {
     try {
       const allItems = await getItems(axios);
-      const categoryItems = allItems.filter(
-        (i) => i.category === selectedCategory
+      const selectedItems = allItems.filter(
+        (i) =>
+          i.category === selectedCategory &&
+          i.size >= selectedMin &&
+          i.size <= selectedMax
       );
-      const sizeItems = categoryItems.filter(
-        (i) => i.size >= selectedMin && i.size <= selectedMax
-      );
-      const sortedItems = sizeItems.sort((a, b) => {
+      const sortedItems = selectedItems.sort((a, b) => {
         return a.size - b.size;
       });
+      setErrorMsg("");
       setItems(sortedItems);
     } catch (err) {
       setErrorMsg((err as Error).message);

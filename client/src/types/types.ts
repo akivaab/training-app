@@ -1,23 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
+// Component Types
 export type CategoryType = "shirt" | "pants" | "shoes" | "suit" | "hat" | "tie";
-export type RoleType = "user" | "admin";
-
-export type RequireAuthPropType = {
-  allowedRoles: string[];
-};
-
-export type AlertPropType = {
-  message: string;
-};
-
-export type ItemSearchMenuPropType = {
-  onSubmit: (newCategory: CategoryType, newMin: number, newMax: number) => void;
-};
-
-export type ItemListPropType = {
-  items: Pick<ItemType, "id" | "category" | "size" | "description">[];
-};
 
 export type ItemType = {
   id: number;
@@ -46,6 +30,9 @@ export type UserType = {
   refreshToken: string;
 };
 
+// Auth Types
+export type RoleType = "user" | "admin";
+
 export type AuthStateType = {
   userId?: number;
   userRole?: RoleType;
@@ -59,10 +46,27 @@ export type AuthContextValueType = {
   logout: () => void;
 };
 
+export type TokenPayload = {
+  user: Pick<UserType, "id" | "role">;
+};
+
+// Prop Types
 export type AuthProviderPropsType = {
   children: ReactNode;
 };
 
-export type TokenPayload = {
-  user: Pick<UserType, "id" | "role">;
+export type RequireAuthPropType = {
+  allowedRoles: RoleType[];
+};
+
+export type AlertPropType = {
+  message: string;
+};
+
+export type ItemSearchMenuPropType = {
+  onSubmit: (newCategory: CategoryType, newMin: number, newMax: number) => void;
+};
+
+export type ItemListPropType = {
+  items: Pick<ItemType, "id" | "category" | "size" | "description">[];
 };

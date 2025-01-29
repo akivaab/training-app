@@ -10,11 +10,14 @@ function RequireAuth({ allowedRoles }: RequireAuthPropType) {
     auth.userRole &&
     auth.accessToken ? (
     allowedRoles?.includes(auth.userRole) ? (
+      // authenticated and authorized
       <Outlet />
     ) : (
+      // authenticated but not authorized
       <Navigate to="/auth/unauthorized" replace />
     )
   ) : (
+    // neither authenticated nor authorized
     <Navigate to="/" state={{ from: location }} replace />
   );
 }

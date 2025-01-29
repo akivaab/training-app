@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getItem, patchItem } from "../../api/itemsApi";
-import { CategoryType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
+import categoryList from "../../util/categoryList";
+import { CategoryType } from "../../types/types";
 
 function EditItem() {
   const navigate = useNavigate();
@@ -13,14 +14,6 @@ function EditItem() {
   const [editSize, setEditSize] = useState<number>(1);
   const [editDescription, setEditDescription] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const categories: CategoryType[] = [
-    "shirt",
-    "pants",
-    "shoes",
-    "suit",
-    "hat",
-    "tie"
-  ];
 
   useEffect(() => {
     handleGetItem();
@@ -30,13 +23,12 @@ function EditItem() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
-        return;
-      }
-      const itemData = await getItem(axios, id);
-      if (itemData) {
+      } else {
+        const itemData = await getItem(axios, id);
         setEditCategory(itemData.category);
         setEditSize(itemData.size);
         setEditDescription(itemData.description);
+        setErrorMsg("");
       }
     } catch (err) {
       setErrorMsg((err as Error).message);
@@ -50,9 +42,12 @@ function EditItem() {
     try {
       if (!id || !/^\d+$/.test(id)) {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
-      } else if (editCategory && !isNaN(editSize)) {
+      } else if (editCategory) {
         await patchItem(axios, id, editCategory, editSize, editDescription);
+        setErrorMsg("");
         navigate(`/items/${id}`, { replace: true });
+      } else {
+        setErrorMsg("Error: Select a category.");
       }
     } catch (err) {
       setErrorMsg((err as Error).message);
@@ -79,7 +74,7 @@ function EditItem() {
             <option value="" disabled>
               Select a category
             </option>
-            {categories.map((cat) => (
+            {categoryList.map((cat) => (
               <option key={cat} value={cat}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </option>
@@ -112,12 +107,12 @@ function EditItem() {
             Description:
           </label>
           <textarea
-            className="mb-2 block h-28 w-full rounded-lg border border-slate-400 bg-sky-50 p-1"
             placeholder="Description"
             required
             maxLength={500}
             value={editDescription}
             onChange={(e) => setEditDescription(e.target.value)}
+            className="mb-2 block h-28 w-full rounded-lg border border-slate-400 bg-sky-50 p-1"
           ></textarea>
         </div>
 

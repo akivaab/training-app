@@ -1,21 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postItem } from "../../api/itemsApi";
-import { CategoryType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
+import categoryList from "../../util/categoryList";
+import { CategoryType } from "../../types/types";
 
 function AddItem() {
   const navigate = useNavigate();
   const axios = useAxiosInstance();
-  const categories: CategoryType[] = [
-    "shirt",
-    "pants",
-    "shoes",
-    "suit",
-    "hat",
-    "tie"
-  ];
   const [category, setCategory] = useState<CategoryType | null>(null);
   const [size, setSize] = useState<number>(1);
   const [description, setDescription] = useState<string>("");
@@ -26,9 +19,12 @@ function AddItem() {
   ): Promise<void> {
     e.preventDefault();
     try {
-      if (category && !isNaN(size)) {
+      if (category) {
         const newItemId = await postItem(axios, category, size, description);
+        setErrorMsg("");
         navigate(`/items/${newItemId}`);
+      } else {
+        setErrorMsg("Error: Select a category.");
       }
     } catch (err) {
       setErrorMsg((err as Error).message);
@@ -55,7 +51,7 @@ function AddItem() {
             <option value="" disabled>
               Select a category
             </option>
-            {categories.map((cat) => (
+            {categoryList.map((cat) => (
               <option key={cat} value={cat}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </option>
@@ -88,12 +84,12 @@ function AddItem() {
             Description:
           </label>
           <textarea
-            className="mb-2 block h-28 w-full rounded-lg border border-slate-400 bg-sky-50 p-1"
             placeholder="Describe the item in detail..."
             required
             maxLength={500}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            className="mb-2 block h-28 w-full rounded-lg border border-slate-400 bg-sky-50 p-1"
           ></textarea>
         </div>
 

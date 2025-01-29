@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../../api/authApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
-import { AuthStateType } from "../../types/types";
 import Alert from "../layout/Alert";
+import { AuthStateType } from "../../types/types";
 
 function Register() {
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ function Register() {
       e.preventDefault();
       await registerUser(axios, firstName, lastName, email, phone, password);
       setAuth(await loginUser(axios, email, password));
+      setPassword("");
+      setErrorMsg("");
       navigate(
         location.state?.from?.pathname + location.state?.from?.search ||
           "/menu",
@@ -50,6 +52,7 @@ function Register() {
           <input
             type="text"
             placeholder="John"
+            maxLength={30}
             required
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -63,6 +66,7 @@ function Register() {
           <input
             type="text"
             placeholder="Doe"
+            maxLength={30}
             required
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -74,6 +78,7 @@ function Register() {
           <input
             type="email"
             placeholder="example@gmail.com"
+            maxLength={100}
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -87,6 +92,8 @@ function Register() {
           <input
             type="tel"
             placeholder="123-456-7890"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            maxLength={12}
             required
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
@@ -99,7 +106,8 @@ function Register() {
           </label>
           <input
             type="password"
-            placeholder="pa55w0rd"
+            placeholder="Password"
+            maxLength={60}
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}

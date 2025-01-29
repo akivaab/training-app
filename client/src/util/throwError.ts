@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
 
-export default function throwError(err: unknown): never {
+function throwError(err: unknown): never {
   if (isAxiosError(err)) {
     const errorMessage =
       err.response?.data?.message || err.message || "Unknown error";
@@ -9,3 +9,5 @@ export default function throwError(err: unknown): never {
     throw new Error("Unknown error");
   }
 }
+
+export default throwError;

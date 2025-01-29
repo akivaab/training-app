@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteComment, getComments, postComment } from "../../api/commentsApi";
-import { AuthStateType, CommentType, UserType } from "../../types/types";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
 import Alert from "../layout/Alert";
+import { AuthStateType, CommentType, UserType } from "../../types/types";
 
 function Comments() {
   const auth = useAuth()?.auth as AuthStateType;
@@ -27,21 +27,26 @@ function Comments() {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
       } else {
         setComments(await getComments(axios, id));
+        setErrorMsg("");
       }
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
   }
 
-  async function handleSubmit(): Promise<void> {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> {
+    e.preventDefault();
     try {
       if (!id || !/^\d+$/.test(id)) {
-        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
       } else {
         await postComment(axios, id, content);
+        setIsCommenting(false);
+        setErrorMsg("");
+        handleGetComments();
       }
-      setIsCommenting(false);
-      handleGetComments();
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -50,11 +55,11 @@ function Comments() {
   async function handleDelete(commentId: number): Promise<void> {
     try {
       if (!id || !/^\d+$/.test(id)) {
-        setErrorMsg(`Error: "${id}" is not a valid user ID.`);
+        setErrorMsg(`Error: "${id}" is not a valid item ID.`);
       } else {
         await deleteComment(axios, id, commentId);
+        handleGetComments();
       }
-      handleGetComments();
     } catch (err) {
       setErrorMsg((err as Error).message);
     }
@@ -66,31 +71,33 @@ function Comments() {
       <section className="mx-auto mt-8 max-w-xl p-4">
         {/* Write Comment */}
         <button
-          className="mb-4 w-5/12 rounded-lg bg-sky-400 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-700"
           onClick={() => setIsCommenting(!isCommenting)}
+          className="mb-4 w-5/12 rounded-lg bg-sky-400 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-700"
         >
           {`Click Here to ${isCommenting ? "Cancel" : "Comment!"}`}
         </button>
 
-        <div
+        <form
+          onSubmit={handleSubmit}
           className={`overflow-hidden transition-all duration-300 ease-in-out ${
             isCommenting ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <textarea
-            className="mb-px w-full rounded-md border p-3"
             required
             placeholder="Write your comment here..."
+            maxLength={500}
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            className="mb-px w-full rounded-md border p-3"
           ></textarea>
           <button
+            type="submit"
             className="mb-4 w-1/4 rounded-lg bg-sky-400 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-700"
-            onClick={handleSubmit}
           >
             Submit
           </button>
-        </div>
+        </form>
 
         {/* Comments */}
         {comments.length > 0 ? (
