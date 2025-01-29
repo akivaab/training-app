@@ -1,7 +1,7 @@
+import { ResultSetHeader } from "mysql2";
 import { NextFunction, Request, Response } from "express";
 import { pool } from "../db/dbConn";
 import { CommentType, DBResultType, UserType } from "../types/types";
-import { ResultSetHeader } from "mysql2";
 
 export async function getAllItemComments(
   req: Request,
@@ -41,11 +41,7 @@ export async function postItemComment(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (
-    !req?.params?.itemId ||
-    isNaN(parseInt(req.params.itemId)) ||
-    !req?.body?.content
-  ) {
+  if (!req?.params?.itemId || !req?.body?.content) {
     res.status(400).json({ message: "Required fields not provided" });
     return;
   }
@@ -55,7 +51,7 @@ export async function postItemComment(
       INSERT INTO comments (content, item_id, user_id)
       VALUES (?, ?, ?)
       `,
-      [req.body.content, parseInt(req.params.itemId), req.requesterId]
+      [req.body.content, req.params.itemId, req.requesterId]
     );
     if (result.affectedRows === 0) {
       res.status(404).json({ message: "Failed to add comment" });
@@ -93,6 +89,8 @@ export async function deleteItemComment(
       });
       return;
     }
+
+    // deleting comments is reserved for admins and the poster
     if (
       req.requesterId !== comments[0].userId &&
       req.requesterRole !== "admin"

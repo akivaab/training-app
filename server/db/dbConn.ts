@@ -13,7 +13,6 @@ export const pool = mysql
 
 async function initialize(): Promise<void> {
   try {
-    //NOTE: refresh token and admin/user roles
     const createUsersTable = `
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT,

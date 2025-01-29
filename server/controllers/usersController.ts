@@ -1,7 +1,7 @@
+import { ResultSetHeader } from "mysql2";
 import { NextFunction, Request, Response } from "express";
 import { pool } from "../db/dbConn";
 import { DBResultType, ItemType, UserType } from "../types/types";
-import { ResultSetHeader } from "mysql2";
 
 export async function getAllUsers(
   req: Request,
@@ -39,6 +39,8 @@ export async function getUser(
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
+
+  // reject if not user's own profile nor admin
   if (
     req.requesterId?.toString() !== req.params.id &&
     req.requesterRole !== "admin"
@@ -46,6 +48,7 @@ export async function getUser(
     res.status(401).json({ message: "Cannot view another user's profile" });
     return;
   }
+
   try {
     const [users] = await pool.query<
       DBResultType<
@@ -114,6 +117,8 @@ export async function patchUser(
     res.status(400).json({ message: "Required fields not provided" });
     return;
   }
+
+  // reject if not user's own profile nor admin
   if (
     req.requesterId?.toString() !== req.params.id &&
     req.requesterRole !== "admin"
@@ -121,6 +126,7 @@ export async function patchUser(
     res.status(401).json({ message: "Cannot view another user's profile" });
     return;
   }
+
   try {
     const [result] = await pool.query<ResultSetHeader>(
       `

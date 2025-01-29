@@ -7,17 +7,13 @@ import authRouter from "./routes/authRoute";
 import verifyJWT from "./middleware/verifyJWT";
 import errorHandler from "./middleware/errorHandler";
 
-// Create a new express application instance
 const app = express();
-
-// Set the network port
 const port = process.env.PORT || 5000;
 
-//note: fine-tune cors, figure out secure and sameSite for refresh token cookies
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"], // React frontend origin
-    credentials: true, // Allow credentials (cookies) to be sent
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -32,7 +28,6 @@ app.use("/users", usersRouter);
 
 app.use(errorHandler);
 
-// Start the Express server
 app.listen(port, () => {
   console.log(`The server is running at http://localhost:${port}`);
 });

@@ -1,7 +1,7 @@
+import { ResultSetHeader } from "mysql2";
 import { NextFunction, Request, Response } from "express";
 import { pool } from "../db/dbConn";
 import { DBResultType, ItemType, UserType } from "../types/types";
-import { ResultSetHeader } from "mysql2";
 
 export async function getAllItems(
   req: Request,
@@ -23,33 +23,6 @@ export async function getAllItems(
       return;
     }
     res.status(200).json(items);
-  } catch (err) {
-    next(err);
-  }
-}
-
-export async function postItem(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  if (!req?.body?.category || !req?.body?.size || !req?.body?.description) {
-    res.status(400).json({ message: "Required fields not provided" });
-    return;
-  }
-  try {
-    const [result] = await pool.query<ResultSetHeader>(
-      `
-      INSERT INTO items (category, size, description, lender_id)
-      VALUES (?, ?, ?, ?)
-      `,
-      [req.body.category, req.body.size, req.body.description, req.requesterId]
-    );
-    if (result.affectedRows === 0) {
-      res.status(404).json({ message: `Failed to add item` });
-    } else {
-      res.status(201).json(result.insertId);
-    }
   } catch (err) {
     next(err);
   }
@@ -86,6 +59,33 @@ export async function getItem(
       return;
     }
     res.status(200).json(items[0]);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function postItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  if (!req?.body?.category || !req?.body?.size || !req?.body?.description) {
+    res.status(400).json({ message: "Required fields not provided" });
+    return;
+  }
+  try {
+    const [result] = await pool.query<ResultSetHeader>(
+      `
+      INSERT INTO items (category, size, description, lender_id)
+      VALUES (?, ?, ?, ?)
+      `,
+      [req.body.category, req.body.size, req.body.description, req.requesterId]
+    );
+    if (result.affectedRows === 0) {
+      res.status(404).json({ message: `Failed to add item` });
+    } else {
+      res.status(201).json(result.insertId);
+    }
   } catch (err) {
     next(err);
   }
@@ -134,7 +134,6 @@ export async function patchItemBorrower(
     res.status(400).json({ message: "ID was not provided" });
     return;
   }
-  console.log(req.body);
   if (!req.body.hasOwnProperty("isBorrowed")) {
     res.status(400).json({ message: "Required fields not provided" });
     return;

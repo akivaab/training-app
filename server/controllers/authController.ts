@@ -1,9 +1,9 @@
+import { ResultSetHeader } from "mysql2";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import jwt, { Secret } from "jsonwebtoken";
 import { pool } from "../db/dbConn";
 import { DBResultType, TokenPayload, UserType } from "../types/types";
-import { ResultSetHeader } from "mysql2";
 
 export async function authLogin(
   req: Request,
@@ -19,10 +19,10 @@ export async function authLogin(
       DBResultType<Pick<UserType, "id" | "email" | "password" | "role">>[]
     >(
       `
-        SELECT id, email, password, role
-        FROM users
-        WHERE email = ?
-        `,
+      SELECT id, email, password, role
+      FROM users
+      WHERE email = ?
+      `,
       [req.body.email]
     );
     if (users.length === 0) {
@@ -38,7 +38,7 @@ export async function authLogin(
       const accessToken = jwt.sign(
         payload,
         process.env.ACCESS_TOKEN_SECRET as Secret,
-        { expiresIn: "30s" }
+        { expiresIn: "10m" }
       );
       const refreshToken = jwt.sign(
         payload,
@@ -47,9 +47,9 @@ export async function authLogin(
       );
       await pool.query(
         `
-          UPDATE users
-          SET refresh_token = ?
-          WHERE id = ?
+        UPDATE users
+        SET refresh_token = ?
+        WHERE id = ?
         `,
         [refreshToken, user.id]
       );
@@ -90,9 +90,9 @@ export async function authRegister(
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const [result] = await pool.query<ResultSetHeader>(
       `
-        INSERT INTO users (first_name, last_name, email, phone, password)
-        VALUES (?, ?, ?, ?, ?)
-        `,
+      INSERT INTO users (first_name, last_name, email, phone, password)
+      VALUES (?, ?, ?, ?, ?)
+      `,
       [
         req.body.firstName,
         req.body.lastName,
@@ -125,10 +125,10 @@ export async function authRefresh(
   try {
     const [users] = await pool.query<DBResultType<Pick<UserType, "id">>[]>(
       `
-          SELECT id
-          FROM users
-          WHERE refresh_token = ?
-          `,
+      SELECT id
+      FROM users
+      WHERE refresh_token = ?
+      `,
       [refreshToken]
     );
     if (users.length === 0) {
@@ -152,7 +152,7 @@ export async function authRefresh(
         const accessToken = jwt.sign(
           payload,
           process.env.ACCESS_TOKEN_SECRET as Secret,
-          { expiresIn: "30s" }
+          { expiresIn: "10m" }
         );
         res
           .status(200)
@@ -169,7 +169,6 @@ export async function authLogout(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  //note: delete access token in frontend
   const cookies = req.cookies;
   if (!cookies?.jwt) {
     res.status(204).json({ message: "Already logged out" });
