@@ -1,6 +1,6 @@
-import { ItemType, UserType } from "../types/types";
 import { AxiosInstance } from "axios";
 import throwError from "../util/throwError";
+import { ItemType, UserType } from "../types/types";
 
 const url = "/users";
 
@@ -13,7 +13,7 @@ export async function getUsers(
     const res = await axios.get(`${url}`);
     if (res.status === 200) {
       return res.data;
-    } /*if (res.status === 204)*/ else {
+    } else {
       return [];
     }
   } catch (err) {
@@ -50,7 +50,11 @@ export async function patchUser(
   phone: string
 ): Promise<void> {
   try {
-    await axios.patch(`${url}/${id}`, { firstName, lastName, email, phone });
+    const updatedUser: Pick<
+      UserType,
+      "firstName" | "lastName" | "email" | "phone"
+    > = { firstName, lastName, email, phone };
+    await axios.patch(`${url}/${id}`, updatedUser);
   } catch (err) {
     throwError(err);
   }

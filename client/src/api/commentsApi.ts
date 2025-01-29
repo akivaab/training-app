@@ -1,6 +1,6 @@
-import { CommentType, UserType } from "../types/types";
 import { AxiosInstance } from "axios";
 import throwError from "../util/throwError";
+import { CommentType, UserType } from "../types/types";
 
 const url = (itemId: string) => `/items/${itemId}/comments`;
 
@@ -12,7 +12,7 @@ export async function getComments(
     const res = await axios.get(`${url(itemId)}`);
     if (res.status === 200) {
       return res.data;
-    } /*if (res.status === 204)*/ else {
+    } else {
       return [];
     }
   } catch (err) {
@@ -26,10 +26,8 @@ export async function postComment(
   content: string
 ): Promise<void> {
   try {
-    const newContent: Partial<CommentType> = {
-      content
-    };
-    await axios.post(`${url(itemId)}`, newContent);
+    const newComment: Pick<CommentType, "content"> = { content };
+    await axios.post(`${url(itemId)}`, newComment);
   } catch (err) {
     throwError(err);
   }

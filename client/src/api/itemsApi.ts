@@ -1,6 +1,6 @@
-import { ItemType, CategoryType, UserType } from "../types/types";
 import { AxiosInstance } from "axios";
 import throwError from "../util/throwError";
+import { ItemType, CategoryType, UserType } from "../types/types";
 
 const url = "/items";
 
@@ -11,28 +11,9 @@ export async function getItems(
     const res = await axios.get(`${url}`);
     if (res.status === 200) {
       return res.data;
-    } /*if (res.status === 204)*/ else {
+    } else {
       return [];
     }
-  } catch (err) {
-    throwError(err);
-  }
-}
-
-export async function postItem(
-  axios: AxiosInstance,
-  category: CategoryType,
-  size: number,
-  description: string
-): Promise<number> {
-  try {
-    const newItem: Partial<ItemType> = {
-      category,
-      size,
-      description
-    };
-    const res = await axios.post(`${url}`, newItem);
-    return res.data;
   } catch (err) {
     throwError(err);
   }
@@ -52,6 +33,25 @@ export async function getItem(
   }
 }
 
+export async function postItem(
+  axios: AxiosInstance,
+  category: CategoryType,
+  size: number,
+  description: string
+): Promise<number> {
+  try {
+    const newItem: Pick<ItemType, "category" | "size" | "description"> = {
+      category,
+      size,
+      description
+    };
+    const res = await axios.post(`${url}`, newItem);
+    return res.data;
+  } catch (err) {
+    throwError(err);
+  }
+}
+
 export async function patchItem(
   axios: AxiosInstance,
   id: string,
@@ -60,7 +60,7 @@ export async function patchItem(
   description: string
 ): Promise<void> {
   try {
-    const updatedItem: Partial<ItemType> = {
+    const updatedItem: Pick<ItemType, "category" | "size" | "description"> = {
       category,
       size,
       description

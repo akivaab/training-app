@@ -1,7 +1,7 @@
-import { AuthStateType, TokenPayload, UserType } from "../types/types";
-import { jwtDecode } from "jwt-decode";
 import { AxiosInstance } from "axios";
+import { jwtDecode } from "jwt-decode";
 import throwError from "../util/throwError";
+import { AuthStateType, TokenPayload, UserType } from "../types/types";
 
 const url = "/auth";
 
@@ -40,13 +40,7 @@ export async function registerUser(
     const newUser: Pick<
       UserType,
       "firstName" | "lastName" | "email" | "phone" | "password"
-    > = {
-      firstName,
-      lastName,
-      email,
-      phone,
-      password
-    };
+    > = { firstName, lastName, email, phone, password };
     await axios.post(`${url}/register`, newUser);
   } catch (err) {
     throwError(err);
