@@ -14,7 +14,7 @@ function ItemList({ items }: ItemListPropType) {
             <h3 className="text-2xl font-bold">
               {capitalize(item.category)} &#9679; Size {item.size}
             </h3>
-            <p className="mt-2 text-gray-800">{item.description}</p>
+            <p className="mt-2 break-words text-gray-800">{item.description}</p>
           </Link>
         </div>
       ))}

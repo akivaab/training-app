@@ -47,23 +47,25 @@ function Header() {
             >
               Lend Item
             </Link>
-            <Link
-              to={`users/${auth.userId}`}
-              className="text-white transition-colors duration-200 hover:text-teal-300"
-            >
-              User Profile
-            </Link>
+            {auth.accessToken && (
+              <Link
+                to={`users/${auth.userId}`}
+                className="font-semibold text-white transition-colors duration-200 hover:text-teal-300"
+              >
+                User Profile
+              </Link>
+            )}
             {!auth?.accessToken ? (
               <Link
                 to="auth/login"
-                className="text-white transition-colors duration-200 hover:text-teal-300"
+                className="font-semibold text-white transition-colors duration-200 hover:text-teal-300"
               >
                 Login
               </Link>
             ) : (
               <button
                 onClick={handleLogout}
-                className="text-white transition-colors duration-200 hover:text-teal-300"
+                className="font-semibold text-white transition-colors duration-200 hover:text-teal-300"
               >
                 Logout
               </button>

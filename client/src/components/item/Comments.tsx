@@ -44,6 +44,7 @@ function Comments() {
       } else {
         await postComment(axios, id, content);
         setIsCommenting(false);
+        setContent("");
         setErrorMsg("");
         handleGetComments();
       }
@@ -72,7 +73,7 @@ function Comments() {
         {/* Write Comment */}
         <button
           onClick={() => setIsCommenting(!isCommenting)}
-          className="mb-4 w-5/12 rounded-lg bg-sky-400 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-700"
+          className="mb-4 w-5/12 rounded-lg bg-sky-500 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-400"
         >
           {`Click Here to ${isCommenting ? "Cancel" : "Comment!"}`}
         </button>
@@ -93,7 +94,7 @@ function Comments() {
           ></textarea>
           <button
             type="submit"
-            className="mb-4 w-1/4 rounded-lg bg-sky-400 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-700"
+            className="mb-4 w-1/4 rounded-lg bg-sky-500 px-5 py-3 text-white shadow transition-colors duration-100 hover:bg-sky-400"
           >
             Submit
           </button>
@@ -106,14 +107,16 @@ function Comments() {
               key={comment.id}
               className="mb-4 rounded-md border border-gray-300 bg-white p-4 shadow-sm"
             >
-              <h3 className="mb-2 text-sm font-medium text-slate-600">
+              <h3 className="text-sm font-medium text-slate-600">
                 {comment.firstName} {comment.lastName} says:
               </h3>
-              <p className="text-base text-slate-800">{comment.content}</p>
+              <p className="mb-1 whitespace-pre-line break-words text-base text-slate-800">
+                {comment.content}
+              </p>
               {(auth.userRole === "admin" ||
                 auth.userId === comment.userId) && (
                 <button
-                  className="mt-2 rounded-md bg-red-500 px-3 py-1 text-sm text-white shadow-sm hover:bg-red-700"
+                  className="mt-2 rounded-xl bg-red-500 px-3 py-1 text-sm text-white shadow-sm hover:bg-red-700"
                   onClick={() => handleDelete(comment.id)}
                 >
                   Delete
@@ -122,7 +125,7 @@ function Comments() {
             </div>
           ))
         ) : (
-          <h2 className="text-lg text-slate-800">This post has no comments.</h2>
+          <h2 className="text-lg text-gray-800">This post has no comments.</h2>
         )}
       </section>
     </>

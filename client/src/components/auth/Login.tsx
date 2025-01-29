@@ -49,7 +49,7 @@ function Login() {
           <input
             type="email"
             placeholder="example@email.com"
-            maxLength={100}
+            maxLength={50}
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}

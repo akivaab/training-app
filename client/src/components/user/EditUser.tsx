@@ -99,7 +99,7 @@ function EditUser() {
         <input
           type="email"
           placeholder="example@gmail.com"
-          maxLength={100}
+          maxLength={50}
           required
           value={editEmail}
           onChange={(e) => setEditEmail(e.target.value)}

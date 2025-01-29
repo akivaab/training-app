@@ -40,8 +40,8 @@ function Register() {
   return (
     <>
       {errorMsg && <Alert message={errorMsg} />}
-      <div className="mx-auto mt-12 max-w-3xl p-4">
-        <h2 className="mb-6 text-center text-3xl font-bold text-sky-700 underline">
+      <div className="mx-auto mt-3 max-w-3xl p-4">
+        <h2 className="mb-3 text-center text-3xl font-bold text-sky-700 underline">
           <u>Sign up:</u>
         </h2>
         <form onSubmit={handleSubmit}>
@@ -78,7 +78,7 @@ function Register() {
           <input
             type="email"
             placeholder="example@gmail.com"
-            maxLength={100}
+            maxLength={50}
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
