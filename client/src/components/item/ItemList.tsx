@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import capitalize from "../../util/capitalize";
 import { ItemListPropType } from "../../types/types";
 
 function ItemList({ items }: ItemListPropType) {
@@ -11,8 +12,7 @@ function ItemList({ items }: ItemListPropType) {
         >
           <Link to={`${item.id}`}>
             <h3 className="text-2xl font-bold">
-              {item.category.charAt(0).toUpperCase() + item.category.slice(1)}{" "}
-              &#9679; Size {item.size}
+              {capitalize(item.category)} &#9679; Size {item.size}
             </h3>
             <p className="mt-2 text-gray-800">{item.description}</p>
           </Link>

@@ -4,6 +4,7 @@ import { getItem, patchItem } from "../../api/itemsApi";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import Alert from "../layout/Alert";
 import categoryList from "../../util/categoryList";
+import capitalize from "../../util/capitalize";
 import { CategoryType } from "../../types/types";
 
 function EditItem() {
@@ -76,7 +77,7 @@ function EditItem() {
             </option>
             {categoryList.map((cat) => (
               <option key={cat} value={cat}>
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                {capitalize(cat)}
               </option>
             ))}
           </select>

@@ -5,6 +5,7 @@ import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
 import Comments from "./Comments";
 import Alert from "../layout/Alert";
+import capitalize from "../../util/capitalize";
 import { AuthStateType, ItemType, UserType } from "../../types/types";
 
 function Item() {
@@ -72,7 +73,7 @@ function Item() {
             {/* Item Info */}
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-sky-600">
-                {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
+                {capitalize(item.category)}
               </h2>
               <h3 className="mt-2 text-lg text-gray-800">Size {item.size}</h3>
               <p className="mt-4 text-base text-slate-700">

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Alert from "../layout/Alert";
-import { CategoryType, ItemSearchMenuPropType } from "../../types/types";
 import categoryList from "../../util/categoryList";
+import capitalize from "../../util/capitalize";
+import { CategoryType, ItemSearchMenuPropType } from "../../types/types";
 
 function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
   const [searchParams] = useSearchParams();
@@ -49,7 +50,7 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
             </option>
             {categoryList.map((cat) => (
               <option key={cat} value={cat}>
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                {capitalize(cat)}
               </option>
             ))}
           </select>

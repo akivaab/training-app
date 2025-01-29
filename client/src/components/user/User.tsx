@@ -5,6 +5,7 @@ import useAxiosInstance from "../../hooks/useAxiosInstance";
 import useAuth from "../../hooks/useAuth";
 import Alert from "../layout/Alert";
 import categoryList from "../../util/categoryList";
+import capitalize from "../../util/capitalize";
 import { AuthStateType, ItemType, UserType } from "../../types/types";
 
 function User() {
@@ -126,7 +127,7 @@ function User() {
             </h3>
             <h3 className="text-lg text-gray-800">
               <u className="mr-2 font-medium">Role:</u>
-              {user.role?.charAt(0).toUpperCase() + user.role?.slice(1)}
+              {capitalize(user.role)}
             </h3>
           </div>
 
@@ -144,9 +145,7 @@ function User() {
                     >
                       <Link to={`/items/${item.id}`}>
                         <h3 className="text-2xl font-bold">
-                          {item.category.charAt(0).toUpperCase() +
-                            item.category.slice(1)}{" "}
-                          &#9679; Size {item.size}
+                          {capitalize(item.category)} &#9679; Size {item.size}
                         </h3>
                       </Link>
                     </div>
@@ -171,9 +170,7 @@ function User() {
                     >
                       <Link to={`/items/${item.id}`}>
                         <h3 className="text-2xl font-bold">
-                          {item.category.charAt(0).toUpperCase() +
-                            item.category.slice(1)}{" "}
-                          &#9679; Size {item.size}
+                          {capitalize(item.category)} &#9679; Size {item.size}
                         </h3>
                       </Link>
                     </div>
