@@ -77,8 +77,10 @@ function Login() {
             Submit
           </button>
         </form>
-        <div className="mt-5 text-center text-sm font-medium text-sky-950 hover:underline">
-          <Link to="/auth/register">First time? Click here to sign up!</Link>
+        <div className="mt-5 text-center text-sm font-medium text-sky-950">
+          <Link to="/auth/register" className="hover:underline">
+            First time? Click here to sign up!
+          </Link>
         </div>
       </div>
     </>

@@ -56,10 +56,10 @@ function UserList() {
               className="mx-auto max-w-xl rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-200 hover:bg-sky-300"
             >
               <Link to={`${user.id}`}>
-                <h2 className="text-xl font-semibold">
+                <h2 className="break-words text-xl font-semibold">
                   {user.lastName}, {user.firstName}
                 </h2>
-                <h3 className="text-md">
+                <h3 className="text-md break-words">
                   <u className="mr-2 font-medium">Email:</u>
                   {user.email}
                 </h3>

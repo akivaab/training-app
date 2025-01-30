@@ -114,10 +114,10 @@ function User() {
             </button>
 
             {/* User Info */}
-            <h2 className="text-2xl font-semibold text-sky-700">
+            <h2 className="break-words text-2xl font-semibold text-sky-700">
               {user.lastName}, {user.firstName}
             </h2>
-            <h3 className="text-lg text-gray-800">
+            <h3 className="break-words text-lg text-gray-800">
               <u className="mr-2 font-medium">Email:</u>
               {user.email}
             </h3>

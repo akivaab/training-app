@@ -107,7 +107,7 @@ function Comments() {
               key={comment.id}
               className="mb-4 rounded-md border border-gray-300 bg-white p-4 shadow-sm"
             >
-              <h3 className="text-sm font-medium text-slate-600">
+              <h3 className="break-words text-sm font-medium text-slate-600">
                 {comment.firstName} {comment.lastName} says:
               </h3>
               <p className="mb-1 whitespace-pre-line break-words text-base text-slate-800">
