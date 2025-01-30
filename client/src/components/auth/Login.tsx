@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../../api/authApi";
 import useAuth from "../../hooks/useAuth";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
@@ -77,6 +77,9 @@ function Login() {
             Submit
           </button>
         </form>
+        <div className="mt-5 text-center text-sm font-medium text-sky-950 hover:underline">
+          <Link to="/auth/register">First time? Click here to sign up!</Link>
+        </div>
       </div>
     </>
   );

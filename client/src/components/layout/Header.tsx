@@ -28,7 +28,7 @@ function Header() {
       <header className="mb-2 bg-sky-500 px-9 py-5 text-white">
         <div className="container mx-auto flex items-center justify-between">
           <h1 className="text-4xl font-extrabold">Gemach</h1>
-          <nav className="space-x-8">
+          <nav className="space-x-7">
             <Link
               to="menu"
               className="text-white transition-colors duration-200 hover:text-teal-300"
@@ -50,7 +50,7 @@ function Header() {
             {auth.accessToken && (
               <Link
                 to={`users/${auth.userId}`}
-                className="font-semibold text-white transition-colors duration-200 hover:text-teal-300"
+                className="font-semibold text-neutral-100 transition-colors duration-200 hover:text-teal-300"
               >
                 User Profile
               </Link>
@@ -58,14 +58,14 @@ function Header() {
             {!auth?.accessToken ? (
               <Link
                 to="auth/login"
-                className="font-semibold text-white transition-colors duration-200 hover:text-teal-300"
+                className="font-semibold text-neutral-100 transition-colors duration-200 hover:text-teal-300"
               >
                 Login
               </Link>
             ) : (
               <button
                 onClick={handleLogout}
-                className="font-semibold text-white transition-colors duration-200 hover:text-teal-300"
+                className="font-semibold text-neutral-100 transition-colors duration-200 hover:text-teal-300"
               >
                 Logout
               </button>
