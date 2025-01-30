@@ -70,11 +70,7 @@ function AddItem() {
             placeholder="Size"
             required
             value={size}
-            onChange={(e) =>
-              setSize(
-                parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 1
-              )
-            }
+            onChange={(e) => setSize(Math.max(parseInt(e.target.value), 1))}
             className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
           />
         </div>

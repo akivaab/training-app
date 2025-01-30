@@ -67,10 +67,9 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
               placeholder="Min"
               required
               value={inputMin}
-              onChange={(e) => {
-                const val = parseInt(e.target.value);
-                setInputMin(val > 0 ? val : 1);
-              }}
+              onChange={(e) =>
+                setInputMin(Math.max(parseInt(e.target.value), 1))
+              }
               className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
             />
             <span className="text-lg text-gray-800">-</span>
@@ -79,10 +78,9 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
               placeholder="Max"
               required
               value={inputMax}
-              onChange={(e) => {
-                const val = parseInt(e.target.value);
-                setInputMax(val > 0 ? val : 1);
-              }}
+              onChange={(e) =>
+                setInputMax(Math.max(parseInt(e.target.value), 1))
+              }
               className="w-20 rounded-md border border-slate-400 bg-sky-50 p-2 text-center"
             />
           </div>
