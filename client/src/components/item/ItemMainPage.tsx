@@ -17,9 +17,9 @@ function ItemMainPage() {
 
   useEffect(() => {
     const category = searchParams.get("category") as CategoryType | null;
-    const min = parseInt(searchParams.get("min") || "0");
-    const max = parseInt(searchParams.get("max") || "0");
-    if (category) {
+    const min = parseInt(searchParams.get("min") || "1");
+    const max = parseInt(searchParams.get("max") || "1");
+    if (category && !isNaN(min) && !isNaN(max)) {
       handleGetItems(category, min, max);
     } else {
       setItems([]);

@@ -13,9 +13,25 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
-    setInputCategory((searchParams.get("category") as CategoryType) || null);
-    setInputMin(parseInt(searchParams.get("min") || "1"));
-    setInputMax(parseInt(searchParams.get("max") || "1"));
+    const categoryParam =
+      (searchParams.get("category") as CategoryType) || null;
+    const minParam = parseInt(searchParams.get("min") || "1");
+    const maxParam = parseInt(searchParams.get("max") || "1");
+    if (categoryList.includes(categoryParam as CategoryType)) {
+      setInputCategory(categoryParam as CategoryType);
+    } else {
+      setInputCategory(null);
+    }
+    if (
+      !isNaN(minParam) &&
+      !isNaN(maxParam) &&
+      minParam > 0 &&
+      maxParam > 0 &&
+      minParam <= maxParam
+    ) {
+      setInputMin(minParam);
+      setInputMax(maxParam);
+    }
   }, [searchParams]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
