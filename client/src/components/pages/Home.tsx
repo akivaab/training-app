@@ -12,14 +12,14 @@ function Home() {
         <Link
           to="auth/login"
           state={{ from: location.state?.from }}
-          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-all duration-150 hover:scale-105 hover:bg-sky-400"
         >
           Click here to login and use the site!
         </Link>
         <Link
           to="auth/register"
           state={{ from: location.state?.from }}
-          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-all duration-150 hover:scale-105 hover:bg-sky-400"
         >
           Not registered? Click here to sign up!
         </Link>

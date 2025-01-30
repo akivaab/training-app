@@ -12,26 +12,26 @@ function Menu() {
       <div className="mx-auto mt-20 flex max-w-lg flex-col gap-6 text-center text-xl">
         <Link
           to="/items"
-          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-all duration-150 hover:scale-105 hover:bg-sky-400"
         >
           Browse Items
         </Link>
         <Link
           to="/items/lend"
-          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-all duration-150 hover:scale-105 hover:bg-sky-400"
         >
           Lend an Item
         </Link>
         <Link
           to={`/users/${auth?.userId}`}
-          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
+          className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-all duration-150 hover:scale-105 hover:bg-sky-400"
         >
           See User Profile
         </Link>
         {auth.userRole === "admin" && (
           <Link
             to="/users"
-            className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-transform duration-150 hover:scale-105 hover:bg-sky-400"
+            className="mx-4 rounded-lg bg-sky-500 p-6 text-white transition-all duration-150 hover:scale-105 hover:bg-sky-400"
           >
             See All Users
           </Link>
