@@ -81,18 +81,21 @@ function Item() {
               <p className="mt-2 whitespace-pre-line break-words text-lg text-slate-900">
                 {item.description}
               </p>
-              <div className="mt-4 text-sm font-semibold">
-                <p className="text-slate-600">
-                  To borrow, press the button below and contact lender:
-                </p>
-                <div className="w-1/3 break-words rounded-xl bg-sky-200 p-1 text-gray-800">
-                  <p>
-                    {item.lastName}, {item.firstName}
+              {auth.userId !== item.lenderId && (
+                <div className="mt-4 text-sm font-semibold">
+                  <p className="text-slate-600">
+                    To borrow, press the button below and contact lender:
                   </p>
-                  <p>{item.email}</p>
-                  <p>{item.phone}</p>
+
+                  <div className="w-1/3 break-words rounded-xl bg-sky-200 p-1 text-gray-800">
+                    <p>
+                      {item.lastName}, {item.firstName}
+                    </p>
+                    <p>{item.email}</p>
+                    <p>{item.phone}</p>
+                  </div>
                 </div>
-              </div>
+              )}
               {item.borrowerId && (
                 <p className="mt-2 text-sm text-red-600">
                   {auth.userId === item.borrowerId
@@ -113,7 +116,7 @@ function Item() {
                   className="mx-2 mb-4 w-2/5 rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors duration-100 hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-gray-500"
                 >
                   {item.borrowerId
-                    ? `Returned from User ID #${item.borrowerId}`
+                    ? `Returned from Borrower`
                     : "Item in Possession"}
                 </button>
               ) : (

@@ -52,6 +52,7 @@ function Register() {
           <input
             type="text"
             placeholder="John"
+            pattern="[A-Za-z][A-Za-z' \-]*[A-Za-z]"
             maxLength={30}
             required
             value={firstName}
@@ -66,6 +67,7 @@ function Register() {
           <input
             type="text"
             placeholder="Doe"
+            pattern="[A-Za-z][A-Za-z' \-]*[A-Za-z]"
             maxLength={30}
             required
             value={lastName}
@@ -91,8 +93,8 @@ function Register() {
           </label>
           <input
             type="tel"
-            placeholder="123-456-7890"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            placeholder="1234567890"
+            pattern="[0-9]{10}"
             maxLength={12}
             required
             value={phone}

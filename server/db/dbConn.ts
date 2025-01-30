@@ -53,7 +53,7 @@ async function initialize(): Promise<void> {
     const adminPwd = await bcrypt.hash("admin", 10);
     const createDefaultAdmin = `
       INSERT IGNORE INTO users (first_name, last_name, email, phone, password, role)
-        VALUES ("admin", "admin", "admin@gemach.com", "000-000-0000", ?, "admin")
+        VALUES ("admin", "admin", "admin@gemach.com", "0000000000", ?, "admin")
       `;
 
     await pool.query(createUsersTable);
