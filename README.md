@@ -56,8 +56,9 @@ Click on the provided link to open the project on a port of your local machine.
 ### Login
 
 Upon opening the app, you will be directed to a main page asking you to login or register if it is your first time using the app. You can either register, or use the default user created when the app runs for the first time. This user has admin status, and you can use the following credentials to log in:
-Email: `admin@gemach.com`
-Password: `admin`
+
+- Email: `admin@gemach.com`
+- Password: `admin`
 
 ![Screenshot of the login screen.](client/img/login.jpeg)
 
