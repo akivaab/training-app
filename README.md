@@ -1,50 +1,88 @@
-# React + TypeScript + Vite
+# Shabbat Clothes Gemach Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An application simulating a clothes gemach created using React and Express as part of job training. It can be run on your local machine, where you can register, post items to lend, search items to borrow, view you user profile, edit and delete information, and more.
 
-Currently, two official plugins are available:
+## Clone the Repository
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To get a copy of the repository on your local machine, open your terminal and run the following command:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+git clone https://github.com/akivaab/training-app.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Or, you can download the ZIP file from the GitHub page.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Running the Project
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+#### Setup MySQL Database
+
+This application requires MySQL to be running in order to work. Install MySQL if you don't have it already, and create a database for the application to have access to.
+
 ```
+CREATE DATABASE database_name;
+```
+
+#### Add .env Files
+
+Once you’ve cloned or downloaded the repository, you must add a .env file in both the server and client directories. There are .env.example files in both directories explaining what environment variables must be added.
+
+- [server/.env example](server/.env.example)
+- [client/.env example](client/.env.example)
+
+#### Run Server and Client
+
+Once the .env files are added, open two instances of the terminal and navigate to the root directory of the repository in both.
+
+Enter the following commands in the first terminal:
+
+```
+cd server
+npm install
+npm run start
+```
+
+Then enter the following commands in the second terminal:
+
+```
+cd client
+npm install
+npm run dev
+```
+
+Click on the provided link to open the project on a port of your local machine.
+
+## Overview
+
+### Login
+
+Upon opening the app, you will be directed to a main page asking you to login or register if it is your first time using the app. You can either register, or use the default user created when the app runs for the first time. This user has admin status, and you can use the following credentials to log in:
+Email: `admin@gemach.com`
+Password: `admin`
+
+![Screenshot of the login screen.](client/img/login.jpeg)
+
+### Browse
+
+After logging in, you will reach the menu page. From here you can click the links to perform various actions, such as to browse the available items based on specific criteria.
+
+![Screenshot of the page where you can browse and search for items.](client/img/browse_items.jpeg)
+
+You can then click on an item to see a more detailed page about it. From this page you can reserve the item for borrowing and use the lender's contact information to arrange a way to retrieve it from them. You can also read comments other users wrote about this item.
+
+![Screenshot of the page where you can browse and search for items.](client/img/item.jpeg)
+
+### Lend
+
+You can also post an item that you are willing to lend out! Simply click the link in the menu or header, fill in the appropriate information, and submit!
+
+![Screenshot of the page where you can lend an item.](client/img/lend_item.jpeg)
+
+### Users
+
+You can view your user profile, from where you can edit your personal information and see the items that you have lent out and are borrowing.
+
+![Screenshot of the page where you can see your user profile.](client/img/user.jpeg)
+
+For admins only, you can see a list of all users registered to the site. Admins are also granted the ability to edit item and user information, ban users, grant users admin status, and more.
+
+![Screenshot of the page where you can see the user list.](client/img/user_list.jpeg)
