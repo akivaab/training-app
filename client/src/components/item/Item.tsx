@@ -42,7 +42,6 @@ function Item() {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
       } else {
         await patchItemBorrower(axios, id, isBorrowed);
-        setErrorMsg("");
         handleGetItem();
       }
     } catch (err) {
@@ -56,7 +55,6 @@ function Item() {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
       } else {
         await deleteItem(axios, id);
-        setErrorMsg("");
         navigate("/menu", { replace: true });
       }
     } catch (err) {

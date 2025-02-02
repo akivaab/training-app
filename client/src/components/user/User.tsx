@@ -76,7 +76,6 @@ function User() {
         setErrorMsg(`Error: "${id}" is not a valid user ID.`);
       } else {
         await patchUserRole(axios, id);
-        setErrorMsg("");
         handleGetUser();
       }
     } catch (err) {
@@ -90,7 +89,6 @@ function User() {
         setErrorMsg(`Error: "${id}" is not a valid user ID.`);
       } else {
         await deleteUser(axios, id);
-        setErrorMsg("");
         navigate("/users", { replace: true });
       }
     } catch (err) {

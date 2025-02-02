@@ -54,7 +54,6 @@ function EditUser() {
           editEmail,
           editPhone
         );
-        setErrorMsg("");
         navigate(`/users/${id}`, { replace: true });
       }
     } catch (err) {

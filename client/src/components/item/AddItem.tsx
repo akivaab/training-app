@@ -22,7 +22,6 @@ function AddItem() {
     try {
       if (category) {
         const newItemId = await postItem(axios, category, size, description);
-        setErrorMsg("");
         navigate(`/items/${newItemId}`);
       } else {
         setErrorMsg("Error: Select a category.");

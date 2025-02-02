@@ -16,7 +16,6 @@ function Header() {
     try {
       await logoutUser(axios);
       logout();
-      setErrorMsg("");
       navigate("/", { replace: true });
     } catch (err) {
       setErrorMsg((err as Error).message);

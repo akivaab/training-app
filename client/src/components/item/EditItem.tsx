@@ -45,7 +45,6 @@ function EditItem() {
         setErrorMsg(`Error: "${id}" is not a valid item ID.`);
       } else if (editCategory) {
         await patchItem(axios, id, editCategory, editSize, editDescription);
-        setErrorMsg("");
         navigate(`/items/${id}`, { replace: true });
       } else {
         setErrorMsg("Error: Select a category.");

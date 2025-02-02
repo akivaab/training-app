@@ -45,7 +45,6 @@ function Comments() {
         await postComment(axios, id, content);
         setIsCommenting(false);
         setContent("");
-        setErrorMsg("");
         handleGetComments();
       }
     } catch (err) {
