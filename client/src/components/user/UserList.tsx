@@ -8,8 +8,8 @@ import { UserType } from "../../types/types";
 function UserList() {
   const axios = useAxiosInstance();
   const [users, setUsers] = useState<
-    Pick<UserType, "id" | "firstName" | "lastName" | "email" | "phone">[]
-  >([]);
+    Pick<UserType, "id" | "firstName" | "lastName" | "email" | "phone">[] | null
+  >(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
@@ -48,34 +48,35 @@ function UserList() {
   return (
     <>
       {errorMsg && <Alert message={errorMsg} />}
-      {users.length > 0 ? (
-        <div className="mt-6 space-y-4">
-          {users.map((user) => (
-            <div
-              key={user.id}
-              className="mx-auto max-w-xl rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-200 hover:bg-sky-300"
-            >
-              <Link to={`${user.id}`}>
-                <h2 className="break-words text-xl font-semibold">
-                  {user.lastName}, {user.firstName}
-                </h2>
-                <h3 className="text-md break-words">
-                  <u className="mr-2 font-medium">Email:</u>
-                  {user.email}
-                </h3>
-                <h3 className="text-md">
-                  <u className="mr-2 font-medium">Tel:</u>
-                  {user.phone}
-                </h3>
-              </Link>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <h2 className="mt-6 text-center text-xl text-slate-800">
-          No users found.
-        </h2>
-      )}
+      {users &&
+        (users.length > 0 ? (
+          <div className="mt-6 space-y-4">
+            {users.map((user) => (
+              <div
+                key={user.id}
+                className="mx-auto max-w-xl rounded-lg bg-sky-200 p-4 shadow-sm transition-colors duration-200 hover:bg-sky-300"
+              >
+                <Link to={`${user.id}`}>
+                  <h2 className="break-words text-xl font-semibold">
+                    {user.lastName}, {user.firstName}
+                  </h2>
+                  <h3 className="text-md break-words">
+                    <u className="mr-2 font-medium">Email:</u>
+                    {user.email}
+                  </h3>
+                  <h3 className="text-md">
+                    <u className="mr-2 font-medium">Tel:</u>
+                    {user.phone}
+                  </h3>
+                </Link>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <h2 className="mt-6 text-center text-xl text-slate-800">
+            No users found.
+          </h2>
+        ))}
       ;
     </>
   );
