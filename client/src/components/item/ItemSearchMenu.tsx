@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Alert from "../layout/Alert";
 import categoryList from "../../util/categoryList";
 import capitalize from "../../util/capitalize";
-import { CategoryType, ItemSearchMenuPropType } from "../../types/types";
+import { CategoryType, ItemErrorPropType } from "../../types/types";
 
-function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
-  const [searchParams] = useSearchParams();
+function ItemSearchMenu({ onError }: ItemErrorPropType) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [inputCategory, setInputCategory] = useState<CategoryType | null>(null);
   const [inputMin, setInputMin] = useState<number>(1);
   const [inputMax, setInputMax] = useState<number>(1);
-  const [errorMsg, setErrorMsg] = useState<string>("");
 
   useEffect(() => {
     const categoryParam =
@@ -37,16 +35,19 @@ function ItemSearchMenu({ onSubmit }: ItemSearchMenuPropType) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     if (inputMin > inputMax) {
-      setErrorMsg("Error: Invalid size range");
+      onError("Error: Invalid size range");
     } else {
-      setErrorMsg("");
-      onSubmit(inputCategory as CategoryType, inputMin, inputMax);
+      onError("");
+      setSearchParams({
+        category: inputCategory as CategoryType,
+        min: inputMin.toString(),
+        max: inputMax.toString()
+      });
     }
   }
 
   return (
     <>
-      {errorMsg && <Alert message={errorMsg} />}
       <form className="mx-auto mt-8 max-w-3xl p-6" onSubmit={handleSubmit}>
         {/* Category */}
         <div className="mb-6 text-center">

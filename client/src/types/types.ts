@@ -63,10 +63,6 @@ export type AlertPropType = {
   message: string;
 };
 
-export type ItemSearchMenuPropType = {
-  onSubmit: (newCategory: CategoryType, newMin: number, newMax: number) => void;
-};
-
-export type ItemListPropType = {
-  items: Pick<ItemType, "id" | "category" | "size" | "description">[];
+export type ItemErrorPropType = {
+  onError: React.Dispatch<React.SetStateAction<string>>;
 };
