@@ -15,7 +15,7 @@ export async function authLogin(
     return;
   }
   try {
-    const [users] = await pool.query<
+    const [users] = await pool.execute<
       DBResultType<Pick<UserType, "id" | "email" | "password" | "role">>[]
     >(
       `
@@ -45,7 +45,7 @@ export async function authLogin(
         process.env.REFRESH_TOKEN_SECRET as Secret,
         { expiresIn: "1d" }
       );
-      await pool.query(
+      await pool.execute(
         `
         UPDATE users
         SET refresh_token = ?
@@ -88,7 +88,7 @@ export async function authRegister(
   }
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       INSERT INTO users (first_name, last_name, email, phone, password)
       VALUES (?, ?, ?, ?, ?)
@@ -123,7 +123,7 @@ export async function authRefresh(
   }
   const refreshToken = cookies.jwt;
   try {
-    const [users] = await pool.query<DBResultType<Pick<UserType, "id">>[]>(
+    const [users] = await pool.execute<DBResultType<Pick<UserType, "id">>[]>(
       `
       SELECT id
       FROM users
@@ -176,7 +176,7 @@ export async function authLogout(
   }
   const refreshToken = cookies.jwt;
   try {
-    const [users] = await pool.query<DBResultType<Pick<UserType, "id">>[]>(
+    const [users] = await pool.execute<DBResultType<Pick<UserType, "id">>[]>(
       `
       SELECT id
       FROM users
@@ -192,7 +192,7 @@ export async function authLogout(
 
     const user = users[0];
 
-    await pool.query(
+    await pool.execute(
       `
       UPDATE users
       SET refresh_token = NULL

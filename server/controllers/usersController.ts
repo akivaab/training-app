@@ -50,7 +50,7 @@ export async function getUser(
   }
 
   try {
-    const [users] = await pool.query<
+    const [users] = await pool.execute<
       DBResultType<
         Pick<
           UserType,
@@ -72,7 +72,7 @@ export async function getUser(
       return;
     }
 
-    const [lentItems] = await pool.query<
+    const [lentItems] = await pool.execute<
       DBResultType<Pick<ItemType, "id" | "category" | "size">>[]
     >(
       `
@@ -82,7 +82,7 @@ export async function getUser(
       `,
       [req.params.id]
     );
-    const [borrowedItems] = await pool.query<
+    const [borrowedItems] = await pool.execute<
       DBResultType<Pick<ItemType, "id" | "category" | "size">>[]
     >(
       `
@@ -128,7 +128,7 @@ export async function patchUser(
   }
 
   try {
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       UPDATE users
       SET first_name = ?, last_name = ?, email = ?, phone = ?
@@ -164,7 +164,7 @@ export async function patchUserRole(
     return;
   }
   try {
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       UPDATE users
       SET role = "admin"
@@ -194,7 +194,7 @@ export async function deleteUser(
     return;
   }
   try {
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       DELETE FROM users
       WHERE id = ?

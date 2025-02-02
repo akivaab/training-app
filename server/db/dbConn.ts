@@ -59,7 +59,7 @@ async function initialize(): Promise<void> {
     await pool.query(createUsersTable);
     await pool.query(createItemsTable);
     await pool.query(createCommentsTable);
-    await pool.query(createDefaultAdmin, adminPwd);
+    await pool.execute(createDefaultAdmin, [adminPwd]);
   } catch (error) {
     console.error("Error fetching data:", error);
   }

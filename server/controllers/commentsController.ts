@@ -13,7 +13,7 @@ export async function getAllItemComments(
     return;
   }
   try {
-    const [comments] = await pool.query<
+    const [comments] = await pool.execute<
       DBResultType<CommentType & Pick<UserType, "firstName" | "lastName">>[]
     >(
       `
@@ -46,7 +46,7 @@ export async function postItemComment(
     return;
   }
   try {
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       INSERT INTO comments (content, item_id, user_id)
       VALUES (?, ?, ?)
@@ -73,7 +73,7 @@ export async function deleteItemComment(
     return;
   }
   try {
-    const [comments] = await pool.query<
+    const [comments] = await pool.execute<
       DBResultType<Pick<CommentType, "userId">>[]
     >(
       `
@@ -98,7 +98,7 @@ export async function deleteItemComment(
       res.status(401).json({ message: "Cannot delete another user's comment" });
       return;
     }
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       DELETE FROM comments
       WHERE id = ?

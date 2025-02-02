@@ -38,7 +38,7 @@ export async function getItem(
     return;
   }
   try {
-    const [items] = await pool.query<
+    const [items] = await pool.execute<
       DBResultType<
         ItemType & Pick<UserType, "firstName" | "lastName" | "email" | "phone">
       >[]
@@ -74,7 +74,7 @@ export async function postItem(
     return;
   }
   try {
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       INSERT INTO items (category, size, description, lender_id)
       VALUES (?, ?, ?, ?)
@@ -105,7 +105,7 @@ export async function patchItem(
     return;
   }
   try {
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       UPDATE items
       SET category = ?, size = ?, description = ?
@@ -139,7 +139,7 @@ export async function patchItemBorrower(
     return;
   }
   try {
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       UPDATE items
       SET borrower_id = ?
@@ -169,7 +169,7 @@ export async function deleteItem(
     return;
   }
   try {
-    const [items] = await pool.query<
+    const [items] = await pool.execute<
       DBResultType<Pick<ItemType, "lenderId">>[]
     >(
       `
@@ -193,7 +193,7 @@ export async function deleteItem(
       return;
     }
 
-    const [result] = await pool.query<ResultSetHeader>(
+    const [result] = await pool.execute<ResultSetHeader>(
       `
       DELETE FROM items
       WHERE id = ?
